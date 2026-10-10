@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="dtYgkiGlNijZqjzElwNVRv">
+<head data-page-node-id="qCgoc4y3eNvxXpsWKNKNN6">
+<meta charset="UTF-8" data-page-node-id="8Ktqj0ON4buxCLKzbeqXAM" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="WdJ1cxAAOGWxUXjl5MHGDe" />
+<title>嵌入式全栈学习平台 · 从零基础到精通（C语言 / 数据结构 / 计算机原理 / 数电模电 / ARM / Linux / RTOS / 驱动 / 网络 / C++ / Qt / AI Harness / 求职）</title>
+<meta name="description" content="一站式全栈学习平台：9 个学科、36 门课，按「学科 → 课程 → 章 → 知识点」四层组织，每门课标注 L0～L5 能力等级。覆盖学习方法、C 语言与数据结构、计算机与操作系统原理、数电模电与 PCB、ARM 启动链路、单片机、RTOS、总线与网络协议、BLE、Linux 应用与驱动、C++ 核心、Qt 上位机、AI Harness 工程、构建工程化、测试质量、可靠性与 OTA 安全、项目全生命周期、编码训练阶梯、面试与职业。讲义式讲解 + 原理插图 + 例题 + 练习 + 编程任务 + 实验室仿真 + 用例自测 + 全站搜索 + 岗位路线 + 知识点关联 + 薄弱点回顾，纯本地可离线使用。" data-page-node-id="fvqNfayN5URbDFeHazlRkF" />
+<link rel="stylesheet" href="style.css" data-page-node-id="IM80fEnpkQVGgrrpIgOcZk" />
+</head>
+<body data-page-node-id="HTXjcsshJ5ctbrBEzlh6KJ">
+<a class="skip-link" href="#app">跳转到主内容</a>
+<header class="topbar" data-page-node-id="CeBxbTkCWCNW75Za530eDz">
+  <div class="wrap topbar-in" data-page-node-id="80huSQKqIyiqn04FdU1Sdm">
+    <a class="brand" href="#/" data-page-node-id="jDC6WpUFTHabWZcenbtvG4">
+      <span class="brand-mark" data-page-node-id="vnhmdTZwjRSCbsEpPPtBLE">ES</span>
+      <span class="brand-name" data-page-node-id="8flAfundOAu9Npq2FTGKWA">嵌入式全栈学习平台<i data-page-node-id="aLl6g7hPFhPuiB0auNjII4">9 学科 · L0～L5 能力阶梯</i></span>
+    </a>
+    <!-- 导航分两层：左边 4 个「每天都要用」的主动作，其余收进「更多」。
+         为什么这么分：顶栏可用宽度被 .wrap 的 1080px 上限钉死，平铺 10 个入口必然换行；
+         而且对新手来说，一屏 9 个入口本身就看不懂。 -->
+    <nav class="nav" id="nav" aria-label="主导航">
+      <div class="nav-main">
+        <a href="#/" data-nav="home">课程</a>
+        <a href="#/help" data-nav="help" title="写给完全没接触过编程的人">使用说明</a>
+        <a href="#/lab" data-nav="lab" title="在网页里直接试跑代码">实验室</a>
+        <a href="#/wrong" data-nav="wrong">错题本<span class="nav-badge" id="wrongCount" hidden>0</span></a>
+      </div>
+      <div class="nav-more" id="navMore">
+        <button type="button" class="nav-more-btn" id="navMoreBtn" aria-expanded="false" aria-controls="navMorePanel">更多<i aria-hidden="true">▾</i></button>
+        <div class="nav-more-panel" id="navMorePanel">
+          <a href="#/map" data-nav="map" title="看清知识点之间的先后关系">知识地图</a>
+          <a href="#/jobs" data-nav="jobs" title="有哪些方向、各要什么能力、薪资量级与作品集要求">想找什么工作</a>
+          <a href="#/route/linux" data-nav="route" title="按就业方向排的学习顺序">岗位路线</a>
+          <a href="#/weak" data-nav="weak" title="按章节归好的错题，看出哪块最弱">薄弱点</a>
+          <a href="#/review" title="按 1-3-7-15 天间隔把做过的题再过一遍">今日复习</a>
+          <a href="#/notes" title="收藏与笔记，可导出导入进度">我的笔记</a>
+          <a href="#/interview" data-nav="interview">面试训练</a>
+          <a href="#/mock-interview" data-nav="mock">模拟面试</a>
+          <a href="#/account" data-nav="account" title="登录后电脑和手机共用同一份进度">我的账号</a>
+          <a href="#/search" data-nav="search">全站搜索</a>
+        </div>
+      </div>
+    </nav>
+    <form class="topsearch" id="topSearch" role="search">
+      <input id="topSearchInput" type="search" autocomplete="off" placeholder="搜索全站…" aria-label="搜索全站" />
+    </form>
+    <div class="global-pct" id="globalPct" title="总进度：已答对题数 / 总题数" data-page-node-id="yrwcyBUIEYUXZ5MVIKELIi">0%</div>
+    <span class="motivate-chip-host" id="motivateChip"></span>
+    <span class="cs-chip-host" id="csChip"></span>
+    <button class="theme-toggle" id="themeBtn" type="button" title="切换深色/浅色主题">深</button>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="打开导航菜单" aria-controls="nav" aria-expanded="false"><span class="nav-toggle-bars" aria-hidden="true"></span>菜单</button>
+  </div>
+</header>
+
+<main id="app" class="wrap" data-page-node-id="wJzWLVp0D1RMMHpZGCP8zr"></main>
+
+<footer class="foot" data-page-node-id="WZ8UrgEQxIbMq5oXwgPtYM">
+  <div class="wrap" data-page-node-id="5LgxCMg8A8aL1BfKY76BP5">
+    <p data-page-node-id="onynOkWmU2Z7uASsWgNRRV">不登录也能用：进度自动保存在本机浏览器里，可离线使用；用邮箱注册登录后，电脑和手机登录同一个邮箱即可共用同一份进度 —— 做过的题相加、错题本按最后一次的结果合并，几台设备不会互相覆盖。全站按「学科 → 课程 → 章 → 知识点」四层组织，共 9 个学科：学习方法与训练闭环、编程基础：C 语言主线、计算机通用基础、硬件与芯片底层、系统·内核与通信、上位机与跨平台开发、AI Harness 工程、工程质量与产品化、求职与职业发展；每门课都标有 L0～L5 能力等级，用来判断自己现在处在哪一级、下一站该去哪。每章都是「讲义式讲解 + 原理插图 + 例题 + 练习 + 面试要点 + 课后作业」，章节页标出前置知识点、下游知识点与最低完成标准。顶栏可搜索全站，右上角可切换深色/浅色主题。</p>
+    <p class="foot-ops" data-page-node-id="dObZmO305yKBT5XYsMjEGs"><button class="link-btn" id="resetBtn" type="button" data-page-node-id="vbDdEDME6sWiWRSRcqtsUv">重置全部进度</button></p>
+  </div>
+</footer>
+
+<!-- 就业导向：岗位全景、技能与薪资对应、作品集、简历面试、逐月路线。
+     同时提供 window.JOB_MAP（岗位能力地图数据，#/jobs 页读它渲染）。 -->
+<!-- 零基础主线的例题与原理图解：一个「补充层」，按章节 id 把例题和图解挂到已有章节上。
+     它读的是 window.COURSES，所以**必须排在所有 data-*.js 之后**。
+     （挂载是幂等的，即使顺序被改乱，DOMContentLoaded 时还会补挂一次，不会重复。） -->
+<!-- 学科体系与能力等级：必须在 app.js 之前，界面按它渲染；validate.js 也读同一个文件 -->
+<!-- 代码语言判定器（C++/Qt 与 JS/Shell/配置的识别）：app.js 与回归脚本共用这一份 -->
+<!-- 云服务公共配置 + 账号与同步模块。
+     顺序要求：cloud-config.js 提供 publicConfig → cloud-sync.js 读它初始化 →
+     app.js 在启动时调用 CloudSync.init() 挂载钩子，所以必须在 app.js 之前。
+     云服务 SDK 本身不在页面加载时下载，而是等真的要登录/同步时才懒加载。 -->
+
+<script>
+(function(){
+  var s=document.createElement("script");
+  s.src="bundle-lazy.js";
+  s.onload=function(){ try{ if(window.__babyMount) window.__babyMount(); }catch(e){} };
+  document.body.appendChild(s);
+})();
+</script>
+<script>
+(function(){
+  var s=document.createElement("script");
+  s.src="bundle-lazy.js";
+  s.onload=function(){ try{ if(window.__babyMount) window.__babyMount(); }catch(e){} };
+  document.body.appendChild(s);
+})();
+</script>
+<script src="bundle-data.js"></script>
+<script src="bundle-app.js"></script>
+<script>
+(function(){
+  var s=document.createElement("script");
+  s.src="bundle-lazy.js";
+  s.onload=function(){ try{ if(window.__babyMount) window.__babyMount(); }catch(e){} };
+  document.body.appendChild(s);
+})();
+</script>
+</body>
+</html>
