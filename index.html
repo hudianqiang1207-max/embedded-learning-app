@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0f1724" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="description" content="嵌入式学习 App：图文讲解 · 刷题打卡 · 离线可用 · 一键更新" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icon.svg" type="image/svg+xml" />
+<title>嵌入式学习 App</title>
+<style>
+  :root {
+    --bg: #0d1522; --bg2: #152238; --card: #1a2b45; --line: #2c4263;
+    --ink: #eef5ff; --ink2: #b7c7db; --ink3: #7f94ad;
+    --brand: #4b8dff; --brand2: #7aa8ff; --ok: #35d08a; --warn: #ffb020; --bad: #ff6b7a;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink);
+    background-image:
+      radial-gradient(900px 420px at 20% -80px, rgba(75,141,255,.18), transparent 60%),
+      radial-gradient(700px 360px at 100% 120px, rgba(123,92,255,.14), transparent 55%);
+    background-attachment: fixed;
+  }
+  #app {
+    max-width: 480px; margin: 0 auto; min-height: 100%;
+    padding-bottom: calc(86px + env(safe-area-inset-bottom));
+    position: relative;
+  }
+  header.appbar {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; align-items: center; gap: 12px;
+    padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
+    background: rgba(13, 21, 34, .88); backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .logo {
+    width: 40px; height: 40px; border-radius: 13px; flex: none;
+    background: linear-gradient(145deg, #4b8dff, #7b5cff);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 18px rgba(75,141,255,.35);
+  }
+  .appbar h1 { margin: 0; font-size: 17px; font-weight: 700; flex: 1; letter-spacing: .2px; }
+  .ver {
+    font-size: 11px; color: var(--ink2); border: 1px solid var(--line);
+    padding: 3px 9px; border-radius: 999px;
+  }
+  main { padding: 14px 16px 24px; }
+
+  /* hero */
+  .hero {
+    position: relative; overflow: hidden;
+    border-radius: 22px; padding: 18px;
+    background: linear-gradient(145deg, #22407a 0%, #1a2c4d 45%, #16243c 100%);
+    border: 1px solid rgba(122,168,255,.28);
+    box-shadow: 0 18px 40px rgba(0,0,0,.28);
+  }
+  .hero-art { position: absolute; right: -8px; top: -6px; width: 150px; opacity: .95; }
+  .hero h2 { margin: 0 0 6px; font-size: 20px; max-width: 62%; }
+  .hero p { margin: 0; color: #d5e4ff; font-size: 13.5px; max-width: 62%; }
+  .hero .row { margin-top: 14px; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    border: 0; border-radius: 14px; padding: 12px 16px; font: inherit; font-size: 14px;
+    font-weight: 650; cursor: pointer; text-decoration: none; color: #fff;
+  }
+  .btn.primary {
+    background: linear-gradient(135deg, #4b8dff, #6d7cff);
+    box-shadow: 0 10px 22px rgba(75,141,255,.35);
+  }
+  .btn.ghost { background: rgba(255,255,255,.06); color: var(--ink); border: 1px solid var(--line); }
+  .btn.block { width: 100%; margin-top: 10px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0;
+  }
+  .stat {
+    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px; padding: 12px 8px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .stat .ico { font-size: 18px; line-height: 1; margin-bottom: 4px; }
+  .stat b { display: block; font-size: 22px; line-height: 1.15; color: #8eb6ff; }
+  .stat span { font-size: 11.5px; color: var(--ink3); }
+
+  .card {
+    background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 20px; padding: 16px; margin: 12px 0;
+  }
+  .card h3 { margin: 0 0 8px; font-size: 15.5px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .card h3 .badge {
+    width: 28px; height: 28px; border-radius: 9px; display: inline-flex;
+    align-items: center; justify-content: center; font-size: 14px;
+    background: rgba(75,141,255,.18); border: 1px solid rgba(75,141,255,.35);
+  }
+  .card p { margin: 0; color: var(--ink2); font-size: 13.5px; }
+
+  /* goal ring */
+  .goal-wrap { display: flex; align-items: center; gap: 16px; }
+  .ring { position: relative; width: 110px; height: 110px; flex: none; }
+  .ring svg { width: 110px; height: 110px; transform: rotate(-90deg); }
+  .ring .val {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .ring .val b { font-size: 22px; color: #fff; line-height: 1.1; }
+  .ring .val span { font-size: 11px; color: var(--ink3); }
+
+  .path { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+  .step {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    border-radius: 16px; padding: 12px;
+  }
+  .step .n {
+    width: 28px; height: 28px; border-radius: 999px; flex: none;
+    background: linear-gradient(135deg,#4b8dff,#7b5cff); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+  }
+  .step .t { font-weight: 650; font-size: 13.5px; margin-bottom: 2px; }
+  .step .d { font-size: 12px; color: var(--ink3); }
+
+  .item {
+    display: flex; gap: 12px; align-items: center; text-decoration: none; color: var(--ink);
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px; padding: 12px;
+  }
+  .item:active { transform: scale(.98); }
+  .item .ico {
+    width: 44px; height: 44px; border-radius: 13px; flex: none;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+    background: rgba(75,141,255,.14); border: 1px solid rgba(75,141,255,.25);
+  }
+  .item .t { font-weight: 650; font-size: 14px; }
+  .item .d { font-size: 12px; color: var(--ink3); }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 5px 10px; border-radius: 999px; font-size: 11.5px;
+    background: rgba(75,141,255,.14); color: #b9d0ff;
+    border: 1px solid rgba(75,141,255,.25); margin: 3px 6px 3px 0;
+  }
+
+  /* quiz */
+  .quiz-q { font-size: 15.5px; font-weight: 700; margin: 10px 0 14px; line-height: 1.55; }
+  .opt {
+    width: 100%; text-align: left; margin: 9px 0; padding: 13px 14px;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; color: var(--ink); font: inherit; font-size: 14px; cursor: pointer;
+    display: flex; gap: 10px; align-items: center;
+  }
+  .opt .k {
+    width: 24px; height: 24px; border-radius: 8px; flex: none;
+    background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--ink2);
+  }
+  .opt.ok { border-color: rgba(53,208,138,.7); background: rgba(53,208,138,.12); }
+  .opt.bad { border-color: rgba(255,107,122,.7); background: rgba(255,107,122,.12); }
+  .fb {
+    margin-top: 12px; padding: 12px 14px; border-radius: 14px; display: none;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+    font-size: 13px; color: var(--ink2); line-height: 1.7;
+  }
+  .fb.show { display: block; }
+
+  .ill {
+    width: 100%; border-radius: 16px; margin: 10px 0 4px;
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    padding: 8px;
+  }
+  .ill svg { width: 100%; height: auto; display: block; }
+  .cap { font-size: 11.5px; color: var(--ink3); text-align: center; margin: 6px 0 2px; }
+
+  .prog {
+    height: 10px; border-radius: 999px; background: rgba(255,255,255,.08); overflow: hidden;
+  }
+  .prog i {
+    display: block; height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, #4b8dff, #35d08a); transition: width .25s;
+  }
+  .prog-line { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink3); margin-bottom: 6px; }
+
+  .banner {
+    position: fixed; left: 12px; right: 12px; bottom: calc(86px + env(safe-area-inset-bottom));
+    z-index: 50; max-width: 480px; margin: 0 auto;
+    background: #1f3d73; border: 1px solid #4b8dff; border-radius: 16px;
+    padding: 12px 14px; display: none; align-items: center; gap: 10px;
+    box-shadow: 0 16px 40px rgba(0,0,0,.4);
+  }
+  .banner.show { display: flex; }
+  .banner p { flex: 1; margin: 0; font-size: 13px; }
+
+  .toast {
+    position: fixed; top: calc(14px + env(safe-area-inset-top)); left: 50%;
+    transform: translateX(-50%) translateY(-10px); opacity: 0; pointer-events: none;
+    background: #22324c; color: var(--ink); border: 1px solid var(--line);
+    padding: 10px 16px; border-radius: 999px; font-size: 13px; z-index: 60; transition: .25s;
+    max-width: 90vw;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  nav.tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    display: flex; justify-content: space-around;
+    background: rgba(10, 16, 26, .96); border-top: 1px solid rgba(255,255,255,.08);
+    padding: 8px 8px calc(10px + env(safe-area-inset-bottom));
+  }
+  nav.tabbar button {
+    flex: 1; background: none; border: 0; color: var(--ink3); font: inherit;
+    font-size: 11px; cursor: pointer; padding: 6px 0 2px;
+  }
+  nav.tabbar button .i {
+    width: 36px; height: 36px; margin: 0 auto 3px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 17px;
+  }
+  nav.tabbar button.on { color: var(--brand2); }
+  nav.tabbar button.on .i {
+    background: rgba(75,141,255,.18); box-shadow: 0 0 0 1px rgba(75,141,255,.35);
+  }
+  .hidden { display: none !important; }
+
+  .kv { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.07); font-size: 13px; }
+  .kv:last-child { border-bottom: 0; }
+  .kv span { color: var(--ink3); }
+  .atlas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .atlas-card {
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09);
+    border-radius: 16px; padding: 10px; cursor: pointer; color: var(--ink);
+    font: inherit; text-align: center;
+  }
+  .atlas-card:active { transform: scale(.97); }
+  .atlas-card svg { width: 100%; height: auto; display: block; margin-bottom: 6px; }
+  .atlas-card b { display: block; font-size: 13px; }
+  .atlas-card span { font-size: 11px; color: var(--ink3); }
+  .ach-wall { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 12px; }
+  .ach {
+    width: 72px; padding: 8px 4px; border-radius: 14px; text-align: center;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    font-size: 10px; color: var(--ink3);
+  }
+  .ach.on { background: rgba(53,208,138,.12); border-color: rgba(53,208,138,.45); color: #b8f0d2; }
+  .ach .ic { display:block; font-size: 20px; margin-bottom: 4px; }
+  .lesson-nav { display:flex; gap:8px; overflow-x:auto; padding:4px 0 10px; }
+  .lesson-nav button {
+    flex:none; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.04); color:var(--ink2); font:inherit; font-size:12px; cursor:pointer;
+  }
+  .lesson-nav button.on { background:rgba(75,141,255,.2); border-color:#4b8dff; color:#fff; font-weight:650; }
+  .lesson-art {
+    width:100%; border-radius:18px; background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.1); padding:10px; margin:10px 0;
+  }
+  .lesson-art svg { width:100%; height:auto; display:block; }
+  .lesson-body h4 { margin:12px 0 6px; font-size:15px; }
+  .lesson-body p, .lesson-body li { color:var(--ink2); font-size:13.5px; line-height:1.75; }
+  .lesson-body ul { margin:6px 0 6px 18px; padding:0; }
+  .keybox {
+    margin:10px 0; padding:12px 14px; border-radius:14px;
+    background:rgba(75,141,255,.12); border:1px solid rgba(75,141,255,.35);
+    font-size:13px; color:#cfe0ff; line-height:1.7;
+  }
+  .keybox b { color:#fff; }
+  .lang-switch { display:flex; gap:8px; margin:10px 0 12px; }
+  .lang-switch button {
+    flex:1; padding:12px; border-radius:14px; border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.04); color:var(--ink); font:inherit; font-weight:650; cursor:pointer;
+  }
+  .lang-switch button.on { background:linear-gradient(135deg,#4b8dff,#7b5cff); border-color:transparent; }
+  .phrase-card {
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+    border-radius:16px; padding:14px; margin:10px 0;
+  }
+  .phrase-card .en, .phrase-card .ru {
+    font-size:16px; font-weight:700; line-height:1.5; margin:6px 0;
+  }
+  .phrase-card .zh { color:var(--ink2); font-size:13px; margin:0 0 8px; }
+  .phrase-card .tip {
+    font-size:11.5px; color:#b9d0ff; background:rgba(75,141,255,.12);
+    border-radius:10px; padding:8px 10px; margin-top:8px;
+  }
+  .flip-wrap { perspective: 1000px; margin: 12px 0; }
+  .flip-card {
+    position: relative; width: 100%; height: 170px; cursor: pointer;
+    transform-style: preserve-3d; transition: transform .45s;
+  }
+  .flip-card.flip { transform: rotateY(180deg); }
+  .flip-face {
+    position: absolute; inset: 0; backface-visibility: hidden;
+    border-radius: 18px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 16px; text-align: center;
+    border: 1px solid rgba(255,255,255,.12);
+  }
+  .flip-front { background: linear-gradient(145deg,#22407a,#1a2c4d); }
+  .flip-back { background: linear-gradient(145deg,#2a2450,#1c1838); transform: rotateY(180deg); }
+  .flip-word { font-size: 26px; font-weight: 800; letter-spacing: .3px; }
+  .flip-ipa { color: #b9d0ff; font-size: 13px; margin-top: 6px; }
+  .flip-hint { color: var(--ink3); font-size: 11px; margin-top: 12px; }
+  .speak {
+    margin-top: 10px; padding: 8px 14px; border-radius: 999px;
+    border: 1px solid rgba(75,141,255,.45); background: rgba(75,141,255,.18);
+    color: #fff; font: inherit; font-size: 13px; cursor: pointer;
+  }
+  .word-meta { display:flex; justify-content:space-between; font-size:12px; color:var(--ink3); margin: 8px 2px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 0; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="appbar">
+    <div class="logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <rect x="4" y="6" width="16" height="12" rx="2" stroke="#fff" stroke-width="1.6"/>
+        <path d="M8 6V4M12 6V4M16 6V4M8 20v-2M12 20v-2M16 20v-2M4 10H2M4 14H2M22 10h-2M22 14h-2" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>嵌入式学习</h1>
+    <span class="ver" id="verLabel">v1.10.0</span>
+  </header>
+
+  <main>
+    <!-- ================= 首页 ================= -->
+    <section id="tab-home">
+      <div class="hero">
+        <svg class="hero-art" viewBox="0 0 160 140" fill="none" aria-hidden="true">
+          <rect x="28" y="28" width="104" height="84" rx="10" fill="#2b4d8f" stroke="#7aa8ff" stroke-width="2"/>
+          <rect x="42" y="42" width="76" height="44" rx="4" fill="#0f2748"/>
+          <circle cx="58" cy="100" r="4" fill="#35d08a"/>
+          <circle cx="74" cy="100" r="4" fill="#ffb020"/>
+          <rect x="92" y="96" width="24" height="8" rx="2" fill="#7aa8ff"/>
+          <path d="M20 48h8M20 64h8M20 80h8M132 48h8M132 64h8M132 80h8" stroke="#7aa8ff" stroke-width="3" stroke-linecap="round"/>
+          <path d="M60 20c8-10 32-10 40 0" stroke="#b9d0ff" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="80" cy="14" r="6" fill="#4b8dff"/>
+        </svg>
+        <h2>手机里的嵌入式教练</h2>
+        <p>图文讲解 + 可交互仿真 + 面试真题。每天一点，攒到 offer。</p>
+        <div class="row">
+          <button class="btn primary" id="btnContinue">🚀 继续学习</button>
+          <button class="btn ghost" id="btnBase">📘 学基础</button>
+          <button class="btn ghost" id="btnLang">🌍 外语</button>
+          <button class="btn ghost" id="btnQuiz">✍️ 去刷题</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="ico">🔥</div>
+          <b id="statStreak">0</b>
+          <span>连续天数</span>
+        </div>
+        <div class="stat">
+          <div class="ico">✅</div>
+          <b id="statToday">0</b>
+          <span>今日题数</span>
+        </div>
+        <div class="stat">
+          <div class="ico">⚡</div>
+          <b id="statXp">0</b>
+          <span>经验 XP</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="badge">🎯</span>今日目标</h3>
+        <div class="goal-wrap">
+          <div class="ring">
+            <svg viewBox="0 0 110 110">
+              <circle cx="55" cy="55" r="42" stroke="rgba(255,255,255,.08)" stroke-width="10" fill="none"/>
+              <circle id="goalRing" cx="55" cy="55" r="42" stroke="url(#gg)" stroke-width="10" fill="none"
+                stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264"/>
+              <defs>
+                <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#4b8dff"/><stop offset="100%" stop-color="#35d08a"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="val"><b id="goalPct">0%</b><span>完成度</span></div>
+          </div>
+          <div>
+            <p id="goalText" style="margin-bottom:8px">先做 3 题热热身。</p>
+            <button class="btn primary" id="btnGoalGo">开始打卡</button>
+          </div>
+        </div></div>
+
+      <div class="card">
+        <h3><span class="badge">📊</span>本周节奏</h3>
+        <div class="ill">
+          <svg id="weekChart" viewBox="0 0 360 120" fill="none">
+            <rect x="8" y="8" width="344" height="104" rx="12" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
+            <text x="20" y="28" fill="#7f94ad" font-size="11" font-family="sans-serif">最近 7 天做题量</text>
+            <g id="weekBars"></g>
+          </svg>
+        </div>
+        <div class="cap" id="weekCap">坚持 7 天，学习站激励会加倍</div>
+      </div>
+
+      <div class="card">
+        <h3><span class="badge">🗺️</span>三步上手路线</h3>
+        <div class="path">
+          <div class="step">
+            <div class="n">1</div>
+            <div><div class="t">打地基：C + 板级常识</div><div class="d">指针、外设、仪器，能独立写 200 行小项目</div></div>
+          </div>
+          <div class="step">
+            <div class="n">2</div>
+            <div><div class="t">做项目：采集上报 / RTOS</div><div class="d">可演示 + 带数字（丢包 0、72h 稳定）</div></div>
+          </div>
+          <div class="step">
+            <div class="n">3</div>
+            <div><div class="t">冲 offer：真题 + 简历</div><div class="d">面试四层答法、包装项目、广州岗位地图</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="badge">🧪</span>不只是看书</h3>
+        <div class="ill">
+          <svg viewBox="0 0 360 170" fill="none">
+            <rect x="8" y="8" width="344" height="154" rx="14" fill="#12233d" stroke="rgba(255,255,255,.08)"/>
+            <text x="24" y="34" fill="#8eb6ff" font-size="13" font-family="sans-serif">硬件交互仿真</text>
+            <rect x="24" y="48" width="140" height="90" rx="10" fill="#1a2f52" stroke="#3d5f96"/>
+            <circle cx="60" cy="93" r="16" fill="#ffb020"/>
+            <rect x="88" y="84" width="48" height="18" rx="3" fill="#7aa8ff"/>
+            <path d="M40 120h90" stroke="#5b7fb8" stroke-width="2"/>
+            <text x="200" y="62" fill="#d7e6ff" font-size="12" font-family="sans-serif">· LED 限流电阻</text>
+            <text x="200" y="86" fill="#d7e6ff" font-size="12" font-family="sans-serif">· 电压分压</text>
+            <text x="200" y="110" fill="#d7e6ff" font-size="12" font-family="sans-serif">· UART 一帧波形</text>
+            <text x="200" y="134" fill="#35d08a" font-size="12" font-family="sans-serif">· @case 自动判题</text>
+          </svg>
+          <div class="cap">实验室：可拖参数的电路/波形仿真 + C 代码单步</div>
+        </div>
+        <a class="btn ghost block" href="study/index.html">打开完整学习站 ›</a>
+      </div>
+    </section>
+
+    <!-- ================= 学习 ================= -->
+    <section id="tab-learn" class="hidden">
+      <div class="card">
+        <h3><span class="badge">📦</span>离线学习包</h3>
+        <div class="ill">
+          <svg viewBox="0 0 360 150" fill="none">
+            <rect x="10" y="20" width="110" height="70" rx="10" fill="#1c3358" stroke="#3d5f96"/>
+            <text x="28" y="48" fill="#b9d0ff" font-size="12" font-family="sans-serif">手机 App</text>
+            <text x="28" y="70" fill="#7f94ad" font-size="11" font-family="sans-serif">安装后可离线</text>
+            <path d="M130 55h40" stroke="#7aa8ff" stroke-width="2" stroke-dasharray="4 4"/>
+            <rect x="180" y="12" width="160" height="100" rx="12" fill="#223f73" stroke="#4b8dff"/>
+            <text x="200" y="40" fill="#fff" font-size="12" font-family="sans-serif">完整课程包</text>
+            <text x="200" y="62" fill="#b9d0ff" font-size="11" font-family="sans-serif">41 门课 · 1500+ 题</text>
+            <text x="200" y="82" fill="#b9d0ff" font-size="11" font-family="sans-serif">例题 · 仿真 · 面试</text>
+            <text x="200" y="102" fill="#35d08a" font-size="11" font-family="sans-serif">约 17MB · 下载后真单机</text>
+          </svg>
+          <div class="cap">支持「仅 Wi-Fi 下载」；下载中可看进度条</div>
+        </div>
+        <div class="prog-line"><span id="packLabel">离线包状态：检查中…</span><span id="packPct">0%</span></div>
+        <div class="prog"><i id="packBar"></i></div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="btnDownloadPack">⬇️ 下载离线包</button>
+          <button class="btn ghost" id="btnWifiOnly">仅 Wi-Fi</button>
+        </div>
+        <div class="chip-row">
+          <span class="pill">🎓 C / 数据结构</span>
+          <span class="pill">🔌 单片机 RTOS</span>
+          <span class="pill">🐧 Linux / 驱动</span>
+          <span class="pill">💼 求职面试</span>
+          <span class="pill">🌍 英语/俄语 6 级</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="badge">📚</span>软硬件都覆盖</h3>
+        <div class="ill">
+          <svg viewBox="0 0 360 160" fill="none">
+            <rect x="16" y="24" width="150" height="110" rx="12" fill="#1a2f52" stroke="#3d5f96"/>
+            <text x="36" y="52" fill="#8eb6ff" font-size="13" font-family="sans-serif">硬件</text>
+            <text x="36" y="78" fill="#d7e6ff" font-size="11" font-family="sans-serif">数电常识 · PCB</text>
+            <text x="36" y="98" fill="#d7e6ff" font-size="11" font-family="sans-serif">外设 · 总线 · 仪器</text>
+            <text x="36" y="118" fill="#35d08a" font-size="11" font-family="sans-serif">仿真：LED/分压/UART</text>
+            <rect x="190" y="24" width="150" height="110" rx="12" fill="#2a2450" stroke="#7b5cff"/>
+            <text x="210" y="52" fill="#c2b4ff" font-size="13" font-family="sans-serif">软件</text>
+            <text x="210" y="78" fill="#e6e0ff" font-size="11" font-family="sans-serif">C · RTOS · Linux</text>
+            <text x="210" y="98" fill="#e6e0ff" font-size="11" font-family="sans-serif">网络 · 可靠性 · 构建</text>
+            <text x="210" y="118" fill="#35d08a" font-size="11" font-family="sans-serif">实验室：C 单步 + @case</text>
+          </svg>
+          <div class="cap">课程图文 + 可交互实验，不是干巴巴文档</div>
+        </div>
+              <div class="card">
+        <h3><span class="badge">🧩</span>硬件与概念图鉴</h3>
+        <p>点开卡片看「是什么 / 坑在哪」，配 SVG 原理图。</p>
+        <div class="atlas" id="atlasGrid">
+          <button class="atlas-card" data-atlas="led">
+            <svg viewBox="0 0 200 110"><circle cx="55" cy="55" r="16" fill="#ffb020"/><rect x="78" y="48" width="70" height="14" rx="3" fill="#7aa8ff"/><path d="M30 80h140" stroke="#5b7fb8" stroke-width="2"/><text x="100" y="28" text-anchor="middle" fill="#b9d0ff" font-size="12">LED + 限流电阻</text></svg>
+            <b>LED 限流</b><span>I=(V-Vf)/R</span>
+          </button>
+          <button class="atlas-card" data-atlas="uart">
+            <svg viewBox="0 0 200 110"><path d="M20 70h20V30h25v40h25V30h25v40h25V30h25v40h25" stroke="#7aa8ff" stroke-width="3" fill="none"/><text x="100" y="28" text-anchor="middle" fill="#b9d0ff" font-size="12">UART 一帧</text><text x="100" y="95" text-anchor="middle" fill="#7f94ad" font-size="10">起始 0 · 数据 · 停止 1</text></svg>
+            <b>UART 波形</b><span>起始+数据+停止</span>
+          </button>
+          <button class="atlas-card" data-atlas="queue">
+            <svg viewBox="0 0 200 110"><rect x="25" y="40" width="28" height="28" rx="4" fill="#4b8dff"/><rect x="58" y="40" width="28" height="28" rx="4" fill="#4b8dff"/><rect x="91" y="40" width="28" height="28" rx="4" fill="#2c4263"/><rect x="124" y="40" width="28" height="28" rx="4" fill="#2c4263"/><text x="100" y="28" text-anchor="middle" fill="#b9d0ff" font-size="12">环形队列</text><text x="100" y="95" text-anchor="middle" fill="#7f94ad" font-size="10">满：(tail+1)%N==head</text></svg>
+            <b>环形缓冲</b><span>满/空判据</span>
+          </button>
+          <button class="atlas-card" data-atlas="ota">
+            <svg viewBox="0 0 200 110"><rect x="22" y="38" width="60" height="36" rx="6" fill="#22407a" stroke="#4b8dff"/><rect x="118" y="38" width="60" height="36" rx="6" fill="#2a2450" stroke="#7b5cff"/><path d="M90 56h22" stroke="#35d08a" stroke-width="3" marker-end="url(#ag)"/><defs><marker id="ag" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6Z" fill="#35d08a"/></marker></defs><text x="52" y="60" text-anchor="middle" fill="#fff" font-size="11">A 区</text><text x="148" y="60" text-anchor="middle" fill="#fff" font-size="11">B 区</text><text x="100" y="28" text-anchor="middle" fill="#b9d0ff" font-size="12">A/B 升级</text></svg>
+            <b>OTA 双区</b><span>可回滚</span>
+          </button>
+        </div>
+        <div class="fb" id="atlasFb"></div>
+      </div>
+        <a class="btn primary block" href="study/index.html">进入学习站 ›</a>
+      </div>
+    </section>
+
+    <section id="tab-base" class="hidden">
+      <div class="card">
+        <h3><span class="badge">📘</span>嵌入式基础 · 图文小节</h3>
+        <p>先看懂原理图，再抠代码。每节 3 分钟，含自测。</p>
+        <div class="lesson-nav" id="lessonNav"></div>
+        <div class="lesson-art" id="lessonArt"></div>
+        <div class="lesson-body" id="lessonBody"></div>
+        <div class="fb" id="lessonFb"></div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn ghost" id="btnPrevLesson">上一节</button>
+          <button class="btn primary" id="btnNextLesson">下一节</button>
+          <button class="btn ghost" id="btnLessonQ">本节小测</button>
+        </div>
+      </div>
+    </section>
+    <section id="tab-lang" class="hidden">
+      <div class="card">
+        <h3><span class="badge">🌍</span>外语学习 · 图文卡片</h3>
+        <p>英语六级 + 俄语六级要点，日常可开口。点卡片看讲解，做完小测。</p>
+        <div class="lang-switch">
+          <button id="btnEn" class="on">🇬🇧 英语</button>
+          <button id="btnRu">🇷🇺 俄语</button>
+        </div>
+        <div class="lesson-art" id="langArt"></div>
+        <div id="langList"></div>
+        <div class="fb" id="langFb"></div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="btnLangQ">本组小测</button>
+                    <button class="btn ghost" id="btnLangShuffle">换一组</button>
+        </div>
+        <h3 style="margin-top:16px"><span class="badge">🃏</span>单词闪卡</h3>
+        <div class="word-meta"><span id="wordPos">1 / 10</span><span id="wordToday">今日词条 0</span></div>
+        <div class="flip-wrap">
+          <div class="flip-card" id="wordCard">
+            <div class="flip-face flip-front">
+              <div class="flip-word" id="wFront">hello</div>
+              <div class="flip-ipa" id="wIpa">/həˈləʊ/</div>
+              <div class="flip-hint">点卡片翻面 · 点 🔊 发音</div>
+            </div>
+            <div class="flip-face flip-back">
+              <div class="flip-word" id="wBack" style="font-size:18px">你好</div>
+              <div class="flip-ipa" id="wTip">问候语</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <button class="speak" id="btnSpeak">🔊 发音</button>
+          <button class="btn ghost" id="btnWordNext">下一个</button>
+                    <button class="btn primary" id="btnWordKnow">记住了</button>
+          <button class="btn ghost" id="btnShadow">🎤 跟读</button>
+          <button class="btn ghost" id="btnWordFuzzy">模糊/错词</button>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <h3><span class="badge">🗂️</span>错词本</h3>
+          <p style="margin-bottom:8px">点「模糊/错词」收进来，清空前会反复出现。</p>
+          <div id="wrongWords" class="chip-row"></div>
+          <button class="btn ghost block" id="btnClearWrong">清空错词本</button>
+          <button class="btn primary block" id="btnReviewWrong">只复习错词</button>
+        </div>
+        <div class="card">
+          <h3><span class="badge">📅</span>今日词包</h3>
+          <p id="packText">每日 10 词，记住了就点亮。</p>
+          <div class="prog"><i id="packWordBar"></i></div>
+          <div class="prog-line" style="margin-top:8px"><span>已记</span><span id="packWordPct">0%</span></div>
+        </div>
+        <div class="card">
+          <h3><span class="badge">📖</span>阅读 + 翻译</h3>
+          <div class="phrase-card" id="readBox">
+            <div class="en" id="readText">…</div>
+            <div class="zh" id="readTrans" style="display:none"></div>
+          </div>
+          <div class="row">
+            <button class="btn ghost" id="btnShowTrans">显示译文</button>
+            <button class="btn primary" id="btnReadNext">换一段</button>
+                        <button class="btn ghost" id="btnReadSpeak">🔊 朗读</button>
+            <button class="btn primary" id="btnReadQuiz">阅读理解</button>
+            <button class="btn ghost" id="btnReadLang">只看俄文</button>
+          </div>
+          <div class="fb" id="readQuizBox"></div>
+          </div>
+          <div class="fb" id="readFb"></div>
+        </div>
+        </div>
+        </div>
+        </div>
+      </div>
+    </section>
+    <!-- ================= 刷题 ================= -->
+    <section id="tab-quiz" class="hidden">
+      <div class="card">
+        <h3><span class="badge">🧠</span>快速刷题</h3>
+        <div class="quiz-q" id="quizQ">点下方按钮开始。</div>
+        <div id="quizOpts"></div>
+        <div class="fb" id="quizFb"></div>
+        <button class="btn primary block" id="btnNextQ">开始 / 下一题</button>
+        <p class="cap" style="margin-top:10px">答错会自动进「错题本」（与学习站互通）</p>
+      </div>
+      <div class="card">
+        <h3><span class="badge">📈</span>今日刷题节奏</h3>
+        <div class="prog-line"><span>目标 10 题</span><span id="quizPctLabel">0%</span></div>
+        <div class="prog"><i id="quizBar"></i></div>
+      </div>
+    </section>
+
+    <!-- ================= 我的 ================= -->
+    <section id="tab-me" class="hidden">
+      <div class="card">
+        <h3><span class="badge">⚙️</span>版本与更新</h3>
+        <div class="kv"><span>App 版本</span><b id="meVer">v1.10.0</b></div>
+        <div class="kv"><span>更新方式</span><b>一键更新，无需卸载</b></div>
+        <div class="kv"><span>离线能力</span><b>课程包可下载到本机</b></div>
+                <div class="ach-wall" id="achWall"></div>
+        <button class="btn ghost block" id="btnCheckUpdate">🔄 检查更新</button>
+        <button class="btn ghost block" id="btnReload">↻ 重新加载</button>
+      </div>
+
+      <div class="card">
+        <h3><span class="badge">💡</span>为什么要图文</h3>
+        <div class="ill">
+          <svg viewBox="0 0 360 120" fill="none">
+            <rect x="12" y="18" width="100" height="84" rx="10" fill="#243b5c"/>
+            <text x="30" y="50" fill="#b9d0ff" font-size="12" font-family="sans-serif">纯文字</text>
+            <text x="30" y="72" fill="#7f94ad" font-size="11" font-family="sans-serif">记不住…</text>
+            <path d="M120 60h36" stroke="#7aa8ff" stroke-width="2" marker-end="url(#ar)"/>
+            <defs>
+              <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0 0 L6 3 L0 6Z" fill="#7aa8ff"/>
+              </marker>
+            </defs>
+            <rect x="170" y="18" width="170" height="84" rx="10" fill="#22407a" stroke="#4b8dff"/>
+            <text x="195" y="50" fill="#fff" font-size="12" font-family="sans-serif">图文 + 仿真</text>
+            <text x="195" y="72" fill="#b9d0ff" font-size="11" font-family="sans-serif">一眼记住原理</text>
+          </svg>
+        </div>
+        <p>关键原理都有示意图：电路、波形、任务调度、OTA 回滚……先看懂图，再抠代码。</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="banner" id="updateBanner">
+    <p>发现新版本，点更新即可，无需卸载重装。</p>
+    <button class="btn primary" id="btnDoUpdate">立即更新</button>
+    <button class="btn ghost" id="btnLaterUpdate">稍后</button>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <nav class="tabbar">
+    <button data-tab="home" class="on"><span class="i">🏠</span>首页</button>
+    <button data-tab="learn"><span class="i">📖</span>学习</button>
+    <button data-tab="base"><span class="i">📘</span>基础</button>
+    <button data-tab="lang"><span class="i">🌍</span>外语</button>
+    <button data-tab="quiz"><span class="i">✍️</span>刷题</button>
+    <button data-tab="me"><span class="i">👤</span>我的</button>
+  </nav>
+</div>
+
+<script src="words-data.js"></script>
+<script>
+(function () {
+  var VER = "v1.10.0";
+  var DAY_GOAL = 10;
+
+  function $(id) { return document.getElementById(id); }
+  function toast(msg) {
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(t._h);
+    t._h = setTimeout(function () { t.classList.remove("show"); }, 2400);
+  }
+
+  /* ---------- 进度与统计 ---------- */
+  function dayKey() {
+    var d = new Date();
+    var m = d.getMonth() + 1, day = d.getDate();
+    return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (day < 10 ? "0" : "") + day;
+  }
+  function studyStore() {
+    try { return JSON.parse(localStorage.getItem("emb-study-v1") || "{}"); } catch (e) { return {}; }
+  }
+  function motivate() {
+    try { return JSON.parse(localStorage.getItem("emb-motivate-v1") || "{}"); } catch (e) { return {}; }
+  }
+  function streak() {
+    var days = studyStore().days || {};
+    if (!days[dayKey()]) return 0;
+    var n = 0, d = new Date();
+    function key(dt) {
+      var m = dt.getMonth() + 1, day = dt.getDate();
+      return dt.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (day < 10 ? "0" : "") + day;
+    }
+    while (days[key(d)]) { n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+  function refreshStats() {
+    var s = studyStore();
+    var today = (s.days || {})[dayKey()] || 0;
+    var mo = motivate();
+    $("statStreak").textContent = streak();
+    $("statToday").textContent = today;
+    $("statXp").textContent = mo.xp || 0;
+
+    var pct = Math.min(100, Math.round(today / DAY_GOAL * 100));
+    var C = 2 * Math.PI * 42;
+    $("goalRing").setAttribute("stroke-dashoffset", String(C * (1 - pct / 100)));
+    $("goalPct").textContent = pct + "%";
+    $("goalText").textContent = today >= DAY_GOAL
+      ? "今日目标已达成，连胜加成中！"
+      : ("今日 " + today + " / " + DAY_GOAL + " 题，还差 " + Math.max(0, DAY_GOAL - today) + " 题。");
+    $("quizBar").style.width = pct + "%";
+    $("quizPctLabel").textContent = pct + "%";
+  }
+
+  /* ---------- 切页 ---------- */
+  var panels = {
+    home: $("tab-home"), learn: $("tab-learn"), quiz: $("tab-quiz"), me: $("tab-me")
+  };
+  function showTab(name) {
+    Object.keys(panels).forEach(function (k) {
+      panels[k].classList.toggle("hidden", k !== name);
+    });
+    document.querySelectorAll(".tabbar button").forEach(function (b) {
+      b.classList.toggle("on", b.getAttribute("data-tab") === name);
+    });
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll(".tabbar button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      showTab(b.getAttribute("data-tab"));
+    });
+  });
+
+  /* ---------- 刷题（答错进错题本） ---------- */
+  var QS = [
+    {
+      q: "中断服务函数里最不应该做的是？",
+      opts: ["清中断标志", "printf 大段日志", "置事件标志", "读走数据"],
+      a: 1,
+      exp: "printf 可能阻塞，拉高中断延迟。只做最急的事，其余放任务/下半部。"
+    },
+    {
+      q: "环形队列判满常用写法是？",
+      opts: ["head == tail", "(tail+1)%N == head", "tail == N", "head == 0"],
+      a: 1,
+      exp: "牺牲一格：head==tail 空满歧义，所以 (tail+1)%N==head 表示满。"
+    },
+    {
+      q: "volatile 关键字保证的是？",
+      opts: ["原子性", "内存序", "每次真实访存", "自动加锁"],
+      a: 2,
+      exp: "只保证不被优化掉访存；原子性用原子操作，顺序用屏障/锁。"
+    },
+    {
+      q: "OTA 防变砖更稳妥的架构是？",
+      opts: ["原地覆盖升级", "A/B 双区 + 试运行确认", "只做 CRC", "断电再说"],
+      a: 1,
+      exp: "A/B 可回滚；写入后回读，自检失败自动回旧槽。"
+    },
+    {
+      q: "TCP 应用层拆包最常用的是？",
+      opts: ["假设一次 recv 一帧", "长度前缀/分隔符划界", "固定 1KB", "不处理"],
+      a: 1,
+      exp: "TCP 是字节流，必须自己划界，并处理半包/粘包。"
+    }
+  ];
+  var qi = 0, qLock = false;
+
+  function markWrong(id, qtext) {
+    try {
+      var s = studyStore();
+      if (!s.wrong) s.wrong = {};
+      if (!s.qts) s.qts = {};
+      s.wrong[id] = 1;
+      s.qts[id] = Date.now();
+      localStorage.setItem("emb-study-v1", JSON.stringify(s));
+    } catch (e) {}
+  }
+  function markOk(id) {
+    try {
+      var s = studyStore();
+      if (s.wrong && s.wrong[id]) delete s.wrong[id];
+      if (!s.ans) s.ans = {};
+      var a = s.ans[id] || (s.ans[id] = { ok: 0, bad: 0 });
+      a.ok++;
+      localStorage.setItem("emb-study-v1", JSON.stringify(s));
+    } catch (e) {}
+  }
+
+  function renderQ() {
+    var it = QS[qi % QS.length];
+    var qid = "app-q" + (qi % QS.length);
+    $("quizQ").textContent = (qi % QS.length + 1) + ". " + it.q;
+    var box = $("quizOpts");
+    box.innerHTML = "";
+    it.opts.forEach(function (text, i) {
+      var b = document.createElement("button");
+      b.className = "opt";
+      b.innerHTML = '<span class="k">' + String.fromCharCode(65 + i) + "</span><span>" + text + "</span>";
+      b.addEventListener("click", function () {
+        if (qLock) return;
+        qLock = true;
+        var ok = i === it.a;
+        Array.prototype.forEach.call(box.children, function (el, j) {
+          if (j === it.a) el.classList.add("ok");
+          else if (j === i) el.classList.add("bad");
+        });
+        var fb = $("quizFb");
+        fb.innerHTML = (ok
+          ? '<b style="color:#35d08a">答对了。</b> '
+          : '<b style="color:#ff6b7a">这题进错题本了。</b> ') + it.exp;
+        fb.classList.add("show");
+
+        try {
+          var s = studyStore();
+          if (!s.days) s.days = {};
+          s.days[dayKey()] = (s.days[dayKey()] || 0) + 1;
+          if (!s.ans) s.ans = {};
+          if (!s.ans[qid]) s.ans[qid] = { ok: 0, bad: 0 };
+          if (ok) { s.ans[qid].ok++; if (s.wrong) delete s.wrong[qid]; }
+          else { s.ans[qid].bad++; if (!s.wrong) s.wrong = {}; s.wrong[qid] = 1; }
+          s.qts = s.qts || {};
+          s.qts[qid] = Date.now();
+          localStorage.setItem("emb-study-v1", JSON.stringify(s));
+
+          var mo = motivate();
+          mo.xp = (mo.xp || 0) + (ok ? 12 : 4);
+          localStorage.setItem("emb-motivate-v1", JSON.stringify(mo));
+        } catch (e) {}
+
+        refreshStats();
+        toast(ok ? "漂亮！继续保持 🔥" : "已记入错题本，下次复习");
+      });
+      box.appendChild(b);
+    });
+    $("quizFb").classList.remove("show");
+  }
+
+  $("btnNextQ").addEventListener("click", function () {
+    qi++; qLock = false; renderQ();
+  });
+  $("btnQuiz").addEventListener("click", function () {
+    showTab("quiz"); renderQ();
+  });
+  $("btnContinue").addEventListener("click", function () {
+    location.href = "study/index.html";
+  });
+  $("btnGoalGo").addEventListener("click", function () {
+    showTab("quiz"); renderQ();
+  });
+
+  /* ---------- 离线包：进度条 + 仅 Wi-Fi ---------- */
+  var wifiOnly = false;
+  var PACK = [
+    "study/index.html",
+    "study/style.css",
+    "study/bundle-data.js",
+    "study/bundle-app.js",
+    "study/bundle-lazy.js"
+  ];
+  function setPack(label, pct) {
+    $("packLabel").textContent = "离线包状态：" + label;
+    $("packPct").textContent = Math.round(pct) + "%";
+    $("packBar").style.width = Math.max(0, Math.min(100, pct)) + "%";
+  }
+  function isWifi() {
+    try {
+      var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      if (!c) return true; /* 未知当允许 */
+      if (c.type) return c.type === "wifi" || c.type === "ethernet";
+      return (c.effectiveType || "").indexOf("2g") < 0;
+    } catch (e) { return true; }
+  }
+  function downloadPack() {
+    if (wifiOnly && !isWifi()) {
+      setPack("当前非 Wi-Fi，已暂停", 0);
+      toast("已开启「仅 Wi-Fi」，请连接 Wi-Fi 后再下载");
+      return;
+    }
+    var done = 0;
+    setPack("下载中…", 0);
+    PACK.forEach(function (u, idx) {
+      fetch(u).then(function (r) {
+        if (!r.ok) throw new Error("fail");
+        return r.arrayBuffer();
+      }).then(function () {
+        done++;
+        setPack("下载中… " + done + "/" + PACK.length, done / PACK.length * 100);
+        if (done === PACK.length) {
+          setPack("已就绪，可离线打开", 100);
+          try { localStorage.setItem("emb-pack-ready", "1"); } catch (e) {}
+          toast("离线包下载完成 🎉");
+        }
+      }).catch(function () {
+        done++;
+        setPack("部分资源失败 " + done + "/" + PACK.length, done / PACK.length * 100);
+      });
+    });
+  }
+  $("btnDownloadPack").addEventListener("click", downloadPack);
+  $("btnWifiOnly").addEventListener("click", function () {
+    wifiOnly = !wifiOnly;
+    $("btnWifiOnly").textContent = wifiOnly ? "✓ 仅 Wi-Fi" : "仅 Wi-Fi";
+    toast(wifiOnly ? "已开启：只在 Wi-Fi 下下载" : "已关闭仅 Wi-Fi 限制");
+    if (wifiOnly) downloadPack();
+  });
+
+  /* ---------- Service Worker / 更新 ---------- */
+  function toastUpdateReady() {
+    $("updateBanner").classList.add("show");
+  }
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").then(function (reg) {
+      if (reg.waiting) toastUpdateReady();
+      reg.addEventListener("updatefound", function () {
+        var nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener("statechange", function () {
+          if (nw.state === "installed" && navigator.serviceWorker.controller) toastUpdateReady();
+        });
+      });
+      /* 启动自动检查更新 */
+      try {
+        reg.update().then(function () {
+          if (reg.waiting) toastUpdateReady();
+        }).catch(function () {});
+      } catch (e) {}
+      window._reg = reg;
+    }).catch(function () {});
+
+    /* 首次打开时探测离线包 */
+    setTimeout(function () {
+      var ok = true;
+      PACK.forEach(function (u) {});
+      setPack("点「下载离线包」缓存到手机", 0);
+    }, 600);
+  } else {
+    setPack("当前环境不支持离线缓存", 0);
+  }
+
+  $("btnDoUpdate").addEventListener("click", function () {
+    if (window._reg && window._reg.waiting) {
+      window._reg.waiting.postMessage({ type: "SKIP_WAITING" });
+    }
+    setTimeout(function () { location.reload(); }, 350);
+  });
+  $("btnLaterUpdate").addEventListener("click", function () {
+    $("updateBanner").classList.remove("show");
+  });
+  $("btnCheckUpdate").addEventListener("click", function () {
+    if (window._reg) {
+      window._reg.update().then(function () {
+        if (window._reg.waiting) toastUpdateReady();
+        else toast("已是最新版本 " + VER);
+      }).catch(function () { toast("检查更新失败"); });
+    } else toast("当前环境不支持自动更新");
+  });
+  $("btnReload").addEventListener("click", function () { location.reload(); });
+  if ($("wordCard")) $("wordCard").addEventListener("click", function () { this.classList.toggle('flip'); });
+  if ($("btnReadQuiz")) $("btnReadQuiz").addEventListener("click", showReadQuiz);
+  if ($("btnReadLang")) $("btnReadLang").addEventListener("click", function () {
+    readLangFilter = (readLangFilter === 'ru') ? 'all' : 'ru';
+    $("btnReadLang").textContent = (readLangFilter === 'ru') ? '看全部' : '只看俄文';
+    readI = 0; renderRead();
+    toast(readLangFilter === 'ru' ? '已筛选俄文短文' : '显示全部短文');
+  });
+  if ($("btnShowTrans")) $("btnShowTrans").addEventListener("click", function () {
+    var x = document.getElementById('readTrans');
+    if (x) x.style.display = (x.style.display === 'none' ? 'block' : 'none');
+  });
+  if ($("btnReadNext")) $("btnReadNext").addEventListener("click", function () { readI++; renderRead(); });
+  if ($("btnReadSpeak")) $("btnReadSpeak").addEventListener("click", function () {
+    try {
+      var it = READS[readI % READS.length];
+      if (!window.speechSynthesis) { toast('不支持朗读'); return; }
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(it.en);
+      u.lang = 'en-US'; u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  });
+  if ($("btnShadow")) $("btnShadow").addEventListener("click", shadowSpeak);
+  if ($("btnSpeak")) $("btnSpeak").addEventListener("click", speakWord);
+  if ($("btnWordNext")) $("btnWordNext").addEventListener("click", function () { wI++; renderWord(); });
+  if ($("btnWordKnow"))   if ($("btnWordFuzzy")) $("btnWordFuzzy").addEventListener("click", function () {
+    var arr = WORDS[langMode] || WORDS.en;
+    var it = arr[wI % arr.length];
+    if (!it) return;
+    if (!wrongSet.some(function (x) { return x.w === it.w; })) {
+      wrongSet.push({ w: it.w, m: it.m });
+      saveWrong(); renderWrong();
+    }
+    toast('已收进错词本');
+    wI++; renderWord(); packPct();
+  });
+  if ($("btnClearWrong")) $("btnClearWrong").addEventListener("click", function () {
+    wrongSet = []; saveWrong(); renderWrong(); toast('错词本已清空');
+  });
+  if ($("btnReviewWrong")) $("btnReviewWrong").addEventListener("click", function () {
+    if (!wrongSet.length) { toast('错词本是空的'); return; }
+    WORDS[langMode] = wrongSet.map(function (x) { return { w: x.w, m: x.m, tip: '错词复习' }; });
+    wI = 0; renderWord(); toast('进入错词复习');
+  });
+  $("btnWordKnow").addEventListener("click", function () {
+    wKnow++;
+    try {
+      var k = todayWordKey();
+      var n = +(localStorage.getItem(k) || '0') + 1;
+      localStorage.setItem(k, String(n));
+    } catch (e) {}
+    wI++; renderWord(); packPct();
+    toast('记住了！今日词条 +1');
+  });
+  if ($("btnLang")) $("btnLang").addEventListener("click", function () { showTab("lang"); });
+  if ($("btnEn")) $("btnEn").addEventListener("click", function () { langMode='en'; renderLang(); renderWord(); document.getElementById('langFb').classList.remove('show'); });
+  if ($("btnRu")) $("btnRu").addEventListener("click", function () { langMode='ru'; renderLang(); renderWord(); document.getElementById('langFb').classList.remove('show'); });
+  if ($("btnLangQ")) $("btnLangQ").addEventListener("click", langQuiz);
+  if ($("btnLangShuffle")) $("btnLangShuffle").addEventListener("click", function () { renderLang(); langQuiz(); });
+  if ($("btnBase")) $("btnBase").addEventListener("click", function () { showTab("base"); });
+  if ($("btnNextLesson")) $("btnNextLesson").addEventListener("click", function () {
+    lessonI = (lessonI + 1) % LESSONS.length; renderLesson();
+    document.getElementById('lessonFb').classList.remove('show');
+    var q = document.getElementById('lessonQuizBox'); if (q) q.remove();
+  });
+  if ($("btnPrevLesson")) $("btnPrevLesson").addEventListener("click", function () {
+    lessonI = (lessonI - 1 + LESSONS.length) % LESSONS.length; renderLesson();
+    document.getElementById('lessonFb').classList.remove('show');
+    var q = document.getElementById('lessonQuizBox'); if (q) q.remove();
+  });
+  if ($("btnLessonQ")) $("btnLessonQ").addEventListener("click", showLessonQuiz);
+
+  function drawWeek() {
+    var days = studyStore().days || {};
+    var names = ['日','一','二','三','四','五','六'];
+    var vals = [];
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var k = d.getFullYear() + '-' + (d.getMonth()+1 < 10 ? '0' : '') + (d.getMonth()+1) + '-' + (d.getDate() < 10 ? '0' : '') + d.getDate();
+      vals.push({ name: names[d.getDay()], v: days[k] || 0 });
+    }
+    var max = Math.max(10, Math.max.apply(null, vals.map(function (x) { return x.v; })));
+    var g = document.getElementById('weekBars');
+    if (!g) return;
+    var html = '';
+    vals.forEach(function (x, i) {
+      var hgt = Math.round(62 * x.v / max);
+      var bx = 28 + i * 46;
+      html += '<rect x="' + bx + '" y="' + (82 - hgt) + '" width="22" height="' + hgt + '" rx="5" fill="url(#wg)"/>';
+      html += '<text x="' + (bx + 11) + '" y="102" text-anchor="middle" fill="#7f94ad" font-size="10">' + x.name + '</text>';
+    });
+    html += '<defs><linearGradient id="wg" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#4b8dff"/><stop offset="100%" stop-color="#35d08a"/></linearGradient></defs>';
+    g.innerHTML = html;
+    var sum = vals.reduce(function (a, b) { return a + b.v; }, 0);
+    var cap = document.getElementById('weekCap');
+    if (cap) cap.textContent = sum === 0 ? '本周还没开张，做 1 题就有柱子' : ('本周累计 ' + sum + ' 题，继续保持！');
+  }
+
+  var ATLAS = {
+    led: { t: 'LED 限流电阻', d: 'LED 导通后压降近似固定。不限流会烧 IO 或灯珠。I=(V-Vf)/R，常见 2~20mA。' },
+    uart: { t: 'UART 一帧', d: '空闲为高；起始位拉低；数据位先发 LSB；停止位回到高。两端波特率要接近，否则误码。' },
+    queue: { t: '环形队列', d: '生产者写、消费者读。空 head==tail；满常用 (tail+1)%N==head（牺牲一格）。满时策略要显式：丢旧/丢新/阻塞。' },
+    ota: { t: 'A/B 升级', d: '下载到空闲区，校验后切换，试运行自检，失败自动回滚。比原地覆盖更不容易变砖。' }
+  };
+  function bindAtlas() {
+    var fb = document.getElementById('atlasFb');
+    document.querySelectorAll('.atlas-card').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var k = btn.getAttribute('data-atlas');
+        var it = ATLAS[k];
+        if (!it || !fb) return;
+        fb.innerHTML = '<b style="color:#8eb6ff">' + it.t + '</b><br>' + it.d;
+        fb.classList.add('show');
+      });
+    });
+  }
+
+  var ACHS = [
+    { id: 'first', icon: '🎯', name: '破冰' },
+    { id: 'ok10', icon: '✅', name: '10 题' },
+    { id: 'daygoal', icon: '🏁', name: '日达标' },
+    { id: 'streak3', icon: '🔥', name: '3 天' },
+    { id: 'streak7', icon: '⭐', name: '7 天' },
+    { id: 'pack', icon: '📦', name: '离线包' }
+  ];
+  function drawAch() {
+    var wall = document.getElementById('achWall');
+    if (!wall) return;
+    var s = studyStore();
+    var days = s.days || {};
+    var ok = 0;
+    Object.keys(s.ans || {}).forEach(function (k) { ok += (s.ans[k].ok || 0); });
+    var st = streak();
+    var today = days[dayKey()] || 0;
+    var got = {
+      first: ok >= 1, ok10: ok >= 10, daygoal: today >= DAY_GOAL,
+      streak3: st >= 3, streak7: st >= 7,
+      pack: (localStorage.getItem('emb-pack-ready') === '1')
+    };
+    wall.innerHTML = ACHS.map(function (a) {
+      return '<div class="ach' + (got[a.id] ? ' on' : '') + '"><span class="ic">' + a.icon + '</span>' + a.name + '</div>';
+    }).join('');
+  }
+
+  /* ===== 嵌入式基础图文课 ===== */
+  var LESSONS = [
+    {
+      id: 'mcu', title: '单片机是什么',
+      art: '<svg viewBox="0 0 360 180" fill="none"><rect x="110" y="40" width="140" height="100" rx="12" fill="#22407a" stroke="#4b8dff" stroke-width="2"/><rect x="135" y="65" width="90" height="50" rx="6" fill="#0f2748"/><text x="180" y="95" text-anchor="middle" fill="#8eb6ff" font-size="13">MCU</text><path d="M50 60h60M50 90h60M50 120h60M250 60h60M250 90h60M250 120h60" stroke="#7aa8ff" stroke-width="3" stroke-linecap="round"/><circle cx="40" cy="60" r="8" fill="#ffb020"/><circle cx="40" cy="90" r="8" fill="#35d08a"/><circle cx="40" cy="120" r="8" fill="#ff6b7a"/><text x="180" y="28" text-anchor="middle" fill="#b9d0ff" font-size="13">芯片 + 引脚 = 能控制外部世界</text><text x="40" y="155" fill="#7f94ad" font-size="11">传感器/按键</text><text x="280" y="155" fill="#7f94ad" font-size="11">LED/马达/屏</text></svg>',
+      body: '<h4>一句话</h4><p>单片机（MCU）是<strong>把 CPU、内存、外设装进一块芯片</strong>的小计算机。它不是拿来跑游戏的，而是用来「读传感器、控电机、收发数据」。</p><h4>它里面有什么</h4><ul><li><b>CPU</b>：按你的代码一步步执行</li><li><b>Flash</b>：存程序（断电不丢）</li><li><b>RAM</b>：存运行时数据（断电会丢）</li><li><b>外设</b>：GPIO、串口、定时器、ADC…</li></ul><div class="keybox"><b>类比</b>：MCU 像一台「家电里的小电脑」——洗衣机、空调、无人机里都有它在默默控制。</div>',
+      q: { q: '单片机里的 Flash 主要用来？', opts: ['存运行时变量', '存程序，断电不丢', '当网速单位', '散热'], a: 1, exp: 'Flash 存代码；RAM 存运行数据，断电即失。' }
+    },
+    {
+      id: 'gpio', title: 'GPIO：点灯入门',
+      art: '<svg viewBox="0 0 360 180" fill="none"><rect x="30" y="55" width="100" height="70" rx="10" fill="#22407a" stroke="#4b8dff"/><text x="80" y="95" text-anchor="middle" fill="#fff" font-size="12">MCU</text><path d="M130 90h60" stroke="#7aa8ff" stroke-width="3"/><rect x="190" y="78" width="40" height="24" rx="4" fill="#5b7fb8"/><text x="210" y="95" text-anchor="middle" fill="#fff" font-size="11">R</text><path d="M230 90h30" stroke="#7aa8ff" stroke-width="3"/><circle cx="285" cy="90" r="18" fill="#ffb020"/><path d="M285 72v-12" stroke="#ffb020" stroke-width="3"/><text x="180" y="28" text-anchor="middle" fill="#b9d0ff" font-size="13">GPIO 输出高 → 电流经电阻点亮 LED</text><text x="80" y="150" text-anchor="middle" fill="#7f94ad" font-size="11">输出 1/0</text></svg>',
+      body: '<h4>GPIO 是什么</h4><p><b>通用输入输出脚</b>。可以配成「输出」去点灯，也可以配成「输入」读按键。</p><h4>最小点灯代码思路</h4><ul><li>打开 GPIO 时钟</li><li>配置为输出模式</li><li>写寄存器：输出高/低电平</li></ul><div class="keybox"><b>必坑</b>：LED 要串<b>限流电阻</b>；注意高电平点亮还是低电平点亮（有的板子是低有效）。</div>',
+      q: { q: '点 LED 时串联电阻是为了？', opts: ['好看', '限制电流，保护 LED 和 IO', '提高速度', '加密'], a: 1, exp: 'I=(V-Vf)/R，不限流会烧灯或烧脚。' }
+    },
+    {
+      id: 'reg', title: '寄存器：操作硬件的开关',
+      art: '<svg viewBox="0 0 360 180" fill="none"><rect x="40" y="50" width="280" height="80" rx="12" fill="#1a2f52" stroke="#3d5f96"/><text x="180" y="36" text-anchor="middle" fill="#b9d0ff" font-size="13">一个寄存器 = 32 个开关</text><g font-size="12" font-family="sans-serif"><rect x="60" y="75" width="36" height="30" rx="4" fill="#35d08a"/><text x="78" y="96" text-anchor="middle" fill="#fff">1</text><rect x="104" y="75" width="36" height="30" rx="4" fill="#2c4263"/><text x="122" y="96" text-anchor="middle" fill="#fff">0</text><rect x="148" y="75" width="36" height="30" rx="4" fill="#35d08a"/><text x="166" y="96" text-anchor="middle" fill="#fff">1</text><rect x="192" y="75" width="36" height="30" rx="4" fill="#2c4263"/><text x="210" y="96" text-anchor="middle" fill="#fff">0</text><rect x="236" y="75" width="36" height="30" rx="4" fill="#2c4263"/><text x="254" y="96" text-anchor="middle" fill="#fff">0</text></g><text x="180" y="155" text-anchor="middle" fill="#7f94ad" font-size="11">写一个数 = 同时改多个开关（位）</text></svg>',
+      body: '<h4>为什么要懂寄存器</h4><p>硬件不会听「请打开串口」这种话。你要<strong>往某个地址写一个数字</strong>，芯片内部的「开关」才会动作。</p><h4>位操作三板斧</h4><ul><li>置位（打开某位）：用 OR</li><li>清位（关掉某位）：用 AND NOT</li><li>读某位：右移后 AND 1</li></ul><div class="keybox"><b>口诀</b>：置位 OR、清位取反、读位右移。不要整寄存器乱赋值，会把别人的功能位也清掉。</div>',
+      q: { q: '只想打开寄存器第 3 位，正确做法是？', opts: ['REG = 1<<3', 'REG |= (1<<3)', 'REG &= (1<<3)', 'REG = 0'], a: 1, exp: 'OR 只置位；直接赋值会清掉其它位。' }
+    },
+    {
+      id: 'uart', title: '串口 UART：和电脑说话',
+      art: '<svg viewBox="0 0 360 180" fill="none"><rect x="30" y="55" width="90" height="70" rx="10" fill="#22407a" stroke="#4b8dff"/><text x="75" y="95" text-anchor="middle" fill="#fff" font-size="12">MCU</text><rect x="240" y="55" width="90" height="70" rx="10" fill="#2a2450" stroke="#7b5cff"/><text x="285" y="95" text-anchor="middle" fill="#fff" font-size="12">电脑</text><path d="M120 80h120" stroke="#35d08a" stroke-width="3"/><path d="M240 100H120" stroke="#ffb020" stroke-width="3"/><text x="180" y="72" text-anchor="middle" fill="#35d08a" font-size="11">TX → RX</text><text x="180" y="118" text-anchor="middle" fill="#ffb020" font-size="11">RX ← TX</text><text x="180" y="30" text-anchor="middle" fill="#b9d0ff" font-size="12">交叉相连 + 共地</text></svg>',
+      body: '<h4>UART 是什么</h4><p>最常用的<strong>异步串口</strong>。不需要时钟线，双方约定好「波特率」（每秒多少 bit）即可。</p><h4>接线三件套</h4><ul><li>TX 对 RX（交叉）</li><li>RX 对 TX</li><li><b>地线要共地</b></li></ul><div class="keybox"><b>调试神器</b>：printf 重定向到串口，电脑串口助手就能看到日志——嵌入式第一生存技能。</div>',
+      q: { q: '两块板用 UART 通信，TX 应该接对方的？', opts: ['TX', 'RX', 'VCC', 'GND'], a: 1, exp: '交叉连接：TX→RX，且必须共地。' }
+    },
+    {
+      id: 'i2c', title: 'I2C：两根线挂一群设备',
+      art: '<svg viewBox="0 0 360 180" fill="none"><rect x="130" y="20" width="100" height="50" rx="10" fill="#22407a" stroke="#4b8dff"/><text x="180" y="50" text-anchor="middle" fill="#fff" font-size="12">MCU 主机</text><path d="M80 100h200" stroke="#7aa8ff" stroke-width="3"/><path d="M80 130h200" stroke="#35d08a" stroke-width="3"/><path d="M180 70v30" stroke="#7aa8ff" stroke-width="3"/><text x="40" y="105" fill="#7aa8ff" font-size="12">SCL</text><text x="40" y="135" fill="#35d08a" font-size="12">SDA</text><rect x="100" y="90" width="40" height="20" rx="4" fill="#5b7fb8"/><rect x="160" y="90" width="40" height="20" rx="4" fill="#5b7fb8"/><rect x="220" y="90" width="40" height="20" rx="4" fill="#5b7fb8"/><text x="180" y="160" text-anchor="middle" fill="#7f94ad" font-size="11">从机各有一个 7 位地址 · 总线要上拉电阻</text></svg>',
+      body: '<h4>为什么工程师爱 I2C</h4><p>只用 <b>SCL（时钟）+ SDA（数据）</b> 两根线，就能挂多个传感器，每台有地址。</p><h4>必记三点</h4><ul><li>要<b>上拉电阻</b>（常见 4.7k）</li><li>主机发地址，从机回 ACK</li><li>读写前先看器件手册的地址</li></ul><div class="keybox"><b>排障口诀</b>：无 ACK → 查地址/上拉/共地；偶发失败 → 查上拉是否过大、速率是否过高。</div>',
+      q: { q: 'I2C 总线上的 SDA/SCL 通常需要？', opts: ['下拉电阻', '上拉电阻', '变压器', '风扇'], a: 1, exp: '开漏输出靠上拉才能到高电平。' }
+    },
+    {
+      id: 'irq', title: '中断：有事先叫我',
+      art: '<svg viewBox="0 0 360 180" fill="none"><rect x="30" y="70" width="120" height="60" rx="10" fill="#1a2f52" stroke="#3d5f96"/><text x="90" y="105" text-anchor="middle" fill="#fff" font-size="12">主程序在跑</text><rect x="210" y="30" width="120" height="50" rx="10" fill="#22407a" stroke="#ffb020"/><text x="270" y="60" text-anchor="middle" fill="#fff" font-size="12">ISR 中断服务</text><path d="M150 90 L210 60" stroke="#ffb020" stroke-width="2" stroke-dasharray="4 3"/><path d="M210 80 L150 105" stroke="#7aa8ff" stroke-width="2" stroke-dasharray="4 3"/><text x="270" y="145" text-anchor="middle" fill="#7f94ad" font-size="11">做完立刻返回主程序</text><text x="180" y="175" text-anchor="middle" fill="#b9d0ff" font-size="12">中断 = 紧急事件优先处理</text></svg>',
+      body: '<h4>不用中断行不行</h4><p>可以，但只能「一直盯着看」（轮询）。中断是<strong>有事才打断你</strong>，更省电、响应更快。</p><h4>ISR 三条纪律</h4><ul><li>尽量<strong>短</strong>（几微秒～几十微秒）</li><li>不要 printf、不要大段计算</li><li>只做「清标志 + 收数 + 通知」，复杂逻辑放主循环/任务</li></ul><div class="keybox"><b>类比</b>：你在写作业，门铃响（中断）→ 你去开门（ISR）→ 马上回来继续写。别在门口打扫卫生（耗时操作）。</div>',
+      q: { q: '中断服务函数（ISR）里最适合做的是？', opts: ['printf 很多日志', '复杂浮点计算', '清标志并置事件', 'malloc 大块内存'], a: 2, exp: 'ISR 要短；耗时与阻塞放任务/主循环。' }
+    },
+    {
+      id: 'timer', title: '定时器与 PWM',
+      art: '<svg viewBox="0 0 360 180" fill="none"><path d="M30 120h40v-50h40v50h40v-50h40v50h40v-50h40v50h40" stroke="#4b8dff" stroke-width="3" fill="none"/><text x="180" y="30" text-anchor="middle" fill="#b9d0ff" font-size="13">PWM：高电平占一格的比例 = 占空比</text><text x="180" y="160" text-anchor="middle" fill="#7f94ad" font-size="11">占空比 50%（上一半时间高）→ 电机半速 / LED 半亮</text><path d="M30 130h300" stroke="#2c4263" stroke-width="1"/></svg>',
+      body: '<h4>定时器能干嘛</h4><ul><li>精确延时（比 for 空转靠谱）</li><li>产生 <b>PWM</b>：控制灯亮度、电机转速</li><li>输入捕获：测脉冲宽度</li></ul><h4>PWM 一句话</h4><p>高速地开关，用<strong>高电平时间占比</strong>等效成「平均电压」。</p><div class="keybox"><b>公式</b>：频率与占空比由计数上限和比较值决定；调试时用示波器看波形最直观。</div>',
+      q: { q: 'PWM 占空比增加，LED 通常会？', opts: ['变暗', '变亮', '不变', '烧毁必然'], a: 1, exp: '占空比越大，平均电流越大，越亮（在安全范围内）。' }
+    },
+    {
+      id: 'adc', title: 'ADC：把电压变成数字',
+      art: '<svg viewBox="0 0 360 180" fill="none"><path d="M30 100c30-60 60 60 90 0s60 60 90 0 60 60 90 0" stroke="#35d08a" stroke-width="3" fill="none"/><rect x="140" y="40" width="80" height="40" rx="8" fill="#22407a" stroke="#4b8dff"/><text x="180" y="65" text-anchor="middle" fill="#fff" font-size="12">ADC</text><text x="180" y="150" text-anchor="middle" fill="#b9d0ff" font-size="12">模拟电压 → 数值（如 0~4095）</text><text x="40" y="95" fill="#7f94ad" font-size="11">传感器</text></svg>',
+      body: '<h4>ADC 解决什么</h4><p>温度、电量、声音都是<strong>连续的电压</strong>。ADC 把它们变成 CPU 能算的数字。</p><h4>换算要会</h4><ul><li>12 位：0~4095</li><li>电压 = 码值 × 参考电压 / 4095</li><li>再用传感器曲线换算成温度等</li></ul><div class="keybox"><b>注意</b>：采样太密、源阻抗太高会抖；可多次采样取中值/平均。</div>',
+      q: { q: '12 位 ADC 的满量程码值大约是？', opts: ['255', '1023', '4095', '65535'], a: 2, exp: '2^12-1=4095；10 位才是 1023。' }
+    },
+    {
+      id: 'rtos', title: 'RTOS：让多件事并行',
+      art: '<svg viewBox="0 0 360 180" fill="none"><rect x="30" y="30" width="300" height="28" rx="6" fill="#4b8dff"/><text x="40" y="48" fill="#fff" font-size="11">任务A 采集</text><rect x="30" y="70" width="300" height="28" rx="6" fill="#7b5cff"/><text x="40" y="88" fill="#fff" font-size="11">任务B 显示</text><rect x="30" y="110" width="300" height="28" rx="6" fill="#35d08a"/><text x="40" y="128" fill="#fff" font-size="11">任务C 通信</text><text x="180" y="165" text-anchor="middle" fill="#b9d0ff" font-size="12">CPU 轮流跑：看起来像「同时」</text></svg>',
+      body: '<h4>为什么需要 RTOS</h4><p>采集、刷屏、联网要是写在一个 while 里，联网一卡住采样也停了。<strong>RTOS 把工作拆成任务</strong>，调度器轮流执行，重要的优先。</p><h4>三个入门词</h4><ul><li><b>任务</b>：一条独立执行流</li><li><b>队列</b>：任务之间传数据</li><li><b>互斥锁</b>：保护共享资源</li></ul><div class="keybox"><b>口诀</b>：按触发源拆任务；数据用队列；共享加锁；栈要估了再测水位。</div>',
+      q: { q: 'RTOS 里任务间传数据更常用？', opts: ['全局变量随便写', '队列', 'printf', '重启'], a: 1, exp: '队列自带同步语义，比裸全局变量安全。' }
+    },
+    {
+      id: 'debug', title: '调试：灯灭了先查什么',
+      art: '<svg viewBox="0 0 360 180" fill="none"><circle cx="70" cy="90" r="28" fill="#2c4263"/><text x="70" y="95" text-anchor="middle" fill="#fff" font-size="11">现象</text><path d="M100 90h40" stroke="#7aa8ff" stroke-width="2"/><circle cx="170" cy="90" r="28" fill="#22407a" stroke="#4b8dff"/><text x="170" y="95" text-anchor="middle" fill="#fff" font-size="11">电源?</text><path d="M200 90h40" stroke="#7aa8ff" stroke-width="2"/><circle cx="270" cy="90" r="28" fill="#22407a" stroke="#4b8dff"/><text x="270" y="95" text-anchor="middle" fill="#fff" font-size="11">时钟?</text><path d="M300 90h30" stroke="#7aa8ff" stroke-width="2"/><circle cx="345" cy="90" r="18" fill="#35d08a"/><text x="345" y="95" text-anchor="middle" fill="#fff" font-size="11">代码</text><text x="180" y="30" text-anchor="middle" fill="#b9d0ff" font-size="12">从下往上查：电 → 时钟 → 外设 → 代码</text><text x="180" y="155" text-anchor="middle" fill="#7f94ad" font-size="11">不要一上来就怀疑 if 写错</text></svg>',
+      body: '<h4>新手最大的坑</h4><p>灯不亮就狂改代码。其实<strong>先量电源、看时钟、查接线</strong>，80% 是硬件/配置问题。</p><h4>四步排障</h4><ul><li>能不能复现？</li><li>分层：电源 → 时钟 → 外设 → 逻辑</li><li>一次只改一处</li><li>记下证据（电压值、日志）</li></ul><div class="keybox"><b>口诀</b>：先复现，再分层；一次改一点，改完要验证。</div>',
+      q: { q: '新板 LED 不亮，优先查？', opts: ['立刻改业务代码', '电源和接线', '重装系统', '换电脑'], a: 1, exp: '从电源/时钟/接线往上查，比改代码快。' }
+    }
+  ];
+  var lessonI = 0;
+  function renderLesson() {
+    var L = LESSONS[lessonI];
+    if (!L) return;
+    document.getElementById('lessonArt').innerHTML = L.art;
+    document.getElementById('lessonBody').innerHTML = L.body;
+    var nav = document.getElementById('lessonNav');
+    nav.innerHTML = LESSONS.map(function (x, i) {
+      return '<button data-lesson="' + i + '" class="' + (i === lessonI ? 'on' : '') + '">' + (i + 1) + '. ' + x.title + '</button>';
+    }).join('');
+    nav.querySelectorAll('button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        lessonI = +b.getAttribute('data-lesson');
+        try { if (window.WORDS_PACK) { WORDS = window.WORDS_PACK; } } catch (e) {}
+  renderLesson();
+  renderLang();
+  renderWord();
+  renderRead();
+  loadWrong(); renderWrong(); packPct();
+        document.getElementById('lessonFb').classList.remove('show');
+      });
+    });
+  }
+  function showLessonQuiz() {
+    var L = LESSONS[lessonI];
+    var fb = document.getElementById('lessonFb');
+    var box = document.getElementById('lessonBody');
+    if (!L || !fb) return;
+    var html = '<h4>本节小测</h4><p class="quiz-q" style="margin:8px 0">' + L.q.q + '</p>';
+    L.q.opts.forEach(function (t, i) {
+      html += '<button class="opt" data-i="' + i + '"><span class="k">' + String.fromCharCode(65 + i) + '</span><span>' + t + '</span></button>';
+    });
+    box.innerHTML = box.innerHTML + '<div id="lessonQuizBox">' + html + '</div>';
+    box.querySelectorAll('#lessonQuizBox .opt').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var i = +btn.getAttribute('data-i');
+        var ok = i === L.q.a;
+        box.querySelectorAll('#lessonQuizBox .opt').forEach(function (el, j) {
+          if (j === L.q.a) el.classList.add('ok');
+          else if (j === i) el.classList.add('bad');
+        });
+        fb.innerHTML = (ok ? '<b style="color:#35d08a">答对。</b> ' : '<b style="color:#ff6b7a">记一下。</b> ') + L.q.exp;
+        fb.classList.add('show');
+      });
+    });
+  }
+
+  /* ===== 外语卡片 ===== */
+  var LANG = {
+    en: [
+      { tag:'日常', en:'Nice to meet you.', zh:'很高兴认识你。', tip:'初次见面；告别可用 Nice talking to you.' },
+      { tag:'救场', en:'Could you say that again, please?', zh:'请再说一遍。', tip:'听不懂必练；比 What? 更礼貌。' },
+      { tag:'六级', en:'There is a growing awareness that…', zh:'人们越来越意识到……', tip:'写作开头高分句，替换 “Nowadays”.' },
+      { tag:'六级', en:'Only in this way can we…', zh:'只有这样我们才能……', tip:'倒装加分句；注意情态动词位置。' },
+      { tag:'面试', en:'I built a logging device; 200 power-cut tests without data loss.', zh:'我做了采集终端，断电 200 次无丢数据。', tip:'数字比形容词可信。' },
+      { tag:'阅读', en:'address / tackle / cope with', zh:'处理、应对（熟词僻义）', tip:'address 不只是地址；六级最爱考。' }
+    ],
+    ru: [
+      { tag:'日常', en:'Здравствуйте! Меня зовут…', zh:'您好！我叫……', tip:'正式场合用 Здравствуйте，熟人用 Привет。' },
+      { tag:'救场', en:'Повторите, пожалуйста.', zh:'请再说一遍。', tip:'俄语语速快，救场句保命。' },
+      { tag:'语法', en:'Я прочитал статью.', zh:'我读完了文章。', tip:'完成体=有结果；未完成体读作「在读/常读」。' },
+      { tag:'六级', en:'С одной стороны… С другой стороны…', zh:'一方面……另一方面……', tip:'议论文连接词。' },
+      { tag:'面试', en:'Я думаю, что… Потому что…', zh:'我认为……因为……', tip:'观点三句式：观点-原因-例子。' },
+      { tag:'出差', en:'У меня бронь на имя…', zh:'我有预订，名字是……', tip:'入住酒店必说。' }
+    ]
+  };
+  var langMode = 'en';
+  var langArt = {
+    en: '<svg viewBox="0 0 360 140" fill="none"><rect x="40" y="30" width="120" height="80" rx="14" fill="#22407a" stroke="#4b8dff"/><text x="100" y="75" text-anchor="middle" fill="#fff" font-size="22">A</text><path d="M180 70h50" stroke="#7aa8ff" stroke-width="3"/><rect x="240" y="30" width="90" height="80" rx="14" fill="#2a2450" stroke="#7b5cff"/><text x="285" y="62" text-anchor="middle" fill="#fff" font-size="13">English</text><text x="285" y="88" text-anchor="middle" fill="#b9d0ff" font-size="11">CET-6</text></svg>',
+    ru: '<svg viewBox="0 0 360 140" fill="none"><rect x="40" y="30" width="120" height="80" rx="14" fill="#2a2450" stroke="#7b5cff"/><text x="100" y="75" text-anchor="middle" fill="#fff" font-size="20">Яз</text><path d="M180 70h50" stroke="#7aa8ff" stroke-width="3"/><rect x="240" y="30" width="90" height="80" rx="14" fill="#22407a" stroke="#4b8dff"/><text x="285" y="62" text-anchor="middle" fill="#fff" font-size="13">Русский</text><text x="285" y="88" text-anchor="middle" fill="#b9d0ff" font-size="11">六级</text></svg>'
+  };
+  function renderLang() {
+    var art = document.getElementById('langArt');
+    var list = document.getElementById('langList');
+    if (!art || !list) return;
+    art.innerHTML = langArt[langMode];
+    list.innerHTML = LANG[langMode].map(function (x, i) {
+      var main = langMode === 'en' ? x.en : x.en;
+      return '<div class="phrase-card">' +
+                '<span class="pill">' + x.tag + '</span>' +
+                '<div class="' + (langMode === 'en' ? 'en' : 'ru') + '">' + main + '</div>' +
+                '<div class="zh">' + x.zh + '</div>' +
+                '<div class="tip">💡 ' + x.tip + '</div></div>';
+            }).join('');
+    document.getElementById('btnEn').classList.toggle('on', langMode === 'en');
+    document.getElementById('btnRu').classList.toggle('on', langMode === 'ru');
+  }
+  function langQuiz() {
+    var arr = LANG[langMode];
+    var it = arr[Math.floor(Math.random() * arr.length)];
+    var fb = document.getElementById('langFb');
+    if (!fb) return;
+    var opts = arr.slice(0, 4).map(function (x) { return x.zh; });
+    if (opts.length < 4) opts = opts.concat(arr.map(function (x) { return x.zh; })).slice(0, 4);
+    /* 打乱 */
+    opts = opts.sort(function () { return Math.random() - 0.5; });
+    var html = '<h4>小测：下面哪句是正确意思？</h4>';
+    html += '<div class="phrase-card"><div class="' + (langMode==='en'?'en':'ru') + '">' + it.en + '</div></div>';
+    opts.forEach(function (t, i) {
+      html += '<button class="opt" data-t="' + encodeURIComponent(t) + '"><span class="k">' + String.fromCharCode(65+i) + '</span><span>' + t + '</span></button>';
+    });
+    fb.innerHTML = html;
+    fb.classList.add('show');
+    fb.querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var ok = decodeURIComponent(b.getAttribute('data-t')) === it.zh;
+        fb.querySelectorAll('.opt').forEach(function (el) {
+          if (decodeURIComponent(el.getAttribute('data-t')) === it.zh) el.classList.add('ok');
+        });
+        if (!ok) b.classList.add('bad');
+        fb.innerHTML += '<div class="tip" style="margin-top:10px">' + (ok?'✅ 对了！':'💡 ') + it.tip + '</div>';
+        try {
+          var s = JSON.parse(localStorage.getItem('emb-study-v1') || '{}');
+          s.days = s.days || {};
+          var d = new Date(); var k = d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
+          s.days[k] = (s.days[k]||0)+1;
+          localStorage.setItem('emb-study-v1', JSON.stringify(s));
+        } catch (e) {}
+        if (typeof refreshStats === 'function') refreshStats();
+      });
+    });
+  }
+
+  /* ===== 闪卡词库 ===== */
+  var WORDS = {
+    en: [
+      /* 日常 */
+      { w:'hello', ipa:'/həˈləʊ/', m:'你好', tip:'日常问候', g:'day' },
+      { w:'thanks', ipa:'/θæŋks/', m:'谢谢', tip:'= thank you', g:'day' },
+      { w:'please', ipa:'/pliːz/', m:'请', tip:'礼貌用语', g:'day' },
+      { w:'sorry', ipa:'/ˈsɒri/', m:'抱歉', tip:'救场常用', g:'day' },
+      /* 嵌入式 */
+      { w:'firmware', ipa:'/ˈfɜːmweə(r)/', m:'固件', tip:'烧进 Flash 的程序', g:'emb' },
+      { w:'interrupt', ipa:'/ˈɪntərʌpt/', m:'中断', tip:'ISR = service routine', g:'emb' },
+      { w:'register', ipa:'/ˈredʒɪstə(r)/', m:'寄存器', tip:'操作硬件', g:'emb' },
+      { w:'buffer', ipa:'/ˈbʌfə(r)/', m:'缓冲区', tip:'ring buffer', g:'emb' },
+      { w:'peripheral', ipa:'/pəˈrɪfərəl/', m:'外设', tip:'GPIO/UART/ADC…', g:'emb' },
+      { w:'baud rate', ipa:'/bɔːd/', m:'波特率', tip:'UART 速率', g:'emb' },
+      { w:'pull-up', ipa:'', m:'上拉电阻', tip:'I2C 必备', g:'emb' },
+      { w:'watchdog', ipa:'/ˈwɒtʃdɒɡ/', m:'看门狗', tip:'防卡死复位', g:'emb' },
+      /* 求职 */
+      { w:'reliable', ipa:'/rɪˈlaɪəbl/', m:'可靠的', tip:'reliability 名词', g:'job' },
+      { w:'optimize', ipa:'/ˈɒptɪmaɪz/', m:'优化', tip:'performance', g:'job' },
+      { w:'debug', ipa:'/diːˈbʌɡ/', m:'调试', tip:'debug/fix/verify', g:'job' },
+      { w:'compile', ipa:'/kəmˈpaɪl/', m:'编译', tip:'compile & link', g:'job' },
+      { w:'latency', ipa:'/ˈleɪtənsi/', m:'延迟', tip:'响应时间', g:'job' },
+      { w:'portfolio', ipa:'/ˈpɔːtfəliəʊ/', m:'作品集', tip:'求职必讲', g:'job' },
+      /* 六级高频 */
+      { w:'address', ipa:'/əˈdres/', m:'地址；处理', tip:'address a problem', g:'cet' },
+      { w:'contribute', ipa:'/kənˈtrɪbjuːt/', m:'贡献；促成', tip:'contribute to', g:'cet' },
+      { w:'implement', ipa:'/ˈɪmplɪment/', m:'实现', tip:'implement a design', g:'cet' },
+      { w:'constraint', ipa:'/kənˈstreɪnt/', m:'约束', tip:'资源/时间约束', g:'cet' }
+    ],
+    ru: [
+      { w:'привет', ipa:'', m:'你好（熟人）', tip:'正式：Здравствуйте', g:'day' },
+      { w:'спасибо', ipa:'', m:'谢谢', tip:'Большое спасибо 更大谢意', g:'day' },
+      { w:'пожалуйста', ipa:'', m:'请；不客气', tip:'请求与回应', g:'day' },
+      { w:'извините', ipa:'', m:'对不起/劳驾', tip:'问路开头', g:'day' },
+      { w:'включить', ipa:'', m:'打开（电器）', tip:'反义：выключить', g:'emb' },
+      { w:'напряжение', ipa:'', m:'电压', tip:'тех. 术语', g:'emb' },
+      { w:'программист', ipa:'', m:'程序员', tip:'职业', g:'job' },
+      { w:'опыт', ipa:'', m:'经验', tip:'опыт работы 工作经验', g:'job' },
+      { w:'быстрый', ipa:'', m:'快的', tip:'形容词', g:'cet' },
+      { w:'прочитал', ipa:'', m:'读完了', tip:'完成体过去', g:'cet' }
+    ]
+  };
+  var wI = 0, wKnow = 0;
+  function todayWordKey() {
+    var d = new Date();
+    return 'emb-words-' + d.getFullYear() + '-' + (d.getMonth()+1<10?'0':'') + (d.getMonth()+1) + '-' + (d.getDate()<10?'0':'') + d.getDate();
+  }
+  function renderWord() {
+    var arr = WORDS[langMode] || WORDS.en;
+    var it = arr[wI % arr.length];
+    if (!it) return;
+    var card = document.getElementById('wordCard');
+    if (card) card.classList.remove('flip');
+    var f = document.getElementById('wFront');
+    var ipa = document.getElementById('wIpa');
+    var b = document.getElementById('wBack');
+    var tip = document.getElementById('wTip');
+    if (f) f.textContent = it.w;
+    if (ipa) ipa.textContent = it.ipa || '（点🔊听）';
+    if (b) b.textContent = it.m;
+    if (tip) tip.textContent = it.tip || '';
+    var pos = document.getElementById('wordPos');
+    if (pos) pos.textContent = (wI % arr.length + 1) + ' / ' + arr.length;
+    var t = document.getElementById('wordToday');
+    if (t) {
+      try { t.textContent = '今日词条 ' + (localStorage.getItem(todayWordKey()) || '0'); } catch (e) {}
+    }
+  }
+  function speakWord() {
+    try {
+      var arr = WORDS[langMode] || WORDS.en;
+      var it = arr[wI % arr.length];
+      if (!window.speechSynthesis) { toast('当前环境不支持发音'); return; }
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(it.w);
+      u.lang = langMode === 'ru' ? 'ru-RU' : 'en-US';
+      u.rate = 0.9;
+      window.speechSynthesis.speak(u);
+    } catch (e) { toast('发音失败'); }
+  }
+
+  var wrongSet = [];
+  function loadWrong() {
+    try { wrongSet = JSON.parse(localStorage.getItem('emb-wrong-words') || '[]'); } catch (e) { wrongSet = []; }
+  }
+  function saveWrong() {
+    try { localStorage.setItem('emb-wrong-words', JSON.stringify(wrongSet)); } catch (e) {}
+  }
+  function renderWrong() {
+    var box = document.getElementById('wrongWords');
+    if (!box) return;
+    if (!wrongSet.length) { box.innerHTML = '<span class="empty" style="padding:8px">还没有错词</span>'; return; }
+    box.innerHTML = wrongSet.map(function (x, i) {
+      return '<span class="pill" style="cursor:pointer" data-wrong="' + i + '">✕ ' + x.w + '</span>';
+    }).join('');
+    box.querySelectorAll('[data-wrong]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        var i = +el.getAttribute('data-wrong');
+        wrongSet.splice(i, 1); saveWrong(); renderWrong(); toast('已移出错词本');
+      });
+    });
+  }
+  function packPct() {
+    try {
+      var n = +(localStorage.getItem(todayWordKey()) || '0');
+      var pct = Math.min(100, n * 10);
+      var bar = document.getElementById('packWordBar');
+      var lab = document.getElementById('packWordPct');
+      var txt = document.getElementById('packText');
+      if (bar) bar.style.width = pct + '%';
+      if (lab) lab.textContent = pct + '%';
+      if (txt) txt.textContent = n >= 10 ? '今日词包已满，明天继续！' : ('每日 10 词：今天已记 ' + n + ' 个。');
+    } catch (e) {}
+  }
+
+  function shadowSpeak() {
+    var arr = WORDS[langMode] || WORDS.en;
+    var it = arr[wI % arr.length];
+    if (!it) return;
+    toast('先听发音，再跟读一遍');
+    speakWord();
+    try {
+      var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) { toast('本机不支持语音识别，可只做跟读'); return; }
+      var rec = new SR();
+      rec.lang = langMode === 'ru' ? 'ru-RU' : 'en-US';
+      rec.onresult = function (e) {
+        var text = e.results[0][0].transcript.toLowerCase().trim();
+        var target = it.w.toLowerCase();
+        var ok = text.indexOf(target.slice(0, 4)) >= 0 || target.indexOf(text.slice(0, 4)) >= 0;
+        toast(ok ? '跟读不错！' : '听到：' + text + '，再试一次');
+      };
+      rec.onerror = function () { toast('识别失败，可继续默读跟读'); };
+      rec.start();
+    } catch (e) { toast('识别不可用，已播放发音'); }
+  }
+  var READS = [
+    { lang:'en', title:'What is an Embedded System',
+      en:'An embedded system is a computer designed to do one job well. It reads sensors, controls motors, and talks to other devices. Because it is small and reliable, it runs inside many products.',
+      zh:'嵌入式系统是一台把一件事做好的计算机。它读传感器、控电机、和其它设备通信。因为它小而可靠，所以藏在很多产品里。',
+      tip:'designed to do：被设计来做；talks to：与…通信。' },
+    { lang:'en', title:'Inside a Microcontroller',
+      en:'A microcontroller has a CPU, flash memory for code, and RAM for data. GPIO pins can turn an LED on or off. A UART interface can print logs to a computer for debugging.',
+      zh:'单片机有 CPU、存程序的 Flash、存数据的 RAM。GPIO 引脚可以开关 LED。UART 接口可以把日志打到电脑上，方便调试。',
+      tip:'turn on/off：打开/关闭。' },
+    { lang:'en', title:'Firmware Timing',
+      en:'When designing firmware, engineers must think about timing. An interrupt must finish quickly. Long work should be moved to a task or a queue so the system stays responsive.',
+      zh:'设计固件时，工程师必须考虑时序。中断要快速结束。耗时工作应放到任务或队列，系统才能保持响应。',
+      tip:'responsive：响应快；queue：队列。' },
+    { lang:'en', title:'Interview with Evidence',
+      en:'For a job interview, bring a project you can demo. Talk about the problem, your design, the hard bug you fixed, and the test results with real numbers.',
+      zh:'面试时带上能演示的项目。讲清问题、设计、修过的难 bug，以及带真实数字的测试结果。',
+      tip:'demo：演示；numbers build trust。' },
+    { lang:'en', title:'Reliability on Devices',
+      en:'Reliable devices recover from failures. A watchdog timer can restart a frozen system. Dual flash slots allow a safe firmware update. Good logs help engineers find the root cause.',
+      zh:'可靠的设备能从故障中恢复。看门狗可以重启卡死的系统。双 Flash 分区支持安全升级。好的日志帮工程师找到根因。',
+      tip:'watchdog / dual slots / root cause 高频技术词。' },
+    { lang:'en', title:'Learning with Small Steps',
+      en:'The best way to learn is to build a small thing every day. Write code, test it, and write down what failed. Little steps become strong skills.',
+      zh:'最好的学习方式是每天做一点小东西。写代码、测试、记下失败点。小步会变成硬本领。',
+      tip:'small steps become strong skills 可作文结尾。' },
+    { lang:'ru', title:'Немного обо мне',
+      en:'Меня зовут Ли Мин. Я из Гуанчжоу. Я студент, изучаю телекоммуникации. Мне нравятся компьютеры и железо.',
+      zh:'我叫李明，来自广州。我是学生，学通信专业。我喜欢电脑和硬件。',
+      tip:'Меня зовут… / Я из… 自我介绍套句。', lang2:'ru' },
+    { lang:'ru', title:'Рабочий день',
+      en:'Утром я читаю документацию. Днём я пишу код и тестирую плату. Вечером я повторяю новые слова.',
+      zh:'早上我看文档。下午写代码、测板子。晚上复习新单词。',
+      tip:'утром/днём/вечером 时间副词三连。' },
+    { lang:'ru', title:'Проблема и решение',
+      en:'Устройство иногда перезагружается. Мы проверили питание и прошивку. Ошибка была в памяти. Мы исправили код, и всё работает хорошо.',
+      zh:'设备有时会重启。我们检查了供电和固件。错误在内存。我们改了代码，现在运行良好。',
+      tip:'иногда 有时；исправили 改正了（完成体）。' },
+    { lang:'ru', title:'Собеседование',
+      en:'На собеседовании я рассказываю о своём проекте. Я объясняю архитектуру, трудности и тесты. Важно говорить честно и давать примеры.',
+      zh:'面试时我介绍自己的项目。我讲架构、难点和测试。重要的是诚实表达并给出例子。',
+      tip:'рассказываю о / объясняю 常用动词。' }
+  ];
+  var readI = 0;
+  function renderRead() {
+    var it = READS[readI % READS.length];
+    var t = document.getElementById('readText');
+    var x = document.getElementById('readTrans');
+    if (t) t.textContent = it.en;
+    if (x) { x.textContent = it.zh; x.style.display = 'none'; }
+    var fb = document.getElementById('readFb');
+    if (fb) { fb.innerHTML = '<b>提示</b> ' + it.tip; fb.classList.add('show'); }
+  }
+
+  var READ_QUIZ = [
+    {
+      q: 'According to the text, why do embedded systems work inside many products?',
+      opts: ['They are very expensive', 'They are small and reliable', 'They only run games', 'They need large batteries'],
+      a: 1,
+      exp: '原文：Because it is small and reliable, it runs inside many products.'
+    },
+    {
+      q: 'What should be moved out of an interrupt handler?',
+      opts: ['Clearing a flag', 'Long work', 'Reading a pin', 'Returning IRQ_HANDLED'],
+      a: 1,
+      exp: '中断要短；耗时工作放任务或队列。'
+    },
+    {
+      q: 'What helps engineers find the root cause of a failure?',
+      opts: ['Good logs', 'Larger fonts', 'More buttons', 'A new logo'],
+      a: 0,
+      exp: 'Good logs help engineers find the root cause.'
+    },
+    {
+      q: '「Утром я читаю документацию.」的意思是？',
+      opts: ['晚上写代码', '早上我看文档', '下午测板子', '今天不上班'],
+      a: 1,
+      exp: 'утром=早上，читаю=读，документацию=文档（第四格）。'
+    },
+    {
+      q: 'Why is it important to give real numbers in an interview?',
+      opts: ['To make the talk longer', 'To show test results people can check', 'To impress with big words', 'To avoid questions'],
+      a: 1,
+      exp: 'test results with real numbers = 可验证证据。'
+    }
+  ];
+  var readLangFilter = 'all';
+  function pickRead() {
+    var arr = READS.filter(function (x) {
+      if (readLangFilter === 'ru') return x.lang === 'ru' || x.lang2 === 'ru';
+      return true;
+    });
+    return arr.length ? arr : READS;
+  }
+  function renderRead() {
+    var arr = pickRead();
+    var it = arr[readI % arr.length];
+    if (!it) return;
+    var t = document.getElementById('readText');
+    var x = document.getElementById('readTrans');
+    if (t) t.textContent = it.en;
+    if (x) { x.textContent = it.zh; x.style.display = 'none'; }
+    var fb = document.getElementById('readFb');
+    if (fb) { fb.innerHTML = '<b>' + (it.title || '') + '</b> · ' + (it.tip || ''); fb.classList.add('show'); }
+  }
+  function showReadQuiz() {
+    var box = document.getElementById('readQuizBox');
+    if (!box) return;
+    var it = READ_QUIZ[Math.floor(Math.random() * READ_QUIZ.length)];
+    var html = '<h4>六级阅读理解</h4><div class="phrase-card"><p style="margin:0 0 8px">' + it.q + '</p>';
+    it.opts.forEach(function (t, i) {
+      html += '<button class="opt" data-i="' + i + '"><span class="k">' + String.fromCharCode(65+i) + '</span><span>' + t + '</span></button>';
+    });
+    html += '</div>';
+    box.innerHTML = html;
+    box.classList.add('show');
+    box.querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var i = +b.getAttribute('data-i');
+        box.querySelectorAll('.opt').forEach(function (el, j) {
+          if (j === it.a) el.classList.add('ok');
+        });
+        if (i !== it.a) b.classList.add('bad');
+        box.innerHTML += '<div class="tip" style="margin-top:8px">' + it.exp + '</div>';
+      });
+    });
+  }
+
+  /* 启动 */
+  $("verLabel").textContent = VER;
+  $("meVer").textContent = VER;
+  refreshStats();
+  renderQ();
+  drawWeek();
+  bindAtlas();
+  drawAch();
+  renderLesson();
+})();
+</script>
+</body>
+</html>
