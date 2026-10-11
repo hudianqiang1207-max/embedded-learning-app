@@ -11,14 +11,19 @@
 <title>嵌入式学习 App</title>
 <style>
   :root {
-    --bg: #0d1522; --bg2: #152238; --card: #1a2b45; --line: #2c4263;
-    --ink: #eef5ff; --ink2: #b7c7db; --ink3: #7f94ad;
-    --brand: #4b8dff; --brand2: #7aa8ff; --ok: #35d08a; --warn: #ffb020; --bad: #ff6b7a;
+    --bg: #0b1220; --bg2: #121c30; --card: #17233a; --line: #2a3d5c;
+    --ink: #f2f7ff; --ink2: #b9c9de; --ink3: #7d92ab;
+    --brand: #4b8dff; --brand2: #7ab0ff; --ok: #3ddc84; --warn: #ffc145; --bad: #ff6b81;
+    --easy: #3ddc84; --med: #ffc145; --hard: #ff6b81;
+    --heat0: rgba(255,255,255,.06); --heat1: #1f4d8f; --heat2: #2f7fd4; --heat3: #4b8dff; --heat4: #7ab0ff;
+    --shadow: 0 10px 28px rgba(0,0,0,.28);
+    --radius: 18px;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; min-height: 100%; }
   body {
-    font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font: 15px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif;
+    -webkit-font-smoothing: antialiased;
     background: var(--bg); color: var(--ink);
     background-image:
       radial-gradient(900px 420px at 20% -80px, rgba(75,141,255,.18), transparent 60%),
@@ -43,7 +48,8 @@
     display: flex; align-items: center; justify-content: center;
     box-shadow: 0 8px 18px rgba(75,141,255,.35);
   }
-  .appbar h1 { margin: 0; font-size: 17px; font-weight: 700; flex: 1; letter-spacing: .2px; }
+  .appbar h1 { margin: 0; font-size: 18px; font-weight: 800; flex: 1; letter-spacing: .3px;
+      background: linear-gradient(90deg, #fff, #b9d0ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .ver {
     font-size: 11px; color: var(--ink2); border: 1px solid var(--line);
     padding: 3px 9px; border-radius: 999px;
@@ -65,12 +71,15 @@
 
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-    border: 0; border-radius: 14px; padding: 12px 16px; font: inherit; font-size: 14px;
-    font-weight: 650; cursor: pointer; text-decoration: none; color: #fff;
+    border: 0; border-radius: 14px; padding: 13px 18px; font: inherit; font-size: 14px;
+    font-weight: 700; cursor: pointer; text-decoration: none; color: #fff;
+    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    user-select: none;
   }
+  .btn:active { transform: scale(.96); filter: brightness(.95); }
   .btn.primary {
-    background: linear-gradient(135deg, #4b8dff, #6d7cff);
-    box-shadow: 0 10px 22px rgba(75,141,255,.35);
+    background: linear-gradient(135deg, #4b8dff, #6d7cff 55%, #7b5cff);
+    box-shadow: 0 10px 22px rgba(75,141,255,.4);
   }
   .btn.ghost { background: rgba(255,255,255,.06); color: var(--ink); border: 1px solid var(--line); }
   .btn.block { width: 100%; margin-top: 10px; }
@@ -86,12 +95,16 @@
     position: relative; overflow: hidden;
   }
   .stat .ico { font-size: 18px; line-height: 1; margin-bottom: 4px; }
-  .stat b { display: block; font-size: 22px; line-height: 1.15; color: #8eb6ff; }
+  .stat b { display: block; font-size: 22px; line-height: 1.15; color: #8eb6ff; font-weight: 800; }
+  .stat.hot b { color: #ffc145; text-shadow: 0 0 18px rgba(255,193,69,.45); }
+  .stat.ok b { color: #3ddc84; }
   .stat span { font-size: 11.5px; color: var(--ink3); }
 
   .card {
-    background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.08);
-    border-radius: 20px; padding: 16px; margin: 12px 0;
+    background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.028));
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: var(--radius); padding: 16px; margin: 12px 0;
+    box-shadow: var(--shadow); backdrop-filter: blur(8px);
   }
   .card h3 { margin: 0 0 8px; font-size: 15.5px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
   .card h3 .badge {
@@ -119,10 +132,13 @@
     border-radius: 16px; padding: 12px;
   }
   .step .n {
-    width: 28px; height: 28px; border-radius: 999px; flex: none;
+    width: 32px; height: 32px; border-radius: 999px; flex: none;
     background: linear-gradient(135deg,#4b8dff,#7b5cff); color: #fff;
-    display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800;
+    box-shadow: 0 6px 14px rgba(75,141,255,.35);
   }
+  .step.done .n { background: linear-gradient(135deg,#3ddc84,#22b573); box-shadow: 0 6px 14px rgba(61,220,132,.3); }
+  .step.cur { border-color: rgba(75,141,255,.55); background: rgba(75,141,255,.1); }
   .step .t { font-weight: 650; font-size: 13.5px; margin-bottom: 2px; }
   .step .d { font-size: 12px; color: var(--ink3); }
 
@@ -156,10 +172,11 @@
     display: flex; gap: 10px; align-items: center;
   }
   .opt .k {
-    width: 24px; height: 24px; border-radius: 8px; flex: none;
+    width: 26px; height: 26px; border-radius: 8px; flex: none;
     background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center;
-    font-size: 12px; color: var(--ink2);
+    font-size: 12px; font-weight: 700; color: var(--ink2);
   }
+  .opt:active { transform: scale(.985); }
   .opt.ok { border-color: rgba(53,208,138,.7); background: rgba(53,208,138,.12); }
   .opt.bad { border-color: rgba(255,107,122,.7); background: rgba(255,107,122,.12); }
   .fb {
@@ -178,7 +195,9 @@
   .cap { font-size: 11.5px; color: var(--ink3); text-align: center; margin: 6px 0 2px; }
 
   .prog {
-    height: 10px; border-radius: 999px; background: rgba(255,255,255,.08); overflow: hidden;
+    height: 12px; border-radius: 999px;
+    background: rgba(255,255,255,.08); overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.25);
   }
   .prog i {
     display: block; height: 100%; width: 0%; border-radius: 999px;
@@ -219,9 +238,18 @@
     width: 36px; height: 36px; margin: 0 auto 3px; border-radius: 12px;
     display: flex; align-items: center; justify-content: center; font-size: 17px;
   }
-  nav.tabbar button.on { color: var(--brand2); }
+  nav.tabbar button {
+    position: relative; border-radius: 14px; transition: color .15s;
+  }
+  nav.tabbar button.on { color: var(--brand2); font-weight: 700; }
   nav.tabbar button.on .i {
-    background: rgba(75,141,255,.18); box-shadow: 0 0 0 1px rgba(75,141,255,.35);
+    background: linear-gradient(135deg, rgba(75,141,255,.28), rgba(123,92,255,.22));
+    box-shadow: 0 0 0 1px rgba(122,168,255,.45), 0 6px 14px rgba(75,141,255,.25);
+    transform: translateY(-1px);
+  }
+  nav.tabbar button.on::after {
+    content: ""; position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+    width: 18px; height: 3px; border-radius: 999px; background: var(--brand);
   }
   .hidden { display: none !important; }
 
@@ -237,6 +265,13 @@
   .atlas-card:active { transform: scale(.97); }
   .atlas-card svg { width: 100%; height: auto; display: block; margin-bottom: 6px; }
   .atlas-card b { display: block; font-size: 13px; }
+  .atlas-card .cat {
+    display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 999px;
+    font-size: 10px; color: var(--brand2); background: rgba(75,141,255,.12);
+    border: 1px solid rgba(75,141,255,.22);
+  }
+  .atlas-card { transition: transform .12s, border-color .12s; }
+  .atlas-card:hover { border-color: rgba(75,141,255,.4); }
   .atlas-card span { font-size: 11px; color: var(--ink3); }
   .ach-wall { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 12px; }
   .ach {
@@ -244,7 +279,13 @@
     background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
     font-size: 10px; color: var(--ink3);
   }
-  .ach.on { background: rgba(53,208,138,.12); border-color: rgba(53,208,138,.45); color: #b8f0d2; }
+  .ach.on {
+      background: linear-gradient(160deg, rgba(61,220,132,.22), rgba(61,220,132,.08));
+      border-color: rgba(61,220,132,.55); color: #c6f5dc;
+      box-shadow: 0 6px 16px rgba(61,220,132,.18);
+    }
+  .ach { transition: transform .15s, box-shadow .15s; }
+  .ach.on .ic { transform: scale(1.08); }
   .ach .ic { display:block; font-size: 20px; margin-bottom: 4px; }
   .lesson-nav { display:flex; gap:8px; overflow-x:auto; padding:4px 0 10px; }
   .lesson-nav button {
@@ -307,7 +348,126 @@
     color: #fff; font: inherit; font-size: 13px; cursor: pointer;
   }
   .word-meta { display:flex; justify-content:space-between; font-size:12px; color:var(--ink3); margin: 8px 2px; }
+  .gallery { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .g-item {
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1);
+    border-radius:14px; overflow:hidden; cursor:pointer;
+  }
+  .g-item img { width:100%; height:110px; object-fit:cover; display:block; background:#0f1724; }
+  .g-item .cap { font-size:11px; color:var(--ink3); padding:8px; text-align:center; }
+  .stat-bars { display:flex; gap:10px; align-items:flex-end; height:90px; margin:10px 0; }
+  .stat-bars div { flex:1; background:linear-gradient(180deg,#4b8dff,#35d08a); border-radius:6px 6px 0 0; min-height:4px; }
+  .tpl-card {
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+    border-radius:14px; padding:12px; margin:8px 0; font-size:13px; line-height:1.7; color:var(--ink2);
+  }
+  .tpl-card b { color:var(--ink); }
   .chip-row { display: flex; flex-wrap: wrap; gap: 0; margin-top: 8px; }
+
+  /* === ui-boost v1.13 === */
+  .streak-banner {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px; border-radius: var(--radius); margin: 12px 0;
+    background: linear-gradient(120deg, rgba(255,176,32,.18), rgba(255,107,122,.1) 55%, rgba(75,141,255,.14));
+    border: 1px solid rgba(255,176,32,.35); box-shadow: var(--shadow);
+  }
+  .streak-banner .flame {
+    width: 48px; height: 48px; border-radius: 16px; flex: none;
+    display: flex; align-items: center; justify-content: center; font-size: 26px;
+    background: rgba(255,176,32,.18); border: 1px solid rgba(255,176,32,.4);
+  }
+  .streak-banner b { font-size: 22px; color: #ffc145; font-weight: 800; }
+  .streak-banner .sub { font-size: 12px; color: var(--ink2); margin-top: 2px; }
+
+  .sec-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 18px 2px 10px;
+  }
+  .sec-head h3 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: .2px; }
+  .sec-head .more {
+    font-size: 12px; color: var(--brand2); text-decoration: none; font-weight: 650;
+    padding: 4px 10px; border-radius: 999px; background: rgba(75,141,255,.12);
+    border: 1px solid rgba(75,141,255,.22);
+  }
+
+  .continue-card {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #24406f 0%, #1a2c4d 50%, #16243c 100%);
+    border: 1px solid rgba(122,168,255,.32);
+  }
+  .continue-card .tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 700; color: #b9d0ff;
+    padding: 4px 10px; border-radius: 999px; margin-bottom: 8px;
+    background: rgba(75,141,255,.2); border: 1px solid rgba(75,141,255,.35);
+  }
+  .continue-card h3 { font-size: 16px; margin: 0 0 6px; }
+  .continue-card .meta { font-size: 12px; color: var(--ink2); margin: 0 0 12px; }
+
+  .heat {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 10px 0 6px;
+  }
+  .heat i {
+    display: block; height: 28px; border-radius: 8px; background: var(--heat0);
+    border: 1px solid rgba(255,255,255,.05);
+  }
+  .heat i.l1 { background: var(--heat1); border-color: transparent; }
+  .heat i.l2 { background: var(--heat2); border-color: transparent; }
+  .heat i.l3 { background: var(--heat3); border-color: transparent; }
+  .heat i.l4 { background: var(--heat4); border-color: transparent; box-shadow: 0 0 12px rgba(122,168,255,.35); }
+  .heat i.today { outline: 2px solid var(--brand2); outline-offset: 1px; }
+  .heat-labels {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    font-size: 10px; color: var(--ink3); text-align: center;
+  }
+
+  .diff {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700;
+  }
+  .diff.easy { background: rgba(61,220,132,.15); color: var(--easy); border: 1px solid rgba(61,220,132,.35); }
+  .diff.med  { background: rgba(255,193,69,.15); color: var(--med);  border: 1px solid rgba(255,193,69,.35); }
+  .diff.hard { background: rgba(255,107,129,.15); color: var(--hard); border: 1px solid rgba(255,107,129,.35); }
+
+  .quick-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0;
+  }
+  .quick-grid .qk {
+    display: flex; flex-direction: column; gap: 6px; padding: 14px 12px;
+    border-radius: 16px; border: 1px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.04); color: var(--ink); cursor: pointer;
+    text-align: left; font: inherit;
+    transition: transform .12s, border-color .12s;
+  }
+  .quick-grid .qk:active { transform: scale(.97); border-color: rgba(75,141,255,.5); }
+  .quick-grid .qk .ico {
+    width: 36px; height: 36px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    background: rgba(75,141,255,.16); border: 1px solid rgba(75,141,255,.28);
+  }
+  .quick-grid .qk b { font-size: 13.5px; font-weight: 750; }
+  .quick-grid .qk span { font-size: 11px; color: var(--ink3); }
+
+  .pill-row { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 10px; margin: 4px 0; }
+  .pill-row::-webkit-scrollbar { display: none; }
+  .pill-row .cp {
+    flex: none; padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 650;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+    color: var(--ink2); cursor: pointer;
+  }
+  .pill-row .cp.on {
+    background: linear-gradient(135deg, #4b8dff, #7b5cff);
+    border-color: transparent; color: #fff; box-shadow: 0 6px 14px rgba(75,141,255,.3);
+  }
+
+  .lvl-bar {
+    height: 8px; border-radius: 999px; background: rgba(255,255,255,.08); overflow: hidden; margin: 8px 0 4px;
+  }
+  .lvl-bar i {
+    display: block; height: 100%; width: 0%;
+    background: linear-gradient(90deg, #ffc145, #ff8a2b); border-radius: 999px;
+    transition: width .4s ease;
+  }
 </style>
 </head>
 <body>
@@ -320,53 +480,63 @@
       </svg>
     </div>
     <h1>嵌入式学习</h1>
-    <span class="ver" id="verLabel">v1.10.0</span>
+    <span class="ver" id="verLabel">v1.12.0</span>
   </header>
 
   <main>
     <!-- ================= 首页 ================= -->
     <section id="tab-home">
-      <div class="hero">
-        <svg class="hero-art" viewBox="0 0 160 140" fill="none" aria-hidden="true">
-          <rect x="28" y="28" width="104" height="84" rx="10" fill="#2b4d8f" stroke="#7aa8ff" stroke-width="2"/>
-          <rect x="42" y="42" width="76" height="44" rx="4" fill="#0f2748"/>
-          <circle cx="58" cy="100" r="4" fill="#35d08a"/>
-          <circle cx="74" cy="100" r="4" fill="#ffb020"/>
-          <rect x="92" y="96" width="24" height="8" rx="2" fill="#7aa8ff"/>
-          <path d="M20 48h8M20 64h8M20 80h8M132 48h8M132 64h8M132 80h8" stroke="#7aa8ff" stroke-width="3" stroke-linecap="round"/>
-          <path d="M60 20c8-10 32-10 40 0" stroke="#b9d0ff" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="80" cy="14" r="6" fill="#4b8dff"/>
-        </svg>
-        <h2>手机里的嵌入式教练</h2>
-        <p>图文讲解 + 可交互仿真 + 面试真题。每天一点，攒到 offer。</p>
-        <div class="row">
-          <button class="btn primary" id="btnContinue">🚀 继续学习</button>
-          <button class="btn ghost" id="btnBase">📘 学基础</button>
-          <button class="btn ghost" id="btnLang">🌍 外语</button>
-          <button class="btn ghost" id="btnQuiz">✍️ 去刷题</button>
+      <div class="streak-banner" id="streakBanner">
+        <div class="flame" id="streakFlame">🔥</div>
+        <div style="flex:1">
+          <div><b id="statStreak">0</b> <span style="color:var(--ink2);font-size:13px">天连胜</span></div>
+          <div class="sub">今日 <span id="statToday">0</span> 题 · XP <span id="statXp">0</span> · <span id="streakTip">再学一点就达标</span></div>
         </div>
+        <button class="btn primary" style="padding:9px 14px;font-size:12px" id="btnGoalGo">打卡</button>
       </div>
 
-      <div class="stats">
-        <div class="stat">
+      <div class="card continue-card" id="continueCard">
+        <div class="tag">▶ 继续上次</div>
+        <h3 id="continueTitle">嵌入式基础 · GPIO 点灯</h3>
+        <p class="meta" id="continueMeta">图文小节 · 约 3 分钟 · 含自测</p>
+        <div class="prog-line"><span>学习进度</span><span id="continuePct">0%</span></div>
+        <div class="prog"><i id="continueBar"></i></div>
+        <button class="btn primary block" id="btnContinue" style="margin-top:12px">继续学习 ›</button>
+      </div>
+
+      <div class="stats" style="margin-top:12px">
+        <div class="stat hot">
           <div class="ico">🔥</div>
-          <b id="statStreak">0</b>
+          <b id="statStreak2">0</b>
           <span>连续天数</span>
         </div>
-        <div class="stat">
+        <div class="stat ok">
           <div class="ico">✅</div>
-          <b id="statToday">0</b>
+          <b id="statToday2">0</b>
           <span>今日题数</span>
         </div>
         <div class="stat">
           <div class="ico">⚡</div>
-          <b id="statXp">0</b>
+          <b id="statXp2">0</b>
           <span>经验 XP</span>
         </div>
       </div>
 
-      <div class="card">
-        <h3><span class="badge">🎯</span>今日目标</h3>
+      <div class="sec-head">
+        <h3>本周学习热力</h3>
+        <span class="more" id="weekCap">坚持 7 天，激励加倍</span>
+      </div>
+      <div class="card" style="margin-top:0">
+        <div class="heat-labels" id="heatLabels"></div>
+        <div class="heat" id="heat7"></div>
+        <div class="cap" id="heatSummary">本周做题分布在上方格子</div>
+      </div>
+
+      <div class="sec-head">
+        <h3>今日目标</h3>
+        <span class="diff med" id="goalDiff">目标 10 题</span>
+      </div>
+      <div class="card" style="margin-top:0">
         <div class="goal-wrap">
           <div class="ring">
             <svg viewBox="0 0 110 110">
@@ -383,30 +553,51 @@
           </div>
           <div>
             <p id="goalText" style="margin-bottom:8px">先做 3 题热热身。</p>
-            <button class="btn primary" id="btnGoalGo">开始打卡</button>
+            <div class="lvl-bar"><i id="xpBar"></i></div>
+            <div class="cap" id="xpText" style="margin:0 0 8px">再赚 XP 升下一级</div>
+            <button class="btn primary" id="btnGoalGo2">开始打卡</button>
           </div>
-        </div></div>
-
-      <div class="card">
-        <h3><span class="badge">📊</span>本周节奏</h3>
-        <div class="ill">
-          <svg id="weekChart" viewBox="0 0 360 120" fill="none">
-            <rect x="8" y="8" width="344" height="104" rx="12" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-            <text x="20" y="28" fill="#7f94ad" font-size="11" font-family="sans-serif">最近 7 天做题量</text>
-            <g id="weekBars"></g>
-          </svg>
         </div>
-        <div class="cap" id="weekCap">坚持 7 天，学习站激励会加倍</div>
       </div>
 
-      <div class="card">
-        <h3><span class="badge">🗺️</span>三步上手路线</h3>
+      <div class="sec-head">
+        <h3>快捷入口</h3>
+        <a class="more" href="study/index.html">完整学习站 ›</a>
+      </div>
+      <div class="quick-grid">
+        <button class="qk" id="btnBase2">
+          <div class="ico">📘</div>
+          <b>图文基础</b>
+          <span>10 节原理图小课</span>
+        </button>
+        <button class="qk" id="btnQuiz2">
+          <div class="ico">✍️</div>
+          <b>快速刷题</b>
+          <span>错题自动进本</span>
+        </button>
+        <button class="qk" id="btnLang2">
+          <div class="ico">🌍</div>
+          <b>六级外语</b>
+          <span>英语 · 俄语</span>
+        </button>
+        <button class="qk" id="btnLearn2">
+          <div class="ico">🧪</div>
+          <b>图鉴 · 仿真</b>
+          <span>65 图 + 实验室</span>
+        </button>
+      </div>
+
+      <div class="sec-head">
+        <h3>三步上手路线</h3>
+        <span class="more">求职导向</span>
+      </div>
+      <div class="card" style="margin-top:0">
         <div class="path">
-          <div class="step">
-            <div class="n">1</div>
+          <div class="step done">
+            <div class="n">✓</div>
             <div><div class="t">打地基：C + 板级常识</div><div class="d">指针、外设、仪器，能独立写 200 行小项目</div></div>
           </div>
-          <div class="step">
+          <div class="step cur">
             <div class="n">2</div>
             <div><div class="t">做项目：采集上报 / RTOS</div><div class="d">可演示 + 带数字（丢包 0、72h 稳定）</div></div>
           </div>
@@ -491,7 +682,27 @@
               <div class="card">
         <h3><span class="badge">🧩</span>硬件与概念图鉴</h3>
         <p>点开卡片看「是什么 / 坑在哪」，配 SVG 原理图。</p>
-        <div class="atlas" id="atlasGrid">
+        <div class="sec-head" style="margin-top:14px">
+        <h3>位图图鉴 · 高清大图</h3>
+        <span class="more" id="bmpCount">共 0 张</span>
+      </div>
+      <div class="pill-row" id="bmpFilter">
+        <button class="cp on" data-bmp="atlas">图鉴卡</button>
+        <button class="cp" data-bmp="poster">原理海报</button>
+        <button class="cp" data-bmp="hero">章节封面</button>
+        <button class="cp" data-bmp="detail">细节放大</button>
+      </div>
+      <div class="gallery" id="bitmapGallery" style="margin-bottom:12px"></div>
+      <div class="cap" id="bmpHint">点开看大图；海报/细节为高清位图，适合投屏讲解</div>
+
+      <div class="pill-row" id="atlasFilter">
+        <button class="cp on" data-cat="all">全部</button>
+        <button class="cp" data-cat="hw">硬件</button>
+        <button class="cp" data-cat="bus">总线</button>
+        <button class="cp" data-cat="wave">波形</button>
+        <button class="cp" data-cat="sys">系统</button>
+      </div>
+      <div class="atlas" id="atlasGrid">
           <button class="atlas-card" data-atlas="led">
             <svg viewBox="0 0 200 110"><circle cx="55" cy="55" r="16" fill="#ffb020"/><rect x="78" y="48" width="70" height="14" rx="3" fill="#7aa8ff"/><path d="M30 80h140" stroke="#5b7fb8" stroke-width="2"/><text x="100" y="28" text-anchor="middle" fill="#b9d0ff" font-size="12">LED + 限流电阻</text></svg>
             <b>LED 限流</b><span>I=(V-Vf)/R</span>
@@ -511,6 +722,12 @@
         </div>
         <div class="fb" id="atlasFb"></div>
       </div>
+                <div class="card">
+          <h3><span class="badge">🖼️</span>图解大全（14 张）</h3>
+          <p>原理图随包离线，点开看大图。</p>
+          <div class="gallery" id="gallery"></div>
+          <div class="lesson-art hidden" id="galleryView"></div>
+        </div>
         <a class="btn primary block" href="study/index.html">进入学习站 ›</a>
       </div>
     </section>
@@ -594,18 +811,36 @@
             <button class="btn ghost" id="btnReadLang">只看俄文</button>
           </div>
           <div class="fb" id="readQuizBox"></div>
+        </div>
+        <div class="card">
+          <h3><span class="badge">✍️</span>六级写作模板</h3>
+          <div id="writeTpl"></div>
+        </div>
+        <div class="card">
+          <h3><span class="badge">🎧</span>听写练习</h3>
+          <p>听一句，尽量默写，再对照。不支持听写环境时可做「看中文说英文」。</p>
+          <div class="phrase-card" id="dictBox">
+            <div class="zh" id="dictZh">—</div>
+            <div class="en" id="dictAns" style="display:none"></div>
+          </div>
+          <div class="row">
+            <button class="btn ghost" id="btnDictPlay">播放</button>
+            <button class="btn primary" id="btnDictShow">显示答案</button>
+            <button class="btn ghost" id="btnDictNext">换一句</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3><span class="badge">📊</span>学习统计</h3>
+          <div class="stat-bars" id="statBars"><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <div class="word-meta"><span>近 7 天做题量</span><span id="statSum">0</span></div>
+        </div>
           </div>
           <div class="fb" id="readFb"></div>
-        </div>
-        </div>
-        </div>
-        </div>
-      </div>
     </section>
     <!-- ================= 刷题 ================= -->
     <section id="tab-quiz" class="hidden">
       <div class="card">
-        <h3><span class="badge">🧠</span>快速刷题</h3>
+        <h3><span class="badge">🧠</span>快速刷题 <span class="diff med" id="quizDiffTag" style="margin-left:6px">进阶</span></h3>
         <div class="quiz-q" id="quizQ">点下方按钮开始。</div>
         <div id="quizOpts"></div>
         <div class="fb" id="quizFb"></div>
@@ -623,7 +858,7 @@
     <section id="tab-me" class="hidden">
       <div class="card">
         <h3><span class="badge">⚙️</span>版本与更新</h3>
-        <div class="kv"><span>App 版本</span><b id="meVer">v1.10.0</b></div>
+        <div class="kv"><span>App 版本</span><b id="meVer">v1.14.0</b></div>
         <div class="kv"><span>更新方式</span><b>一键更新，无需卸载</b></div>
         <div class="kv"><span>离线能力</span><b>课程包可下载到本机</b></div>
                 <div class="ach-wall" id="achWall"></div>
@@ -672,9 +907,10 @@
 </div>
 
 <script src="words-data.js"></script>
+<script src="bmp-manifest.js"></script>
 <script>
 (function () {
-  var VER = "v1.10.0";
+  var VER = "v1.14.0";
   var DAY_GOAL = 10;
 
   function $(id) { return document.getElementById(id); }
@@ -855,13 +1091,13 @@
   $("btnNextQ").addEventListener("click", function () {
     qi++; qLock = false; renderQ();
   });
-  $("btnQuiz").addEventListener("click", function () {
+  if ($("btnQuiz")) $("btnQuiz").addEventListener("click", function () {
     showTab("quiz"); renderQ();
   });
-  $("btnContinue").addEventListener("click", function () {
-    location.href = "study/index.html";
+  if ($("btnContinue")) $("btnContinue").addEventListener("click", function () {
+    showTab("base"); renderLesson();
   });
-  $("btnGoalGo").addEventListener("click", function () {
+  if ($("btnGoalGo")) $("btnGoalGo").addEventListener("click", function () {
     showTab("quiz"); renderQ();
   });
 
@@ -996,6 +1232,12 @@
       window.speechSynthesis.speak(u);
     } catch (e) {}
   });
+  if ($("btnDictPlay")) $("btnDictPlay").addEventListener("click", dictPlay);
+  if ($("btnDictShow")) $("btnDictShow").addEventListener("click", function () {
+    var a = document.getElementById("dictAns");
+    if (a) a.style.display = "block";
+  });
+  if ($("btnDictNext")) $("btnDictNext").addEventListener("click", function () { dictI++; renderDict(); });
   if ($("btnShadow")) $("btnShadow").addEventListener("click", shadowSpeak);
   if ($("btnSpeak")) $("btnSpeak").addEventListener("click", speakWord);
   if ($("btnWordNext")) $("btnWordNext").addEventListener("click", function () { wI++; renderWord(); });
@@ -1199,6 +1441,8 @@
   renderLang();
   renderWord();
   renderRead();
+  renderGallery();
+  renderTpl(); renderDict(); drawStatBars();
   loadWrong(); renderWrong(); packPct();
         document.getElementById('lessonFb').classList.remove('show');
       });
@@ -1567,6 +1811,301 @@
       });
     });
   }
+
+  var GALLERY = [["01-min-sys.svg","min sys"],["02-gpio-led.svg","gpio led"],["03-register.svg","register"],["04-uart.svg","uart"],["05-i2c.svg","i2c"],["06-irq.svg","irq"],["07-pwm.svg","pwm"],["08-adc.svg","adc"],["09-rtos.svg","rtos"],["10-ota.svg","ota"],["11-debug.svg","debug"],["12-cpu.svg","cpu"],["13-frame.svg","frame"],["14-power.svg","power"],["15-GPIO八模式.svg","GPIO八模式"],["16-NVIC优先级.svg","NVIC优先级"],["17-DMA三通道.svg","DMA三通道"],["18-SPI四线.svg","SPI四线"],["19-CAN差分.svg","CAN差分"],["20-I2C时序.svg","I2C时序"],["20-wave-uart.svg","wave uart"],["21-wave-pwm.svg","wave pwm"],["21-看门狗.svg","看门狗"],["22-Flash擦写.svg","Flash擦写"],["22-wave-i2c.svg","wave i2c"],["23-CRC校验.svg","CRC校验"],["23-wave-adc.svg","wave adc"],["24-circuit-led.svg","circuit led"],["24-状态机.svg","状态机"],["25-circuit-pullup.svg","circuit pullup"],["25-环形缓冲.svg","环形缓冲"],["26-circuit-divider.svg","circuit divider"],["26-优先级反转.svg","优先级反转"],["27-circuit-decoupling.svg","circuit decoupling"],["27-栈溢出.svg","栈溢出"],["28-HardFault.svg","HardFault"],["28-timing-setup-hold.svg","timing setup hold"],["29-timing-irq-latency.svg","timing irq latency"],["29-设备树.svg","设备树"],["30-rtos-queue.svg","rtos queue"],["30-字符设备.svg","字符设备"],["31-cache-line.svg","cache line"],["31-sysfs.svg","sysfs"],["32-MQTT.svg","MQTT"],["32-stack-frame.svg","stack frame"],["33-TLS握手.svg","TLS握手"],["33-endian.svg","endian"],["34-OTA签名.svg","OTA签名"],["34-watchdog.svg","watchdog"],["35-ota-flow.svg","ota flow"],["35-低功耗.svg","低功耗"],["36-debug-flow.svg","debug flow"],["36-去耦电容.svg","去耦电容"],["37-mem-map.svg","mem map"],["37-晶振电路.svg","晶振电路"],["38-bom-resistor.svg","bom resistor"],["38-上拉电阻.svg","上拉电阻"],["39-PWM调速.svg","PWM调速"],["39-solder-joint.svg","solder joint"],["40-ADC滤波.svg","ADC滤波"],["40-fsm.svg","fsm"],["41-串口DMA.svg","串口DMA"],["42-Modbus.svg","Modbus"],["43-USB枚举.svg","USB枚举"],["44-蓝牙GAP.svg","蓝牙GAP"]];
+  function renderGallery() {
+    var g = document.getElementById('gallery');
+    if (!g) return;
+    g.innerHTML = GALLERY.map(function (x, i) {
+      return '<div class="g-item" data-g="' + i + '">' +
+        '<img src="img/' + x[0] + '" alt="' + x[1] + '"/>' +
+        '<div class="cap">' + x[1] + '</div></div>';
+    }).join('');
+    g.querySelectorAll('[data-g]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        var it = GALLERY[+el.getAttribute('data-g')];
+        var v = document.getElementById('galleryView');
+        if (!v) return;
+        v.innerHTML = '<img src="img/' + it[0] + '" style="width:100%" alt="' + it[1] + '"/>' +
+          '<div class="cap" style="margin-top:8px">' + it[1] + '</div>';
+        v.classList.remove('hidden');
+      });
+    });
+  }
+
+  var TPL = [
+    { t: '现象 + 观点', s: 'There is a growing awareness that… / From my perspective, …' },
+    { t: '两点论证', s: 'On the one hand, … On the other hand, … / First, … Moreover, …' },
+    { t: '因果', s: 'Several factors account for this phenomenon. … Therefore, …' },
+    { t: '倒装强调', s: 'Only in this way can we… / Not only… but also…' },
+    { t: '建议结尾', s: 'It is high time that we took measures to…' }
+  ];
+  var DICT = [
+    { zh: '很高兴认识你', en: 'Nice to meet you.' },
+    { zh: '请再说一遍', en: 'Could you say that again, please?' },
+    { zh: '只有这样我们才能成功', en: 'Only in this way can we succeed.' },
+    { zh: '我做了一个采集设备，断电 200 次不丢数据', en: 'I built a logging device; 200 power-cut tests without data loss.' }
+  ];
+  var dictI = 0;
+  function renderTpl() {
+    var box = document.getElementById('writeTpl');
+    if (!box) return;
+    box.innerHTML = TPL.map(function (x) {
+      return '<div class="tpl-card"><b>' + x.t + '</b><br>' + x.s + '</div>';
+    }).join('');
+  }
+  function renderDict() {
+    var it = DICT[dictI % DICT.length];
+    var z = document.getElementById('dictZh');
+    var a = document.getElementById('dictAns');
+    if (z) z.textContent = it.zh;
+    if (a) { a.textContent = it.en; a.style.display = 'none'; }
+  }
+  function dictPlay() {
+    var it = DICT[dictI % DICT.length];
+    try {
+      if (!window.speechSynthesis) { toast('不支持朗读'); return; }
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(it.en);
+      u.lang = 'en-US'; u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  function drawStatBars() {
+    var days = studyStore().days || {};
+    var vals = [];
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var k = d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
+      vals.push(days[k] || 0);
+    }
+    var max = Math.max(1, Math.max.apply(null, vals));
+    var box = document.getElementById('statBars');
+    if (!box) return;
+    Array.prototype.forEach.call(box.children, function (el, i) {
+      el.style.height = Math.round(80 * vals[i] / max) + 'px';
+    });
+    var s = document.getElementById('statSum');
+    if (s) s.textContent = vals.reduce(function (a, b) { return a + b; }, 0) + ' 题';
+  }
+
+  
+  /* ==== bitmap gallery JS ==== */
+  var BMP_SETS = {
+    atlas: (function () {
+      var a = [];
+      for (var i = 1; i <= 65; i++) {
+        // 文件名带主题，运行时用索引表
+        a.push(i);
+      }
+      return a;
+    })()
+  };
+
+  /* 位图清单：由页面内联，避免额外请求 */
+  var BMP_MANIFEST = window.BMP_MANIFEST || {
+    atlas: [],
+    poster: [],
+    hero: [],
+    detail: []
+  };
+
+  function renderBitmaps(kind) {
+    var box = document.getElementById("bitmapGallery");
+    if (!box) return;
+    var list = BMP_MANIFEST[kind] || [];
+    var cnt = document.getElementById("bmpCount");
+    if (cnt) cnt.textContent = "共 " + list.length + " 张";
+    box.innerHTML = list.map(function (it, i) {
+      return '<div class="g-item" data-bmp="' + kind + '" data-i="' + i + '">' +
+        '<img loading="lazy" src="' + it.src + '" alt="' + (it.t || '') + '"/>' +
+        '<div class="cap">' + (it.t || it.src.split("/").pop()) + '</div></div>';
+    }).join("");
+    box.querySelectorAll("[data-bmp]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var k = el.getAttribute("data-bmp");
+        var idx = +el.getAttribute("data-i");
+        var it = (BMP_MANIFEST[k] || [])[idx];
+        if (!it) return;
+        var v = document.getElementById("galleryView");
+        if (!v) return;
+        v.innerHTML = '<img src="' + it.src + '" style="width:100%" alt="' + (it.t||'') + '"/>' +
+          '<div class="cap" style="margin-top:8px">' + (it.t || '') + '</div>';
+        v.classList.remove("hidden");
+      });
+    });
+  }
+
+  function bindBitmapFilter() {
+    var box = document.getElementById("bmpFilter");
+    if (!box) return;
+    box.addEventListener("click", function (e) {
+      var b = e.target.closest("button");
+      if (!b) return;
+      box.querySelectorAll(".cp").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      renderBitmaps(b.getAttribute("data-bmp"));
+    });
+    renderBitmaps("atlas");
+  }
+
+  /* ==== ui-boost v1.13 JS ==== */
+  function syncStats() {
+    var s2 = studyStore();
+    var today2 = (s2.days || {})[dayKey()] || 0;
+    var mo2 = motivate();
+    var st2 = streak();
+    ["statStreak","statStreak2"].forEach(function(id){ var e=$(id); if(e) e.textContent = st2; });
+    ["statToday","statToday2"].forEach(function(id){ var e=$(id); if(e) e.textContent = today2; });
+    ["statXp","statXp2"].forEach(function(id){ var e=$(id); if(e) e.textContent = mo2.xp || 0; });
+    var tip = $("streakTip");
+    if (tip) {
+      tip.textContent = today2 >= DAY_GOAL ? "今日已达标，连胜保持中"
+        : (st2 > 0 ? "别断了连胜，还差 " + Math.max(0, DAY_GOAL - today2) + " 题"
+        : "开始今天的学习，点燃连胜");
+    }
+    var fl = $("streakFlame");
+    if (fl) fl.textContent = st2 > 0 ? "🔥" : "✨";
+
+    /* 继续学进度：按今日目标折算 */
+    var pct2 = Math.min(100, Math.round(today2 / DAY_GOAL * 100));
+    var cb = $("continueBar"), cp = $("continuePct");
+    if (cb) cb.style.width = pct2 + "%";
+    if (cp) cp.textContent = pct2 + "%";
+
+    /* XP 等级条：每 200 XP 一级 */
+    var xp = mo2.xp || 0;
+    var lvl = Math.floor(xp / 200) + 1;
+    var into = xp % 200;
+    var xb = $("xpBar"), xt = $("xpText");
+    if (xb) xb.style.width = Math.round(into / 200 * 100) + "%";
+    if (xt) xt.textContent = "Lv." + lvl + " · 距下一级还差 " + (200 - into) + " XP";
+
+    drawHeat();
+  }
+
+  function drawHeat() {
+    var days = studyStore().days || {};
+    var names = ["日","一","二","三","四","五","六"];
+    var box = $("heat7"), labels = $("heatLabels");
+    if (!box) return;
+    var html = "", lhtml = "", sum = 0;
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var k = d.getFullYear()+"-"+(d.getMonth()+1<10?"0":"")+(d.getMonth()+1)+"-"+(d.getDate()<10?"0":"")+d.getDate();
+      var v = days[k] || 0;
+      sum += v;
+      var lv = v === 0 ? "" : v < 3 ? "l1" : v < 8 ? "l2" : v < 15 ? "l3" : "l4";
+      var todayCls = (i === 0 ? " today" : "");
+      html += '<i class="' + lv + todayCls + '" title="' + names[d.getDay()] + ' · ' + v + ' 题"></i>';
+      lhtml += "<span>" + names[d.getDay()] + "</span>";
+    }
+    box.innerHTML = html;
+    if (labels) labels.innerHTML = lhtml;
+    var hs = $("heatSummary");
+    if (hs) hs.textContent = "本周共 " + sum + " 题 · 格子越亮做得越多";
+  }
+
+  function bindBoost() {
+    function goBase() {
+      if (window.switchTab) switchTab("base");
+      else {
+        document.querySelectorAll("nav.tabbar button").forEach(function(b){
+          b.classList.toggle("on", b.getAttribute("data-tab") === "base");
+        });
+        document.querySelectorAll("main > section").forEach(function(sec){
+          sec.classList.toggle("hidden", sec.id !== "tab-base");
+        });
+      }
+    }
+    function goQuiz() {
+      if (window.switchTab) switchTab("quiz");
+      else {
+        document.querySelectorAll("nav.tabbar button").forEach(function(b){
+          b.classList.toggle("on", b.getAttribute("data-tab") === "quiz");
+        });
+        document.querySelectorAll("main > section").forEach(function(sec){
+          sec.classList.toggle("hidden", sec.id !== "tab-quiz");
+        });
+      }
+    }
+    function goLang() {
+      if (window.switchTab) switchTab("lang");
+      else {
+        document.querySelectorAll("nav.tabbar button").forEach(function(b){
+          b.classList.toggle("on", b.getAttribute("data-tab") === "lang");
+        });
+        document.querySelectorAll("main > section").forEach(function(sec){
+          sec.classList.toggle("hidden", sec.id !== "tab-lang");
+        });
+      }
+    }
+    function goLearn() {
+      if (window.switchTab) switchTab("learn");
+      else {
+        document.querySelectorAll("nav.tabbar button").forEach(function(b){
+          b.classList.toggle("on", b.getAttribute("data-tab") === "learn");
+        });
+        document.querySelectorAll("main > section").forEach(function(sec){
+          sec.classList.toggle("hidden", sec.id !== "tab-learn");
+        });
+      }
+    }
+    var m = {
+      btnBase2: goBase, btnQuiz2: goQuiz, btnLang2: goLang, btnLearn2: goLearn,
+      btnGoalGo2: goQuiz
+    };
+    Object.keys(m).forEach(function(id) {
+      var el = $(id);
+      if (el) el.addEventListener("click", m[id]);
+    });
+  }
+
+  /* 刷题难度标签 */
+  function tagQuizDiff() {
+    var it = typeof QS !== "undefined" && QS.length ? QS[qi % QS.length] : null;
+    var tag = $("quizDiffTag");
+    if (!tag || !it) return;
+    var hard = (it.q || "").length > 40 || (it.opts || []).some(function(o){ return o.length > 18; });
+    tag.className = "diff " + (hard ? "med" : "easy");
+    tag.textContent = hard ? "进阶" : "基础";
+  }
+
+  /* atlasFilter JS */
+  (function () {
+    var box = document.getElementById("atlasFilter");
+    if (!box) return;
+    var MAP = {
+      all: null,
+      hw: ["led"],
+      bus: ["uart"],
+      wave: ["uart"],
+      sys: ["queue", "ota"]
+    };
+    box.addEventListener("click", function (e) {
+      var b = e.target.closest("button");
+      if (!b) return;
+      box.querySelectorAll(".cp").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      var cat = b.getAttribute("data-cat") || "all";
+      var allow = MAP[cat];
+      document.querySelectorAll("#atlasGrid .atlas-card").forEach(function (card) {
+        var k = card.getAttribute("data-atlas") || "";
+        card.style.display = (!allow || allow.indexOf(k) >= 0) ? "" : "none";
+      });
+    });
+  })();
+
+  try { syncStats(); } catch (e) {}
+  try { bindBoost(); } catch (e) {}
+  try { bindBitmapFilter(); } catch (e) {}
+  try { tagQuizDiff(); } catch (e) {}
+  var _oldRefresh = typeof refreshStats === "function" ? refreshStats : null;
+  refreshStats = function () {
+    if (_oldRefresh) _oldRefresh();
+    try { syncStats(); } catch (e) {}
+    try { tagQuizDiff(); } catch (e) {}
+  };
 
   /* 启动 */
   $("verLabel").textContent = VER;
