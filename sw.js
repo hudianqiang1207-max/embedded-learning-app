@@ -1,6 +1,6 @@
 /* 嵌入式学习 App · Service Worker
    版本变更 = 发布新版本；用户点「立即更新」即可，无需卸载重装 */
-var CACHE = "emb-app-v1.10.0";
+var CACHE = "emb-app-v1.12.0";
 
 var ASSETS = [
   "./",
@@ -8,6 +8,20 @@ var ASSETS = [
   "./manifest.webmanifest",
   "./icon.svg",
   "./words-data.js",
+  "./img/01-min-sys.svg",
+  "./img/02-gpio-led.svg",
+  "./img/03-register.svg",
+  "./img/04-uart.svg",
+  "./img/05-i2c.svg",
+  "./img/06-irq.svg",
+  "./img/07-pwm.svg",
+  "./img/08-adc.svg",
+  "./img/09-rtos.svg",
+  "./img/10-ota.svg",
+  "./img/11-debug.svg",
+  "./img/12-cpu.svg",
+  "./img/13-frame.svg",
+  "./img/14-power.svg",
   "./study/index.html",
   "./study/style.css",
   "./study/bundle-data.js",
