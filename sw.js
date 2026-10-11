@@ -1,10 +1,6 @@
 /* 嵌入式学习 App · Service Worker
    版本变更 = 发布新版本；用户点「立即更新」即可，无需卸载重装 */
-<<<<<<< HEAD
 var CACHE = "emb-app-v1.14.0";
-=======
-var CACHE = "emb-app-v1.13.0";
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
 
 var ASSETS = [
   "./",
@@ -33,14 +29,10 @@ var ASSETS = [
   "./study/bundle-lazy.js"
 ];
 
-<<<<<<< HEAD
 /* lazy bitmaps: atlas/poster/hero/detail 按需缓存 */
   var LAZY_RE = /\/(img-atlas|img-poster|img-hero|img-detail|img-hd|img-png)\//;
 
   function cacheAll() {
-=======
-function cacheAll() {
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
   return caches.open(CACHE).then(function (c) {
     /* 逐项缓存：大文件失败不阻断安装，运行时再补 */
     return Promise.all(ASSETS.map(function (u) {

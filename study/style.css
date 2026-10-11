@@ -1561,11 +1561,7 @@ html[data-theme="dark"] .lab-highlight { background: rgba(212, 178, 115, .18); }
   margin: 8px 0 4px; padding: 10px 12px; font-size: 13px; line-height: 1.7;
   background: var(--ok-soft); border-left: 3px solid var(--ok); border-radius: 8px;
   max-width: 560px;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
 
 /* ---------- 坚持激励（连胜/经验/成就） ---------- */
 .motivate-chip-host { display: inline-flex; }
@@ -1610,11 +1606,7 @@ html[data-theme="dark"] .lab-highlight { background: rgba(212, 178, 115, .18); }
 .motivate-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 @media (max-width: 820px) {
   .motivate-card { grid-template-columns: 1fr; }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
 
 /* ---------- 间隔复习 ---------- */
 .review-banner {
@@ -1630,11 +1622,7 @@ html[data-theme="dark"] .lab-highlight { background: rgba(212, 178, 115, .18); }
 .rb-act { display: flex; gap: 8px; flex-wrap: wrap; }
 @media (max-width: 720px) {
   .review-banner { grid-template-columns: 1fr; }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
 
 .cb-eng { background: #5b6e8c; }
 .cb-rus { background: #8c5b6e; }
@@ -1652,11 +1640,7 @@ html[data-theme="dark"] .lab-highlight { background: rgba(212, 178, 115, .18); }
 .note-input {
   flex: 1; min-width: 140px; padding: 6px 10px; font: inherit; font-size: 13px;
   border: 1px solid var(--line); border-radius: 8px; background: var(--card);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
 
 .sec-nav {
   position: sticky; top: 0; z-index: 20;
@@ -1671,8 +1655,5 @@ html[data-theme="dark"] .lab-highlight { background: rgba(212, 178, 115, .18); }
   padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line);
   background: var(--card); color: var(--ink); cursor: pointer; font-size: 12px;
 }
-<<<<<<< HEAD
 .btn-to-top:hover { border-color: var(--brand); color: var(--brand); }
-=======
-.btn-to-top:hover { border-color: var(--brand); color: var(--brand); }
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
+

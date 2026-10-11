@@ -682,7 +682,6 @@
               <div class="card">
         <h3><span class="badge">🧩</span>硬件与概念图鉴</h3>
         <p>点开卡片看「是什么 / 坑在哪」，配 SVG 原理图。</p>
-<<<<<<< HEAD
         <div class="sec-head" style="margin-top:14px">
         <h3>位图图鉴 · 高清大图</h3>
         <span class="more" id="bmpCount">共 0 张</span>
@@ -697,9 +696,6 @@
       <div class="cap" id="bmpHint">点开看大图；海报/细节为高清位图，适合投屏讲解</div>
 
       <div class="pill-row" id="atlasFilter">
-=======
-        <div class="pill-row" id="atlasFilter">
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
         <button class="cp on" data-cat="all">全部</button>
         <button class="cp" data-cat="hw">硬件</button>
         <button class="cp" data-cat="bus">总线</button>
@@ -862,11 +858,7 @@
     <section id="tab-me" class="hidden">
       <div class="card">
         <h3><span class="badge">⚙️</span>版本与更新</h3>
-<<<<<<< HEAD
         <div class="kv"><span>App 版本</span><b id="meVer">v1.14.0</b></div>
-=======
-        <div class="kv"><span>App 版本</span><b id="meVer">v1.13.0</b></div>
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
         <div class="kv"><span>更新方式</span><b>一键更新，无需卸载</b></div>
         <div class="kv"><span>离线能力</span><b>课程包可下载到本机</b></div>
                 <div class="ach-wall" id="achWall"></div>
@@ -915,16 +907,10 @@
 </div>
 
 <script src="words-data.js"></script>
-<<<<<<< HEAD
 <script src="bmp-manifest.js"></script>
 <script>
 (function () {
   var VER = "v1.14.0";
-=======
-<script>
-(function () {
-  var VER = "v1.13.0";
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
   var DAY_GOAL = 10;
 
   function $(id) { return document.getElementById(id); }
@@ -1904,7 +1890,6 @@
   }
 
   
-<<<<<<< HEAD
   /* ==== bitmap gallery JS ==== */
   var BMP_SETS = {
     atlas: (function () {
@@ -1964,8 +1949,6 @@
     renderBitmaps("atlas");
   }
 
-=======
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
   /* ==== ui-boost v1.13 JS ==== */
   function syncStats() {
     var s2 = studyStore();
@@ -2115,10 +2098,7 @@
 
   try { syncStats(); } catch (e) {}
   try { bindBoost(); } catch (e) {}
-<<<<<<< HEAD
   try { bindBitmapFilter(); } catch (e) {}
-=======
->>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
   try { tagQuizDiff(); } catch (e) {}
   var _oldRefresh = typeof refreshStats === "function" ? refreshStats : null;
   refreshStats = function () {
