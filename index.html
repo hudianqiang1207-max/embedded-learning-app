@@ -838,6 +838,46 @@
           <div class="fb" id="readFb"></div>
     </section>
     <!-- ================= 刷题 ================= -->
+    <section id="tab-iv" class="hidden">
+      <div class="streak-banner" style="background:linear-gradient(120deg,rgba(255,107,129,.18),rgba(255,176,32,.12),rgba(75,141,255,.14))">
+        <div class="flame">🎯</div>
+        <div style="flex:1">
+          <div><b id="ivCount">0</b> <span style="color:var(--ink2);font-size:13px">道面试题</span></div>
+          <div class="sub">八股 · 技术 · 情商 · 人事 · 来自 5 份真实资料</div>
+        </div>
+      </div>
+
+      <div class="pill-row" id="ivFilter">
+        <button class="cp on" data-iv="all">全部</button>
+        <button class="cp" data-iv="bagu">八股文</button>
+        <button class="cp" data-iv="tech">技术题</button>
+        <button class="cp" data-iv="eq">情商题</button>
+        <button class="cp" data-iv="hr">人事题</button>
+      </div>
+
+      <div class="card" id="ivCard">
+        <div class="quiz-q" id="ivQ">点「下一题」开始刷面试题。</div>
+        <div class="fb" id="ivA"></div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="btnIvShow">显示答案</button>
+          <button class="btn ghost" id="btnIvNext">下一题</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="badge">📚</span>题库速览</h3>
+        <div class="kv"><span>八股文（嵌入式 200 页）</span><b id="ivBagu">0</b></div>
+        <div class="kv"><span>技术问题汇总</span><b id="ivTech">0</b></div>
+        <div class="kv"><span>情商问题</span><b id="ivEq">0</b></div>
+        <div class="kv"><span>人事面试 150 问</span><b id="ivHr">0</b></div>
+      </div>
+
+      <div class="card">
+        <h3><span class="badge">💡</span>怎么用</h3>
+        <p>按分类刷，答案遮住先自测，再对照。八股文重点背关键字、结构体、指针、中断、RTOS；人事题练表达逻辑；情商题准备 STAR 故事。</p>
+      </div>
+    </section>
+
     <section id="tab-quiz" class="hidden">
       <div class="card">
         <h3><span class="badge">🧠</span>快速刷题 <span class="diff med" id="quizDiffTag" style="margin-left:6px">进阶</span></h3>
@@ -858,7 +898,7 @@
     <section id="tab-me" class="hidden">
       <div class="card">
         <h3><span class="badge">⚙️</span>版本与更新</h3>
-        <div class="kv"><span>App 版本</span><b id="meVer">v1.14.0</b></div>
+        <div class="kv"><span>App 版本</span><b id="meVer">v1.15.0</b></div>
         <div class="kv"><span>更新方式</span><b>一键更新，无需卸载</b></div>
         <div class="kv"><span>离线能力</span><b>课程包可下载到本机</b></div>
                 <div class="ach-wall" id="achWall"></div>
@@ -901,6 +941,7 @@
     <button data-tab="learn"><span class="i">📖</span>学习</button>
     <button data-tab="base"><span class="i">📘</span>基础</button>
     <button data-tab="lang"><span class="i">🌍</span>外语</button>
+    <button data-tab="iv"><span class="i">🎯</span>面试</button>
     <button data-tab="quiz"><span class="i">✍️</span>刷题</button>
     <button data-tab="me"><span class="i">👤</span>我的</button>
   </nav>
@@ -908,9 +949,10 @@
 
 <script src="words-data.js"></script>
 <script src="bmp-manifest.js"></script>
+<script src="data-interview-pack.js"></script>
 <script>
 (function () {
-  var VER = "v1.14.0";
+  var VER = "v1.15.0";
   var DAY_GOAL = 10;
 
   function $(id) { return document.getElementById(id); }
@@ -1890,6 +1932,81 @@
   }
 
   
+  /* ==== interview pack JS ==== */
+  var IV = window.IV_PACK || [];
+  var IV_FILTER = "all";
+  var IV_IDX = 0;
+
+  function ivList() {
+    if (IV_FILTER === "all") return IV;
+    return IV.filter(function (x) { return x.s === IV_FILTER; });
+  }
+
+  function renderIv() {
+    var list = ivList();
+    var qEl = document.getElementById("ivQ");
+    var aEl = document.getElementById("ivA");
+    if (!qEl) return;
+    if (!list.length) {
+      qEl.textContent = "该分类暂无题目";
+      if (aEl) { aEl.classList.remove("show"); aEl.innerHTML = ""; }
+      return;
+    }
+    IV_IDX = IV_IDX % list.length;
+    var it = list[IV_IDX];
+    qEl.textContent = (IV_IDX + 1) + "/" + list.length + ". " + it.q;
+    if (aEl) {
+      aEl.classList.remove("show");
+      aEl.innerHTML = it.a ? "" : "（本题为简答题，尝试口头作答）";
+    }
+    var c = document.getElementById("ivCount");
+    if (c) c.textContent = list.length;
+  }
+
+  function showIvAnswer() {
+    var list = ivList();
+    var it = list[IV_IDX];
+    var aEl = document.getElementById("ivA");
+    if (!it || !aEl) return;
+    aEl.innerHTML = it.a
+      ? "<b style='color:#8eb6ff'>参考答案</b><br>" + it.a
+      : "（本题为简答题，尝试口头作答后再看解析）";
+    aEl.classList.add("show");
+  }
+
+  function bindIv() {
+    var f = document.getElementById("ivFilter");
+    if (f) {
+      f.addEventListener("click", function (e) {
+        var b = e.target.closest("button");
+        if (!b) return;
+        f.querySelectorAll(".cp").forEach(function (x) { x.classList.remove("on"); });
+        b.classList.add("on");
+        IV_FILTER = b.getAttribute("data-iv");
+        IV_IDX = 0;
+        renderIv();
+      });
+    }
+    var n = document.getElementById("btnIvNext");
+    if (n) n.addEventListener("click", function () {
+      IV_IDX++;
+      renderIv();
+    });
+    var s2 = document.getElementById("btnIvShow");
+    if (s2) s2.addEventListener("click", showIvAnswer);
+
+    /* 统计 */
+    function cnt(src) {
+      return IV.filter(function (x) { return x.s === src; }).length;
+    }
+    var m = { ivBagu: "bagu", ivTech: "tech", ivEq: "eq", ivHr: "hr" };
+    Object.keys(m).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = cnt(m[id]);
+    });
+    renderIv();
+  }
+
   /* ==== bitmap gallery JS ==== */
   var BMP_SETS = {
     atlas: (function () {
@@ -2099,6 +2216,7 @@
   try { syncStats(); } catch (e) {}
   try { bindBoost(); } catch (e) {}
   try { bindBitmapFilter(); } catch (e) {}
+  try { bindIv(); } catch (e) {}
   try { tagQuizDiff(); } catch (e) {}
   var _oldRefresh = typeof refreshStats === "function" ? refreshStats : null;
   refreshStats = function () {

@@ -1,6 +1,6 @@
-/* 嵌入式学习 App · Service Worker
+﻿/* 嵌入式学习 App · Service Worker
    版本变更 = 发布新版本；用户点「立即更新」即可，无需卸载重装 */
-var CACHE = "emb-app-v1.14.0";
+var CACHE = "emb-app-v1.15.0";
 
 var ASSETS = [
   "./",
