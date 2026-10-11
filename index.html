@@ -307,6 +307,20 @@
     color: #fff; font: inherit; font-size: 13px; cursor: pointer;
   }
   .word-meta { display:flex; justify-content:space-between; font-size:12px; color:var(--ink3); margin: 8px 2px; }
+  .gallery { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .g-item {
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1);
+    border-radius:14px; overflow:hidden; cursor:pointer;
+  }
+  .g-item img { width:100%; height:110px; object-fit:cover; display:block; background:#0f1724; }
+  .g-item .cap { font-size:11px; color:var(--ink3); padding:8px; text-align:center; }
+  .stat-bars { display:flex; gap:10px; align-items:flex-end; height:90px; margin:10px 0; }
+  .stat-bars div { flex:1; background:linear-gradient(180deg,#4b8dff,#35d08a); border-radius:6px 6px 0 0; min-height:4px; }
+  .tpl-card {
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+    border-radius:14px; padding:12px; margin:8px 0; font-size:13px; line-height:1.7; color:var(--ink2);
+  }
+  .tpl-card b { color:var(--ink); }
   .chip-row { display: flex; flex-wrap: wrap; gap: 0; margin-top: 8px; }
 </style>
 </head>
@@ -320,7 +334,7 @@
       </svg>
     </div>
     <h1>嵌入式学习</h1>
-    <span class="ver" id="verLabel">v1.10.0</span>
+    <span class="ver" id="verLabel">v1.12.0</span>
   </header>
 
   <main>
@@ -511,6 +525,12 @@
         </div>
         <div class="fb" id="atlasFb"></div>
       </div>
+                <div class="card">
+          <h3><span class="badge">🖼️</span>图解大全（14 张）</h3>
+          <p>原理图随包离线，点开看大图。</p>
+          <div class="gallery" id="gallery"></div>
+          <div class="lesson-art hidden" id="galleryView"></div>
+        </div>
         <a class="btn primary block" href="study/index.html">进入学习站 ›</a>
       </div>
     </section>
@@ -594,6 +614,29 @@
             <button class="btn ghost" id="btnReadLang">只看俄文</button>
           </div>
           <div class="fb" id="readQuizBox"></div>
+        </div>
+        <div class="card">
+          <h3><span class="badge">✍️</span>六级写作模板</h3>
+          <div id="writeTpl"></div>
+        </div>
+        <div class="card">
+          <h3><span class="badge">🎧</span>听写练习</h3>
+          <p>听一句，尽量默写，再对照。不支持听写环境时可做「看中文说英文」。</p>
+          <div class="phrase-card" id="dictBox">
+            <div class="zh" id="dictZh">—</div>
+            <div class="en" id="dictAns" style="display:none"></div>
+          </div>
+          <div class="row">
+            <button class="btn ghost" id="btnDictPlay">播放</button>
+            <button class="btn primary" id="btnDictShow">显示答案</button>
+            <button class="btn ghost" id="btnDictNext">换一句</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3><span class="badge">📊</span>学习统计</h3>
+          <div class="stat-bars" id="statBars"><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <div class="word-meta"><span>近 7 天做题量</span><span id="statSum">0</span></div>
+        </div>
           </div>
           <div class="fb" id="readFb"></div>
         </div>
@@ -623,7 +666,7 @@
     <section id="tab-me" class="hidden">
       <div class="card">
         <h3><span class="badge">⚙️</span>版本与更新</h3>
-        <div class="kv"><span>App 版本</span><b id="meVer">v1.10.0</b></div>
+        <div class="kv"><span>App 版本</span><b id="meVer">v1.12.0</b></div>
         <div class="kv"><span>更新方式</span><b>一键更新，无需卸载</b></div>
         <div class="kv"><span>离线能力</span><b>课程包可下载到本机</b></div>
                 <div class="ach-wall" id="achWall"></div>
@@ -674,7 +717,7 @@
 <script src="words-data.js"></script>
 <script>
 (function () {
-  var VER = "v1.10.0";
+  var VER = "v1.12.0";
   var DAY_GOAL = 10;
 
   function $(id) { return document.getElementById(id); }
@@ -996,6 +1039,12 @@
       window.speechSynthesis.speak(u);
     } catch (e) {}
   });
+  if ($("btnDictPlay")) $("btnDictPlay").addEventListener("click", dictPlay);
+  if ($("btnDictShow")) $("btnDictShow").addEventListener("click", function () {
+    var a = document.getElementById("dictAns");
+    if (a) a.style.display = "block";
+  });
+  if ($("btnDictNext")) $("btnDictNext").addEventListener("click", function () { dictI++; renderDict(); });
   if ($("btnShadow")) $("btnShadow").addEventListener("click", shadowSpeak);
   if ($("btnSpeak")) $("btnSpeak").addEventListener("click", speakWord);
   if ($("btnWordNext")) $("btnWordNext").addEventListener("click", function () { wI++; renderWord(); });
@@ -1199,6 +1248,8 @@
   renderLang();
   renderWord();
   renderRead();
+  renderGallery();
+  renderTpl(); renderDict(); drawStatBars();
   loadWrong(); renderWrong(); packPct();
         document.getElementById('lessonFb').classList.remove('show');
       });
@@ -1566,6 +1617,83 @@
         box.innerHTML += '<div class="tip" style="margin-top:8px">' + it.exp + '</div>';
       });
     });
+  }
+
+  var GALLERY = [["01-min-sys.svg","min sys"],["02-gpio-led.svg","gpio led"],["03-register.svg","register"],["04-uart.svg","uart"],["05-i2c.svg","i2c"],["06-irq.svg","irq"],["07-pwm.svg","pwm"],["08-adc.svg","adc"],["09-rtos.svg","rtos"],["10-ota.svg","ota"],["11-debug.svg","debug"],["12-cpu.svg","cpu"],["13-frame.svg","frame"],["14-power.svg","power"],["15-GPIO八模式.svg","GPIO八模式"],["16-NVIC优先级.svg","NVIC优先级"],["17-DMA三通道.svg","DMA三通道"],["18-SPI四线.svg","SPI四线"],["19-CAN差分.svg","CAN差分"],["20-I2C时序.svg","I2C时序"],["20-wave-uart.svg","wave uart"],["21-wave-pwm.svg","wave pwm"],["21-看门狗.svg","看门狗"],["22-Flash擦写.svg","Flash擦写"],["22-wave-i2c.svg","wave i2c"],["23-CRC校验.svg","CRC校验"],["23-wave-adc.svg","wave adc"],["24-circuit-led.svg","circuit led"],["24-状态机.svg","状态机"],["25-circuit-pullup.svg","circuit pullup"],["25-环形缓冲.svg","环形缓冲"],["26-circuit-divider.svg","circuit divider"],["26-优先级反转.svg","优先级反转"],["27-circuit-decoupling.svg","circuit decoupling"],["27-栈溢出.svg","栈溢出"],["28-HardFault.svg","HardFault"],["28-timing-setup-hold.svg","timing setup hold"],["29-timing-irq-latency.svg","timing irq latency"],["29-设备树.svg","设备树"],["30-rtos-queue.svg","rtos queue"],["30-字符设备.svg","字符设备"],["31-cache-line.svg","cache line"],["31-sysfs.svg","sysfs"],["32-MQTT.svg","MQTT"],["32-stack-frame.svg","stack frame"],["33-TLS握手.svg","TLS握手"],["33-endian.svg","endian"],["34-OTA签名.svg","OTA签名"],["34-watchdog.svg","watchdog"],["35-ota-flow.svg","ota flow"],["35-低功耗.svg","低功耗"],["36-debug-flow.svg","debug flow"],["36-去耦电容.svg","去耦电容"],["37-mem-map.svg","mem map"],["37-晶振电路.svg","晶振电路"],["38-bom-resistor.svg","bom resistor"],["38-上拉电阻.svg","上拉电阻"],["39-PWM调速.svg","PWM调速"],["39-solder-joint.svg","solder joint"],["40-ADC滤波.svg","ADC滤波"],["40-fsm.svg","fsm"],["41-串口DMA.svg","串口DMA"],["42-Modbus.svg","Modbus"],["43-USB枚举.svg","USB枚举"],["44-蓝牙GAP.svg","蓝牙GAP"]];
+  function renderGallery() {
+    var g = document.getElementById('gallery');
+    if (!g) return;
+    g.innerHTML = GALLERY.map(function (x, i) {
+      return '<div class="g-item" data-g="' + i + '">' +
+        '<img src="img/' + x[0] + '" alt="' + x[1] + '"/>' +
+        '<div class="cap">' + x[1] + '</div></div>';
+    }).join('');
+    g.querySelectorAll('[data-g]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        var it = GALLERY[+el.getAttribute('data-g')];
+        var v = document.getElementById('galleryView');
+        if (!v) return;
+        v.innerHTML = '<img src="img/' + it[0] + '" style="width:100%" alt="' + it[1] + '"/>' +
+          '<div class="cap" style="margin-top:8px">' + it[1] + '</div>';
+        v.classList.remove('hidden');
+      });
+    });
+  }
+
+  var TPL = [
+    { t: '现象 + 观点', s: 'There is a growing awareness that… / From my perspective, …' },
+    { t: '两点论证', s: 'On the one hand, … On the other hand, … / First, … Moreover, …' },
+    { t: '因果', s: 'Several factors account for this phenomenon. … Therefore, …' },
+    { t: '倒装强调', s: 'Only in this way can we… / Not only… but also…' },
+    { t: '建议结尾', s: 'It is high time that we took measures to…' }
+  ];
+  var DICT = [
+    { zh: '很高兴认识你', en: 'Nice to meet you.' },
+    { zh: '请再说一遍', en: 'Could you say that again, please?' },
+    { zh: '只有这样我们才能成功', en: 'Only in this way can we succeed.' },
+    { zh: '我做了一个采集设备，断电 200 次不丢数据', en: 'I built a logging device; 200 power-cut tests without data loss.' }
+  ];
+  var dictI = 0;
+  function renderTpl() {
+    var box = document.getElementById('writeTpl');
+    if (!box) return;
+    box.innerHTML = TPL.map(function (x) {
+      return '<div class="tpl-card"><b>' + x.t + '</b><br>' + x.s + '</div>';
+    }).join('');
+  }
+  function renderDict() {
+    var it = DICT[dictI % DICT.length];
+    var z = document.getElementById('dictZh');
+    var a = document.getElementById('dictAns');
+    if (z) z.textContent = it.zh;
+    if (a) { a.textContent = it.en; a.style.display = 'none'; }
+  }
+  function dictPlay() {
+    var it = DICT[dictI % DICT.length];
+    try {
+      if (!window.speechSynthesis) { toast('不支持朗读'); return; }
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(it.en);
+      u.lang = 'en-US'; u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  function drawStatBars() {
+    var days = studyStore().days || {};
+    var vals = [];
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var k = d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
+      vals.push(days[k] || 0);
+    }
+    var max = Math.max(1, Math.max.apply(null, vals));
+    var box = document.getElementById('statBars');
+    if (!box) return;
+    Array.prototype.forEach.call(box.children, function (el, i) {
+      el.style.height = Math.round(80 * vals[i] / max) + 'px';
+    });
+    var s = document.getElementById('statSum');
+    if (s) s.textContent = vals.reduce(function (a, b) { return a + b; }, 0) + ' 题';
   }
 
   /* 启动 */
