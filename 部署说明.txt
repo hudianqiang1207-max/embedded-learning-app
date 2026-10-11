@@ -18,4 +18,8 @@
   manifest.webmanifest  安装元数据
   icon.svg            图标
   words-data.js       词库
+<<<<<<< HEAD
   study/              完整学习站（可离线）
+=======
+  study/              完整学习站（可离线）
+>>>>>>> 2791a646f31238970c0e91a6a49a07d29834d31b
