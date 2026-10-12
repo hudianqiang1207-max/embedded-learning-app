@@ -2,32 +2,79 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0f1724" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#FF7B2E" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="嵌入式学习" />
+<meta name="application-name" content="嵌入式学习" />
+<meta name="msapplication-TileColor" content="#FF7B2E" />
+<meta name="msapplication-tap-highlight" content="no" />
+<!-- iOS 图标 -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png" />
+<link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" sizes="76x76" href="apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" sizes="60x60" href="apple-touch-icon-60x60.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.ico" />
+<!-- iOS 启动图 -->
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-640x1136.png" media="(device-width: 320px) and (device-height: 568px)" />
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-750x1334.png" media="(device-width: 375px) and (device-height: 667px)" />
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-828x1792.png" media="(device-width: 414px) and (device-height: 896px)" />
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-1125x2436.png" media="(device-width: 375px) and (device-height: 812px)" />
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-1170x2532.png" media="(device-width: 390px) and (device-height: 844px)" />
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-1284x2778.png" media="(device-width: 428px) and (device-height: 926px)" />
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-1290x2796.png" media="(device-width: 430px) and (device-height: 932px)" />
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-768x1024.png" media="(device-width: 768px) and (device-height: 1024px)" />
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-1024x768.png" media="(device-width: 1024px) and (device-height: 768px)" />
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-min-device-pixel-ratio: 2)" />
+<link rel="apple-touch-startup-image" href="apple-touch-startup-image-2048x1536.png" media="(device-width: 1024px) and (device-height: 768px) and (-webkit-min-device-pixel-ratio: 2)" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="description" content="嵌入式学习 App：图文讲解 · 刷题打卡 · 离线可用 · 一键更新" />
 <link rel="manifest" href="manifest.webmanifest" />
 <link rel="icon" href="icon.svg" type="image/svg+xml" />
 <title>嵌入式学习 App</title>
 <style>
+  /* text-safe */
+  * { box-sizing: border-box; }
+  .flip-word, .flip-ipa, .quiz-q, .opt span, .lesson-body, .fb,
+  .card p, .step .t, .step .d, .item .t, .item .d {
+    overflow-wrap: anywhere; word-break: break-word; white-space: normal;
+    max-width: 100%;
+  }
+  img { max-width: 100%; height: auto; }
+  /* ios-safe */
   :root {
-    --bg: #0b1220; --bg2: #121c30; --card: #17233a; --line: #2a3d5c;
-    --ink: #f2f7ff; --ink2: #b9c9de; --ink3: #7d92ab;
-    --brand: #4b8dff; --brand2: #7ab0ff; --ok: #3ddc84; --warn: #ffc145; --bad: #ff6b81;
-    --easy: #3ddc84; --med: #ffc145; --hard: #ff6b81;
-    --heat0: rgba(255,255,255,.06); --heat1: #1f4d8f; --heat2: #2f7fd4; --heat3: #4b8dff; --heat4: #7ab0ff;
-    --shadow: 0 10px 28px rgba(0,0,0,.28);
+    /* === warm-theme === */
+    --bg: #FFF8F0;
+    --bg2: #FFF1E0;
+    --card: #FFFFFF;
+    --line: #F0E0CC;
+    --ink: #3D2B1F;
+    --ink2: #7A6350;
+    --ink3: #A89478;
+    --brand: #FF7B2E;
+    --brand2: #FF9A5C;
+    --ok: #4CAF50;
+    --warn: #FFB347;
+    --bad: #FF6B6B;
+    --easy: #4CAF50; --med: #FFB347; --hard: #FF6B6B;
+    --heat0: rgba(255,123,46,.08); --heat1: #FFD4B8; --heat2: #FFB347; --heat3: #FF7B2E; --heat4: #E85D04;
+    --shadow: 0 8px 24px rgba(200,120,50,.12);
     --radius: 18px;
+    --warm-bg: linear-gradient(135deg, #FFF8F0 0%, #FFE8D0 100%);
+    --warm-accent: linear-gradient(135deg, #FF7B2E, #FF9A5C);
+    --warm-card: linear-gradient(135deg, #FFFFFF, #FFF8F0);
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; min-height: 100%; }
+  html, body { margin: 0; min-height: 100%; min-height: -webkit-fill-available; }
   body {
     font: 15px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif;
     -webkit-font-smoothing: antialiased;
     background: var(--bg); color: var(--ink);
-    background-image:
-      radial-gradient(900px 420px at 20% -80px, rgba(75,141,255,.18), transparent 60%),
-      radial-gradient(700px 360px at 100% 120px, rgba(123,92,255,.14), transparent 55%);
+    background-image: radial-gradient(900px 420px at 20% -80px, rgba(255,123,46,.12), transparent 60%),
+      radial-gradient(700px 360px at 100% 120px, rgba(255,154,92,.1), transparent 55%);
     background-attachment: fixed;
   }
   #app {
@@ -38,7 +85,7 @@
   header.appbar {
     position: sticky; top: 0; z-index: 30;
     display: flex; align-items: center; gap: 12px;
-    padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
+    padding: calc(12px + var(--sat, env(safe-area-inset-top, 0px))) 16px 12px;
     background: rgba(13, 21, 34, .88); backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(255,255,255,.06);
   }
@@ -228,7 +275,7 @@
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
     display: flex; justify-content: space-around;
     background: rgba(10, 16, 26, .96); border-top: 1px solid rgba(255,255,255,.08);
-    padding: 8px 8px calc(10px + env(safe-area-inset-bottom));
+    padding: 8px 8px calc(10px + var(--sab, env(safe-area-inset-bottom, 0px)));
   }
   nav.tabbar button {
     flex: 1; background: none; border: 0; color: var(--ink3); font: inherit;
@@ -325,23 +372,62 @@
     font-size:11.5px; color:#b9d0ff; background:rgba(75,141,255,.12);
     border-radius:10px; padding:8px 10px; margin-top:8px;
   }
-  .flip-wrap { perspective: 1000px; margin: 12px 0; }
+  .flip-wrap { perspective: 1200px; margin: 16px 0; }
   .flip-card {
-    position: relative; width: 100%; height: 170px; cursor: pointer;
-    transform-style: preserve-3d; transition: transform .45s;
+    position: relative; width: 100%; min-height: 280px; height: auto; cursor: pointer;
+    transform-style: preserve-3d; transition: transform .5s cubic-bezier(.2,.8,.2,1);
   }
   .flip-card.flip { transform: rotateY(180deg); }
   .flip-face {
-    position: absolute; inset: 0; backface-visibility: hidden;
-    border-radius: 18px; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; padding: 16px; text-align: center;
-    border: 1px solid rgba(255,255,255,.12);
+    position: absolute; inset: 0; min-height: 280px;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 22px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 24px 18px;
+    text-align: center; border: 1px solid rgba(255,255,255,.12);
   }
-  .flip-front { background: linear-gradient(145deg,#22407a,#1a2c4d); }
-  .flip-back { background: linear-gradient(145deg,#2a2450,#1c1838); transform: rotateY(180deg); }
-  .flip-word { font-size: 26px; font-weight: 800; letter-spacing: .3px; }
-  .flip-ipa { color: #b9d0ff; font-size: 13px; margin-top: 6px; }
-  .flip-hint { color: var(--ink3); font-size: 11px; margin-top: 12px; }
+  .flip-front { background: linear-gradient(155deg,#2a4d94 0%,#1a2c52 55%,#152238 100%); }
+  .flip-back {
+    background: linear-gradient(155deg,#3a2a68 0%,#241a48 55%,#1a1432 100%);
+    transform: rotateY(180deg);
+  }
+  .flip-word {
+    font-size: 32px; font-weight: 800; letter-spacing: .3px;
+    line-height: 1.35; max-width: 100%;
+    overflow-wrap: anywhere; word-break: break-word;
+    padding: 0 4px;
+  }
+  .flip-word.long { font-size: 22px; }
+  .flip-word.xlong { font-size: 17px; line-height: 1.5; }
+  .flip-ipa {
+    color: #b9d0ff; font-size: 15px; margin-top: 10px; line-height: 1.5;
+    overflow-wrap: anywhere; word-break: break-word; max-width: 100%;
+    padding: 0 6px;
+  }
+  .flip-hint { color: var(--ink3); font-size: 12px; margin-top: 16px; opacity: .85; }
+  /* word-art-css */
+  .word-art {
+    width: 200px; height: 120px; margin: 0 auto 12px;
+    border-radius: 14px; overflow: hidden;
+    background: rgba(255,255,255,.06);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .word-art svg { width: 100%; height: 100%; object-fit: cover; }
+  .word-art:empty { display: none; }
+  .word-mnem {
+    margin-top: 14px; padding: 12px 14px; border-radius: 12px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+    font-size: 13px; line-height: 1.7; color: #cfe0ff;
+    max-width: 100%; overflow-wrap: anywhere; word-break: break-word;
+  }
+  .word-mnem b { color: #ffc145; }
+  .word-mnem .root { display: block; margin-top: 6px; color: #7ab0ff; font-size: 12px; }
+  .word-mnem:empty { display: none; }
+  .flip-tag {
+    display: inline-block; margin-bottom: 12px; padding: 4px 12px;
+    border-radius: 999px; font-size: 11px; font-weight: 700;
+    background: rgba(255,255,255,.12); color: #cfe0ff;
+    border: 1px solid rgba(255,255,255,.18);
+  }
   .speak {
     margin-top: 10px; padding: 8px 14px; border-radius: 999px;
     border: 1px solid rgba(75,141,255,.45); background: rgba(75,141,255,.18);
@@ -357,9 +443,13 @@
   .g-item .cap { font-size:11px; color:var(--ink3); padding:8px; text-align:center; }
   .stat-bars { display:flex; gap:10px; align-items:flex-end; height:90px; margin:10px 0; }
   .stat-bars div { flex:1; background:linear-gradient(180deg,#4b8dff,#35d08a); border-radius:6px 6px 0 0; min-height:4px; }
+  /* tpl-full */
   .tpl-card {
+    overflow: visible; max-height: none;
     background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-    border-radius:14px; padding:12px; margin:8px 0; font-size:13px; line-height:1.7; color:var(--ink2);
+    border-radius:14px; padding:14px; margin:10px 0; font-size:13.5px;
+    line-height:1.8; color:var(--ink2);
+    overflow-wrap: anywhere; word-break: break-word;
   }
   .tpl-card b { color:var(--ink); }
   .chip-row { display: flex; flex-wrap: wrap; gap: 0; margin-top: 8px; }
@@ -468,6 +558,374 @@
     background: linear-gradient(90deg, #ffc145, #ff8a2b); border-radius: 999px;
     transition: width .4s ease;
   }
+
+  /* === online-features === */
+  .search-fab {
+    position: fixed; right: 16px; bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+    width: 52px; height: 52px; border-radius: 50%; z-index: 45;
+    background: linear-gradient(135deg, #4b8dff, #7b5cff);
+    color: #fff; font-size: 22px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(75,141,255,.4); cursor: pointer;
+  }
+  .search-panel {
+    position: fixed; inset: 0; z-index: 60; background: var(--bg);
+    display: none; flex-direction: column;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+  .search-panel.show { display: flex; }
+  .search-bar { display: flex; gap: 10px; margin-bottom: 12px; }
+  .search-bar input {
+    flex: 1; padding: 13px 16px; border-radius: 14px; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink); font: inherit; font-size: 15px; outline: none;
+  }
+  .search-bar input:focus { border-color: var(--brand); }
+  .search-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; }
+  .search-tabs::-webkit-scrollbar { display: none; }
+  .search-tabs .cp {
+    flex: none; padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 650;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    color: var(--ink2); cursor: pointer;
+  }
+  .search-tabs .cp.on {
+    background: linear-gradient(135deg, #4b8dff, #7b5cff);
+    border-color: transparent; color: #fff;
+  }
+  .search-results { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .search-hint { text-align: center; color: var(--ink3); padding: 48px 20px; font-size: 14px; line-height: 1.8; }
+  .search-hint span { font-size: 12px; opacity: .7; }
+  .sr-item {
+    padding: 14px 16px; border-radius: 14px; margin-bottom: 10px;
+    background: var(--card); border: 1px solid rgba(255,255,255,.08); cursor: pointer;
+  }
+  .sr-item .sr-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 999px;
+    font-size: 10px; font-weight: 700; margin-bottom: 6px;
+  }
+  .sr-tag.lesson { background: rgba(61,220,132,.18); color: #3ddc84; }
+  .sr-tag.iv { background: rgba(255,193,69,.18); color: #ffc145; }
+  .sr-tag.word { background: rgba(75,141,255,.18); color: #7ab0ff; }
+  .sr-tag.quiz { background: rgba(255,107,129,.18); color: #ff6b81; }
+  .sr-tag.online { background: rgba(160,120,255,.18); color: #b49aff; }
+  .sr-tag.dict { background: rgba(255,160,80,.18); color: #ffb020; }
+  .sr-item .sr-title {
+    font-size: 14.5px; font-weight: 700; color: var(--ink);
+    overflow-wrap: anywhere; word-break: break-word; line-height: 1.5;
+  }
+  .sr-item .sr-desc {
+    font-size: 12px; color: var(--ink3); margin-top: 5px; line-height: 1.6;
+    overflow-wrap: anywhere; word-break: break-word;
+  }
+  .sr-item mark { background: rgba(255,193,69,.35); color: inherit; border-radius: 3px; padding: 0 2px; }
+  .online-box {
+    padding: 16px; border-radius: 16px; margin-bottom: 12px;
+    background: linear-gradient(135deg, rgba(75,141,255,.15), rgba(123,92,255,.1));
+    border: 1px solid rgba(75,141,255,.3);
+  }
+  .online-box h4 { margin: 0 0 8px; font-size: 14px; }
+  .online-box p { margin: 0 0 12px; font-size: 12px; color: var(--ink2); line-height: 1.7; }
+  .online-box .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .online-box a {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 650;
+    text-decoration: none; color: #fff;
+    background: linear-gradient(135deg, #4b8dff, #6d7cff);
+  }
+  .dict-result {
+    padding: 16px; border-radius: 16px; margin-bottom: 12px;
+    background: var(--card); border: 1px solid rgba(255,255,255,.1);
+  }
+  .dict-result .d-word { font-size: 20px; font-weight: 800; }
+  .dict-result .d-phonetic { color: var(--brand2); font-size: 13px; margin: 4px 0 10px; }
+  .dict-result .d-def { font-size: 13px; color: var(--ink2); line-height: 1.8; }
+  .dict-loading { text-align: center; padding: 30px; color: var(--ink3); }
+
+  /* === warm-theme baicizhan === */
+  .book-selector { padding: 8px 0 12px; }
+  .book-title { font-size: 16px; font-weight: 800; color: var(--ink); margin-bottom: 12px; }
+  .book-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .book-card {
+    padding: 16px 8px; border-radius: 16px; text-align: center; cursor: pointer;
+    background: var(--warm-card); border: 2px solid var(--line);
+    transition: all .2s; font: inherit;
+  }
+  .book-card.on {
+    border-color: var(--brand); background: linear-gradient(135deg, #FFF0E0, #FFE0C0);
+    box-shadow: 0 4px 16px rgba(255,123,46,.2);
+  }
+  .book-card:active { transform: scale(.95); }
+  .book-ico { font-size: 28px; margin-bottom: 6px; }
+  .book-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .book-count { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+
+  .bc-stage { padding: 8px 0; }
+  .bc-progress { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .bc-bar {
+    flex: 1; height: 10px; border-radius: 999px;
+    background: var(--line); overflow: hidden;
+  }
+  .bc-bar i {
+    display: block; height: 100%; border-radius: 999px;
+    background: var(--warm-accent); transition: width .3s;
+  }
+  .bc-count { font-size: 13px; font-weight: 700; color: var(--ink2); white-space: nowrap; }
+
+  .bc-card {
+    background: var(--warm-card); border: 2px solid var(--line);
+    border-radius: 24px; padding: 24px 20px; text-align: center;
+    min-height: 360px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    box-shadow: 0 12px 32px rgba(200,120,50,.15);
+    position: relative; overflow: hidden;
+  }
+  .bc-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: var(--warm-accent);
+  }
+  .bc-art {
+    width: 180px; height: 110px; margin-bottom: 16px;
+    border-radius: 16px; overflow: hidden;
+    background: #FFF0E0; display: flex; align-items: center; justify-content: center;
+  }
+  .bc-art svg { width: 100%; height: 100%; }
+  .bc-art:empty { display: none; }
+  .bc-word {
+    font-size: 36px; font-weight: 900; color: var(--ink);
+    line-height: 1.3; max-width: 100%;
+    overflow-wrap: anywhere; word-break: break-word;
+  }
+  .bc-word.long { font-size: 26px; }
+  .bc-word.xlong { font-size: 20px; line-height: 1.5; }
+  .bc-phonetic {
+    font-size: 16px; color: var(--brand); margin: 8px 0 12px;
+    font-weight: 600;
+  }
+  .bc-meaning {
+    font-size: 20px; font-weight: 700; color: var(--ink2);
+    line-height: 1.5; max-width: 100%;
+    overflow-wrap: anywhere; word-break: break-word;
+  }
+  .bc-tip {
+    font-size: 13px; color: var(--ink3); margin-top: 12px;
+    padding: 8px 14px; border-radius: 10px;
+    background: rgba(255,123,46,.08); max-width: 100%;
+    overflow-wrap: anywhere; word-break: break-word;
+  }
+  .bc-mnem {
+    font-size: 13px; color: var(--brand); margin-top: 10px;
+    font-weight: 600; line-height: 1.6; max-width: 100%;
+    overflow-wrap: anywhere; word-break: break-word;
+  }
+  .bc-mnem:empty { display: none; }
+
+  .bc-actions {
+    display: flex; gap: 10px; margin-top: 20px;
+    justify-content: center; flex-wrap: wrap;
+  }
+  .bc-btn {
+    padding: 12px 18px; border-radius: 14px; border: 2px solid var(--line);
+    background: #fff; color: var(--ink); font: inherit; font-size: 14px;
+    font-weight: 700; cursor: pointer; transition: all .15s;
+  }
+  .bc-btn:active { transform: scale(.94); }
+  .bc-speak { border-color: var(--brand); color: var(--brand); background: #FFF0E0; }
+  .bc-know { border-color: var(--ok); color: var(--ok); background: #E8F5E9; }
+  .bc-fuzzy { border-color: var(--warn); color: var(--warn); background: #FFF8E1; }
+  .bc-next {
+    border-color: transparent; color: #fff; background: var(--warm-accent);
+    box-shadow: 0 4px 16px rgba(255,123,46,.3);
+  }
+
+  .bc-nav {
+    display: flex; gap: 8px; margin-top: 12px;
+    justify-content: center;
+  }
+  .bc-nav-btn {
+    padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line);
+    background: transparent; color: var(--ink2); font: inherit; font-size: 12px;
+    cursor: pointer;
+  }
+  .bc-nav-btn:active { background: var(--bg2); }
+
+  .bc-back {
+    position: fixed; inset: 0; z-index: 70; background: var(--bg);
+    overflow-y: auto; padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+  .bc-back.hidden { display: none; }
+  .bc-close {
+    position: sticky; top: 0; margin-bottom: 16px;
+    padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink); font: inherit; font-size: 13px;
+    cursor: pointer;
+  }
+  .bc-back-content {
+    background: var(--card); border: 2px solid var(--line);
+    border-radius: 20px; padding: 20px;
+  }
+  .bc-back-content .bb-word { font-size: 28px; font-weight: 900; }
+  .bc-back-content .bb-phonetic { font-size: 15px; color: var(--brand); margin: 6px 0 14px; }
+  .bc-back-content .bb-def { font-size: 15px; line-height: 1.8; color: var(--ink2); margin-bottom: 12px; }
+  .bc-back-content .bb-tip {
+    padding: 12px 14px; border-radius: 12px; background: #FFF0E0;
+    font-size: 13px; color: var(--ink2); line-height: 1.7;
+  }
+  .bc-back-content .bb-mnem {
+    margin-top: 12px; padding: 12px 14px; border-radius: 12px;
+    background: #E8F5E9; font-size: 13px; color: var(--ink2); line-height: 1.7;
+  }
+
+  .quick-row {
+    display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0;
+    justify-content: center;
+  }
+  .quick-row .btn { padding: 10px 16px; border-radius: 12px; font-size: 13px; }
+
+  .wrong-mini {
+    background: var(--card); border: 2px solid var(--line);
+    border-radius: 16px; padding: 14px; margin: 12px 0;
+  }
+  .wrong-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  .wrong-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .wrong-chips .wc {
+    padding: 5px 12px; border-radius: 999px; font-size: 12px;
+    background: #FFF0E0; color: var(--ink2); border: 1px solid var(--line);
+    cursor: pointer;
+  }
+
+  /* 全局暖色卡片 */
+  .card {
+    background: var(--warm-card); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+  }
+  .hero { background: linear-gradient(135deg, #FF9A5C 0%, #FF7B2E 50%, #E85D04 100%); }
+  .hero h2, .hero p { color: #fff !important; }
+  .btn.primary {
+    background: var(--warm-accent);
+    box-shadow: 0 8px 20px rgba(255,123,46,.3);
+  }
+  .streak-banner {
+    background: linear-gradient(120deg, rgba(255,123,46,.18), rgba(255,179,71,.12), rgba(255,154,92,.15));
+    border-color: rgba(255,123,46,.35);
+  }
+  .search-fab { background: var(--warm-accent); }
+  .tabbar { background: rgba(255,255,255,.95); border-top-color: var(--line); }
+  .tabbar button { color: var(--ink3); }
+  .tabbar button.on { color: var(--brand); }
+  .tabbar button.on .i {
+    background: linear-gradient(135deg, rgba(255,123,46,.2), rgba(255,154,92,.15));
+    box-shadow: 0 0 0 1px rgba(255,123,46,.35);
+  }
+
+
+  /* 一屏一卡（单词页） */
+  #tab-lang.mode-pick .bc-stage,
+  #tab-lang.mode-pick .quick-row,
+  #tab-lang.mode-pick .wrong-mini,
+  #tab-lang.mode-pick .fb,
+  #tab-lang.mode-pick .book-pills { display: none !important; }
+  #tab-lang.mode-card .book-selector,
+  #tab-lang.mode-card .quick-row,
+  #tab-lang.mode-card .wrong-mini,
+  #tab-lang.mode-card .fb { display: none !important; }
+
+  #tab-lang.mode-card {
+    display: flex; flex-direction: column; gap: 10px;
+    min-height: calc(100dvh - 150px);
+    min-height: calc(100vh - 150px);
+  }
+  #tab-lang.mode-card .book-pills {
+    display: flex; gap: 8px; overflow-x: auto; flex: none;
+    padding-bottom: 2px; -webkit-overflow-scrolling: touch;
+  }
+  #tab-lang.mode-card .book-pills::-webkit-scrollbar { display: none; }
+  #tab-lang.mode-card .book-pills button {
+    flex: none; border: 1px solid var(--line); background: var(--warm-card);
+    color: var(--ink); border-radius: 999px; padding: 8px 14px; font: inherit;
+    font-size: 12px; cursor: pointer; white-space: nowrap;
+  }
+  #tab-lang.mode-card .book-pills button.on {
+    background: var(--warm-accent); border-color: var(--warm-accent); color: #fff;
+  }
+
+  #tab-lang.mode-card .bc-stage {
+    flex: 1; display: flex; flex-direction: column; min-height: 0; padding: 0;
+  }
+  #tab-lang.mode-card .daily-goal-bar { flex: none; margin-bottom: 8px; }
+  #tab-lang.mode-card .bc-progress { flex: none; margin-bottom: 10px; }
+  #tab-lang.mode-card .bc-card {
+    flex: 1; min-height: 220px; max-height: none;
+    margin: 0; padding: 18px 16px;
+  }
+  #tab-lang.mode-card .bc-art {
+    width: 140px; height: 86px; margin-bottom: 10px; flex: none;
+  }
+  #tab-lang.mode-card .bc-word {
+    font-size: 32px; max-width: 100%;
+    overflow-wrap: anywhere; word-break: break-word; white-space: normal;
+  }
+  #tab-lang.mode-card .bc-word.long { font-size: 24px; }
+  #tab-lang.mode-card .bc-word.xlong { font-size: 18px; line-height: 1.45; }
+  #tab-lang.mode-card .bc-meaning { font-size: 18px; }
+  #tab-lang.mode-card .bc-actions,
+  #tab-lang.mode-card .bc-nav { flex: none; }
+
+  /* 防止整页长滚动（卡片模式） */
+  body.lang-card-lock { overflow: hidden; height: 100dvh; height: 100vh; }
+  .book-pills { display: none; }
+
+
+
+  /* 一屏一卡再压缩 */
+  #tab-lang.mode-card { min-height: 0; height: auto; overflow: hidden; }
+  #tab-lang.mode-card .daily-goal-bar {
+    display: flex; gap: 6px; align-items: center; flex-wrap: nowrap;
+    overflow-x: auto; margin-bottom: 6px; padding-bottom: 0;
+  }
+  #tab-lang.mode-card .daily-goal-bar::-webkit-scrollbar { display: none; }
+  #tab-lang.mode-card .daily-goal-bar .dg-btn { flex: none; padding: 6px 10px; font-size: 12px; }
+  #tab-lang.mode-card .bc-progress { margin-bottom: 8px; }
+  #tab-lang.mode-card .bc-card {
+    min-height: 200px;
+    padding: 14px 14px 12px;
+  }
+  #tab-lang.mode-card .bc-actions {
+    display: flex; gap: 8px; flex-wrap: nowrap; margin-top: 10px;
+  }
+  #tab-lang.mode-card .bc-actions .bc-btn {
+    flex: 1; min-width: 0; padding: 12px 6px; font-size: 13px;
+  }
+  #tab-lang.mode-card .bc-nav {
+    display: flex; gap: 8px; margin-top: 8px;
+  }
+  #tab-lang.mode-card .bc-nav .bc-nav-btn {
+    flex: 1; min-width: 0; padding: 10px 4px; font-size: 12px;
+  }
+  #tab-lang.mode-card .bc-tip,
+  #tab-lang.mode-card .bc-mnem {
+    font-size: 12px; max-height: 3.2em; overflow: hidden;
+  }
+  /* 隐藏次要入口，避免撑高 */
+  #tab-lang.mode-card #btnLangShuffle,
+  #tab-lang.mode-card #langFb,
+  #tab-lang.mode-card #lessonFb { display: none !important; }
+
+
+
+  body.lang-card-lock {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    left: 0; right: 0;
+  }
+  body.lang-card-lock main,
+  body.lang-card-lock .wrap {
+    overflow: hidden !important;
+    padding-bottom: 0 !important;
+    height: auto;
+  }
+  #tab-lang.mode-card {
+    overflow: hidden !important;
+  }
+
 </style>
 </head>
 <body>
@@ -480,7 +938,7 @@
       </svg>
     </div>
     <h1>嵌入式学习</h1>
-    <span class="ver" id="verLabel">v1.12.0</span>
+    <span class="ver" id="verLabel">v1.24.0</span>
   </header>
 
   <main>
@@ -748,96 +1206,109 @@
       </div>
     </section>
     <section id="tab-lang" class="hidden">
-      <div class="card">
-        <h3><span class="badge">🌍</span>外语学习 · 图文卡片</h3>
-        <p>英语六级 + 俄语六级要点，日常可开口。点卡片看讲解，做完小测。</p>
-        <div class="lang-switch">
-          <button id="btnEn" class="on">🇬🇧 英语</button>
-          <button id="btnRu">🇷🇺 俄语</button>
+      <div class="book-pills" id="bookPills"></div>
+      <!-- 分类选择（百词斩式词书） -->
+      <div class="book-selector" id="bookSelector">
+        <div class="book-title">📚 选个词书开始</div>
+        <div class="book-sub">显示的是每本词书的<b>总词汇量</b>，每天学 10 个，积少成多</div>
+        <div class="book-grid">
+          <button class="book-card on" data-book="daily">
+            <div class="book-ico">🗣️</div>
+            <div class="book-name">日常英语</div>
+            <div class="book-count">共 4199 词</div>
+          </button>
+          <button class="book-card" data-book="cet6">
+            <div class="book-ico">🎯</div>
+            <div class="book-name">四级/学术</div>
+            <div class="book-count">共 318 词</div>
+          </button>
+          <button class="book-card" data-book="emb">
+            <div class="book-ico">⚡</div>
+            <div class="book-name">嵌入式</div>
+            <div class="book-count">共 1603 词</div>
+          </button>
+          <button class="book-card" data-book="job">
+            <div class="book-ico">💼</div>
+            <div class="book-name">求职面试</div>
+            <div class="book-count">共 307 词</div>
+          </button>
+          <button class="book-card" data-book="pro">
+            <div class="book-ico">🔧</div>
+            <div class="book-name">专业合集</div>
+            <div class="book-count">共 2663 词</div>
+          </button>
+          <button class="book-card" data-book="ru">
+            <div class="book-ico">🇷🇺</div>
+            <div class="book-name">俄语</div>
+            <div class="book-count">俄语区</div>
+          </button>
         </div>
-        <div class="lesson-art" id="langArt"></div>
-        <div id="langList"></div>
-        <div class="fb" id="langFb"></div>
-        <div class="row" style="margin-top:12px">
-          <button class="btn primary" id="btnLangQ">本组小测</button>
-                    <button class="btn ghost" id="btnLangShuffle">换一组</button>
+      </div>
+
+      <!-- 单词大卡（百词斩式一屏一卡） -->
+      <div class="bc-stage" id="bcStage">
+        <div class="daily-goal-bar">
+          <span>🎯 每日目标</span>
+          <button class="dg-btn" data-dg="5">5 词</button>
+          <button class="dg-btn on" data-dg="10">10 词</button>
+          <button class="dg-btn" data-dg="20">20 词</button>
+          <button class="dg-btn" data-dg="all">全部</button>
         </div>
-        <h3 style="margin-top:16px"><span class="badge">🃏</span>单词闪卡</h3>
-        <div class="word-meta"><span id="wordPos">1 / 10</span><span id="wordToday">今日词条 0</span></div>
-        <div class="flip-wrap">
-          <div class="flip-card" id="wordCard">
-            <div class="flip-face flip-front">
-              <div class="flip-word" id="wFront">hello</div>
-              <div class="flip-ipa" id="wIpa">/həˈləʊ/</div>
-              <div class="flip-hint">点卡片翻面 · 点 🔊 发音</div>
-            </div>
-            <div class="flip-face flip-back">
-              <div class="flip-word" id="wBack" style="font-size:18px">你好</div>
-              <div class="flip-ipa" id="wTip">问候语</div>
-            </div>
-          </div>
+        <div class="bc-progress">
+          <div class="bc-bar"><i id="bcBar" style="width:0%"></i></div>
+          <div class="bc-count"><span id="bcNow">1</span> / <span id="bcTotal">40</span></div>
         </div>
-        <div class="row">
-          <button class="speak" id="btnSpeak">🔊 发音</button>
-          <button class="btn ghost" id="btnWordNext">下一个</button>
-                    <button class="btn primary" id="btnWordKnow">记住了</button>
-          <button class="btn ghost" id="btnShadow">🎤 跟读</button>
-          <button class="btn ghost" id="btnWordFuzzy">模糊/错词</button>
+
+        <div class="bc-card" id="bcCard">
+          <div class="bc-art" id="bcArt"></div>
+          <div class="bc-word" id="bcWord">hello</div>
+          <div class="bc-phonetic" id="bcPhonetic">/həˈləʊ/</div>
+          <div class="bc-meaning" id="bcMeaning">你好</div>
+          <div class="bc-tip" id="bcTip">💡 万能问候</div>
+          <div class="bc-mnem" id="bcMnem"></div>
         </div>
-        <div class="card" style="margin-top:12px">
-          <h3><span class="badge">🗂️</span>错词本</h3>
-          <p style="margin-bottom:8px">点「模糊/错词」收进来，清空前会反复出现。</p>
-          <div id="wrongWords" class="chip-row"></div>
-          <button class="btn ghost block" id="btnClearWrong">清空错词本</button>
-          <button class="btn primary block" id="btnReviewWrong">只复习错词</button>
+
+        <div class="bc-actions">
+          <button class="bc-btn bc-speak" id="bcSpeak">🔊 发音</button>
+          <button class="bc-btn bc-fuzzy" id="bcFuzzy">😐 模糊</button>
+          <button class="bc-btn bc-know" id="bcKnow">😊 认识</button>
+          <button class="bc-btn bc-next" id="bcNext">下一个 ›</button>
         </div>
-        <div class="card">
-          <h3><span class="badge">📅</span>今日词包</h3>
-          <p id="packText">每日 10 词，记住了就点亮。</p>
-          <div class="prog"><i id="packWordBar"></i></div>
-          <div class="prog-line" style="margin-top:8px"><span>已记</span><span id="packWordPct">0%</span></div>
+
+        <div class="bc-nav">
+          <button class="bc-nav-btn" id="bcPrev">‹ 上一个</button>
+          <button class="bc-nav-btn" id="bcFlip">翻转看详情</button>
+          <button class="bc-nav-btn" id="bcShuffle">随机打乱</button>
+          <button class="bc-nav-btn" id="bcBooks">📚 词书</button>
         </div>
-        <div class="card">
-          <h3><span class="badge">📖</span>阅读 + 翻译</h3>
-          <div class="phrase-card" id="readBox">
-            <div class="en" id="readText">…</div>
-            <div class="zh" id="readTrans" style="display:none"></div>
-          </div>
-          <div class="row">
-            <button class="btn ghost" id="btnShowTrans">显示译文</button>
-            <button class="btn primary" id="btnReadNext">换一段</button>
-                        <button class="btn ghost" id="btnReadSpeak">🔊 朗读</button>
-            <button class="btn primary" id="btnReadQuiz">阅读理解</button>
-            <button class="btn ghost" id="btnReadLang">只看俄文</button>
-          </div>
-          <div class="fb" id="readQuizBox"></div>
-        </div>
-        <div class="card">
-          <h3><span class="badge">✍️</span>六级写作模板</h3>
-          <div id="writeTpl"></div>
-        </div>
-        <div class="card">
-          <h3><span class="badge">🎧</span>听写练习</h3>
-          <p>听一句，尽量默写，再对照。不支持听写环境时可做「看中文说英文」。</p>
-          <div class="phrase-card" id="dictBox">
-            <div class="zh" id="dictZh">—</div>
-            <div class="en" id="dictAns" style="display:none"></div>
-          </div>
-          <div class="row">
-            <button class="btn ghost" id="btnDictPlay">播放</button>
-            <button class="btn primary" id="btnDictShow">显示答案</button>
-            <button class="btn ghost" id="btnDictNext">换一句</button>
-          </div>
-        </div>
-        <div class="card">
-          <h3><span class="badge">📊</span>学习统计</h3>
-          <div class="stat-bars" id="statBars"><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-          <div class="word-meta"><span>近 7 天做题量</span><span id="statSum">0</span></div>
-        </div>
-          </div>
-          <div class="fb" id="readFb"></div>
+      </div>
+
+      <!-- 背面详情（点翻转） -->
+      <div class="bc-back hidden" id="bcBack">
+        <button class="bc-close" id="bcBackClose">✕ 关闭</button>
+        <div class="bc-back-content" id="bcBackContent"></div>
+      </div>
+
+      <!-- 快捷入口 -->
+      <div class="quick-row">
+        <button class="btn ghost" id="btnEn">🇬🇧 英语</button>
+        <button class="btn ghost" id="btnRu">🇷🇺 俄语</button>
+        <button class="btn ghost" id="btnLangQ">📝 小测</button>
+        <button class="btn ghost" id="btnLangShuffle">🔀 换组</button>
+      </div>
+
+      <!-- 小测区 -->
+      <div class="fb" id="langFb"></div>
+      <div class="fb" id="lessonFb"></div>
+
+      <!-- 错词本（迷你） -->
+      <div class="wrong-mini" id="wrongMini">
+        <div class="wrong-title">📝 错词本 <span id="wrongCount">0</span></div>
+        <div class="wrong-chips" id="wrongChips"></div>
+        <button class="btn ghost" id="btnReviewWrong" style="margin-top:8px">只复习错词</button>
+      </div>
     </section>
-    <!-- ================= 刷题 ================= -->
+
     <section id="tab-iv" class="hidden">
       <div class="streak-banner" style="background:linear-gradient(120deg,rgba(255,107,129,.18),rgba(255,176,32,.12),rgba(75,141,255,.14))">
         <div class="flame">🎯</div>
@@ -899,7 +1370,8 @@
       <div class="card">
         <h3><span class="badge">⚙️</span>版本与更新</h3>
         <div class="kv"><span>App 版本</span><b id="meVer">v1.15.0</b></div>
-        <div class="kv"><span>更新方式</span><b>一键更新，无需卸载</b></div>
+        <div class="kv"><span>当前版本</span><b id="verLabel2">v1.24.0</b></div>
+        <div class="kv"><span>更新方式</span><b id="updModeLabel">一键更新，无需卸载</b></div>
         <div class="kv"><span>离线能力</span><b>课程包可下载到本机</b></div>
                 <div class="ach-wall" id="achWall"></div>
         <button class="btn ghost block" id="btnCheckUpdate">🔄 检查更新</button>
@@ -936,7 +1408,26 @@
   </div>
   <div class="toast" id="toast"></div>
 
-  <nav class="tabbar">
+  <div class="search-fab" id="searchFab" title="搜索">🔍</div>
+<div class="search-panel" id="searchPanel">
+  <div class="search-bar">
+    <input type="search" id="searchInput" placeholder="搜课程 / 面试题 / 单词 / 刷题…" autocomplete="off"/>
+    <button class="btn ghost" id="searchClose">取消</button>
+  </div>
+  <div class="search-tabs" id="searchTabs">
+    <button class="cp on" data-st="all">全部</button>
+    <button class="cp" data-st="lesson">课程</button>
+    <button class="cp" data-st="iv">面试题</button>
+    <button class="cp" data-st="word">单词</button>
+    <button class="cp" data-st="quiz">刷题</button>
+    <button class="cp" data-st="online">联网搜</button>
+    <button class="cp" data-st="dict">在线词典</button>
+  </div>
+  <div class="search-results" id="searchResults">
+    <div class="search-hint">输入关键词开始搜索<br><span>支持中文/英文 · 即时出结果</span></div>
+  </div>
+</div>
+<nav class="tabbar">
     <button data-tab="home" class="on"><span class="i">🏠</span>首页</button>
     <button data-tab="learn"><span class="i">📖</span>学习</button>
     <button data-tab="base"><span class="i">📘</span>基础</button>
@@ -950,9 +1441,12 @@
 <script src="words-data.js"></script>
 <script src="bmp-manifest.js"></script>
 <script src="data-interview-pack.js"></script>
+<script src="data-hw-lessons.js"></script>
+<script src="data-job-market.js"></script>
+<script src="word-art.js"></script>
 <script>
 (function () {
-  var VER = "v1.15.0";
+  var VER = "v1.24.0";
   var DAY_GOAL = 10;
 
   function $(id) { return document.getElementById(id); }
@@ -1008,7 +1502,8 @@
 
   /* ---------- 切页 ---------- */
   var panels = {
-    home: $("tab-home"), learn: $("tab-learn"), quiz: $("tab-quiz"), me: $("tab-me")
+    home: $("tab-home"), learn: $("tab-learn"), base: $("tab-base"),
+    lang: $("tab-lang"), iv: $("tab-iv"), quiz: $("tab-quiz"), me: $("tab-me")
   };
   function showTab(name) {
     Object.keys(panels).forEach(function (k) {
@@ -1130,13 +1625,13 @@
     $("quizFb").classList.remove("show");
   }
 
-  $("btnNextQ").addEventListener("click", function () {
+  if ($("btnNextQ")) $("btnNextQ").addEventListener("click", function () {
     qi++; qLock = false; renderQ();
   });
   if ($("btnQuiz")) $("btnQuiz").addEventListener("click", function () {
     showTab("quiz"); renderQ();
   });
-  if ($("btnContinue")) $("btnContinue").addEventListener("click", function () {
+  if ($("btnContinue")) if ($("btnContinue")) $("btnContinue").addEventListener("click", function () {
     showTab("base"); renderLesson();
   });
   if ($("btnGoalGo")) $("btnGoalGo").addEventListener("click", function () {
@@ -1165,7 +1660,22 @@
       return (c.effectiveType || "").indexOf("2g") < 0;
     } catch (e) { return true; }
   }
+  /* local-offline-fix */
+  function isLocalEnv() {
+    return location.protocol === "file:" ||
+      location.hostname === "android_asset" ||
+      (typeof window.__IS_APK__ !== "undefined" && window.__IS_APK__) ||
+      /android_asset/.test(location.href);
+  }
   function downloadPack() {
+    /* APK / file:// 已是全量离线包，无需再下载 */
+    if (isLocalEnv()) {
+      setPack("已内置，可离线使用", 100);
+      try { localStorage.setItem("emb-pack-ready", "1"); } catch (e) {}
+      toast("离线内容已内置 🎉");
+      try { drawAch(); } catch (e) {}
+      return;
+    }
     if (wifiOnly && !isWifi()) {
       setPack("当前非 Wi-Fi，已暂停", 0);
       toast("已开启「仅 Wi-Fi」，请连接 Wi-Fi 后再下载");
@@ -1191,15 +1701,33 @@
       });
     });
   }
-  $("btnDownloadPack").addEventListener("click", downloadPack);
-  $("btnWifiOnly").addEventListener("click", function () {
+  if ($("btnDownloadPack")) $("btnDownloadPack").addEventListener("click", downloadPack);
+  if ($("btnWifiOnly")) $("btnWifiOnly").addEventListener("click", function () {
     wifiOnly = !wifiOnly;
     $("btnWifiOnly").textContent = wifiOnly ? "✓ 仅 Wi-Fi" : "仅 Wi-Fi";
     toast(wifiOnly ? "已开启：只在 Wi-Fi 下下载" : "已关闭仅 Wi-Fi 限制");
     if (wifiOnly) downloadPack();
   });
 
-  /* ---------- Service Worker / 更新 ---------- */
+  /* ---------- 
+  try {
+    if (typeof VER === "string") {
+      var _vl = document.getElementById("verLabel");
+      var _v2 = document.getElementById("verLabel2");
+      if (_vl) _vl.textContent = VER;
+      if (_v2) _v2.textContent = VER;
+    }
+  } catch (e) {}
+
+  
+  try {
+    if (window.__IS_APK__ && window.NativeUpdate) {
+      var _um = document.getElementById("updModeLabel");
+      if (_um) _um.textContent = "APK 内下载安装（会弹系统安装）";
+    }
+  } catch (e) {}
+
+  Service Worker / 更新 ---------- */
   function toastUpdateReady() {
     $("updateBanner").classList.add("show");
   }
@@ -1233,16 +1761,16 @@
     setPack("当前环境不支持离线缓存", 0);
   }
 
-  $("btnDoUpdate").addEventListener("click", function () {
+  if ($("btnDoUpdate")) $("btnDoUpdate").addEventListener("click", function () {
     if (window._reg && window._reg.waiting) {
       window._reg.waiting.postMessage({ type: "SKIP_WAITING" });
     }
     setTimeout(function () { location.reload(); }, 350);
   });
-  $("btnLaterUpdate").addEventListener("click", function () {
+  if ($("btnLaterUpdate")) $("btnLaterUpdate").addEventListener("click", function () {
     $("updateBanner").classList.remove("show");
   });
-  $("btnCheckUpdate").addEventListener("click", function () {
+  if ($("btnCheckUpdate")) $("btnCheckUpdate").addEventListener("click", function () {
     if (window._reg) {
       window._reg.update().then(function () {
         if (window._reg.waiting) toastUpdateReady();
@@ -1250,41 +1778,37 @@
       }).catch(function () { toast("检查更新失败"); });
     } else toast("当前环境不支持自动更新");
   });
-  $("btnReload").addEventListener("click", function () { location.reload(); });
+  if ($("btnReload")) $("btnReload").addEventListener("click", function () { location.reload(); });
   if ($("wordCard")) $("wordCard").addEventListener("click", function () { this.classList.toggle('flip'); });
-  if ($("btnReadQuiz")) $("btnReadQuiz").addEventListener("click", showReadQuiz);
-  if ($("btnReadLang")) $("btnReadLang").addEventListener("click", function () {
+  if ($("btnReadQuiz")) if ($("btnReadQuiz")) $("btnReadQuiz").addEventListener("click", showReadQuiz);
+  if ($("btnReadLang")) if ($("btnReadLang")) $("btnReadLang").addEventListener("click", function () {
     readLangFilter = (readLangFilter === 'ru') ? 'all' : 'ru';
     $("btnReadLang").textContent = (readLangFilter === 'ru') ? '看全部' : '只看俄文';
     readI = 0; renderRead();
     toast(readLangFilter === 'ru' ? '已筛选俄文短文' : '显示全部短文');
   });
-  if ($("btnShowTrans")) $("btnShowTrans").addEventListener("click", function () {
+  if ($("btnShowTrans")) if ($("btnShowTrans")) $("btnShowTrans").addEventListener("click", function () {
     var x = document.getElementById('readTrans');
     if (x) x.style.display = (x.style.display === 'none' ? 'block' : 'none');
   });
-  if ($("btnReadNext")) $("btnReadNext").addEventListener("click", function () { readI++; renderRead(); });
-  if ($("btnReadSpeak")) $("btnReadSpeak").addEventListener("click", function () {
+  if ($("btnReadNext")) if ($("btnReadNext")) $("btnReadNext").addEventListener("click", function () { readI++; renderRead(); });
+  if ($("btnReadSpeak")) if ($("btnReadSpeak")) $("btnReadSpeak").addEventListener("click", function () {
     try {
       var it = READS[readI % READS.length];
-      if (!window.speechSynthesis) { toast('不支持朗读'); return; }
-      window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(it.en);
-      u.lang = 'en-US'; u.rate = 0.85;
-      window.speechSynthesis.speak(u);
+      speakText(it.en, "en");
     } catch (e) {}
   });
-  if ($("btnDictPlay")) $("btnDictPlay").addEventListener("click", dictPlay);
-  if ($("btnDictShow")) $("btnDictShow").addEventListener("click", function () {
+  if ($("btnDictPlay")) if ($("btnDictPlay")) $("btnDictPlay").addEventListener("click", dictPlay);
+  if ($("btnDictShow")) if ($("btnDictShow")) $("btnDictShow").addEventListener("click", function () {
     var a = document.getElementById("dictAns");
     if (a) a.style.display = "block";
   });
-  if ($("btnDictNext")) $("btnDictNext").addEventListener("click", function () { dictI++; renderDict(); });
+  if ($("btnDictNext")) if ($("btnDictNext")) $("btnDictNext").addEventListener("click", function () { dictI++; renderDict(); });
   if ($("btnShadow")) $("btnShadow").addEventListener("click", shadowSpeak);
   if ($("btnSpeak")) $("btnSpeak").addEventListener("click", speakWord);
-  if ($("btnWordNext")) $("btnWordNext").addEventListener("click", function () { wI++; renderWord(); });
-  if ($("btnWordKnow"))   if ($("btnWordFuzzy")) $("btnWordFuzzy").addEventListener("click", function () {
-    var arr = WORDS[langMode] || WORDS.en;
+  if ($("btnWordNext")) if ($("btnWordNext")) $("btnWordNext").addEventListener("click", function () { wI++; renderWord(); });
+  if ($("btnWordKnow"))   if ($("btnWordFuzzy")) if ($("btnWordFuzzy")) $("btnWordFuzzy").addEventListener("click", function () {
+    var arr = (window.WORDS_PACK && (window.WORDS_PACK[langMode] || window.WORDS_PACK.en)) || (WORDS && (WORDS[langMode] || WORDS.en));
     var it = arr[wI % arr.length];
     if (!it) return;
     if (!wrongSet.some(function (x) { return x.w === it.w; })) {
@@ -1294,15 +1818,15 @@
     toast('已收进错词本');
     wI++; renderWord(); packPct();
   });
-  if ($("btnClearWrong")) $("btnClearWrong").addEventListener("click", function () {
+  if ($("btnClearWrong")) if ($("btnClearWrong")) $("btnClearWrong").addEventListener("click", function () {
     wrongSet = []; saveWrong(); renderWrong(); toast('错词本已清空');
   });
-  if ($("btnReviewWrong")) $("btnReviewWrong").addEventListener("click", function () {
+  if ($("btnReviewWrong")) if ($("btnReviewWrong")) $("btnReviewWrong").addEventListener("click", function () {
     if (!wrongSet.length) { toast('错词本是空的'); return; }
     WORDS[langMode] = wrongSet.map(function (x) { return { w: x.w, m: x.m, tip: '错词复习' }; });
     wI = 0; renderWord(); toast('进入错词复习');
   });
-  $("btnWordKnow").addEventListener("click", function () {
+  if ($("btnWordKnow")) $("btnWordKnow").addEventListener("click", function () {
     wKnow++;
     try {
       var k = todayWordKey();
@@ -1316,19 +1840,19 @@
   if ($("btnEn")) $("btnEn").addEventListener("click", function () { langMode='en'; renderLang(); renderWord(); document.getElementById('langFb').classList.remove('show'); });
   if ($("btnRu")) $("btnRu").addEventListener("click", function () { langMode='ru'; renderLang(); renderWord(); document.getElementById('langFb').classList.remove('show'); });
   if ($("btnLangQ")) $("btnLangQ").addEventListener("click", langQuiz);
-  if ($("btnLangShuffle")) $("btnLangShuffle").addEventListener("click", function () { renderLang(); langQuiz(); });
+  if ($("btnLangShuffle")) if ($("btnLangShuffle")) $("btnLangShuffle").addEventListener("click", function () { renderLang(); langQuiz(); });
   if ($("btnBase")) $("btnBase").addEventListener("click", function () { showTab("base"); });
-  if ($("btnNextLesson")) $("btnNextLesson").addEventListener("click", function () {
+  if ($("btnNextLesson")) if ($("btnNextLesson")) $("btnNextLesson").addEventListener("click", function () {
     lessonI = (lessonI + 1) % LESSONS.length; renderLesson();
     document.getElementById('lessonFb').classList.remove('show');
     var q = document.getElementById('lessonQuizBox'); if (q) q.remove();
   });
-  if ($("btnPrevLesson")) $("btnPrevLesson").addEventListener("click", function () {
+  if ($("btnPrevLesson")) if ($("btnPrevLesson")) $("btnPrevLesson").addEventListener("click", function () {
     lessonI = (lessonI - 1 + LESSONS.length) % LESSONS.length; renderLesson();
     document.getElementById('lessonFb').classList.remove('show');
     var q = document.getElementById('lessonQuizBox'); if (q) q.remove();
   });
-  if ($("btnLessonQ")) $("btnLessonQ").addEventListener("click", showLessonQuiz);
+  if ($("btnLessonQ")) if ($("btnLessonQ")) $("btnLessonQ").addEventListener("click", showLessonQuiz);
 
   function drawWeek() {
     var days = studyStore().days || {};
@@ -1479,9 +2003,12 @@
       b.addEventListener('click', function () {
         lessonI = +b.getAttribute('data-lesson');
         try { if (window.WORDS_PACK) { WORDS = window.WORDS_PACK; } } catch (e) {}
+  try { if (window.WORDS_PACK) { WORDS = window.WORDS_PACK; } } catch (e) {}
   renderLesson();
   renderLang();
   renderWord();
+  renderTpl();
+  renderDict();
   renderRead();
   renderGallery();
   renderTpl(); renderDict(); drawStatBars();
@@ -1519,17 +2046,17 @@
     en: [
       { tag:'日常', en:'Nice to meet you.', zh:'很高兴认识你。', tip:'初次见面；告别可用 Nice talking to you.' },
       { tag:'救场', en:'Could you say that again, please?', zh:'请再说一遍。', tip:'听不懂必练；比 What? 更礼貌。' },
-      { tag:'六级', en:'There is a growing awareness that…', zh:'人们越来越意识到……', tip:'写作开头高分句，替换 “Nowadays”.' },
-      { tag:'六级', en:'Only in this way can we…', zh:'只有这样我们才能……', tip:'倒装加分句；注意情态动词位置。' },
+      { tag:'六级', en:'There is a growing awareness that protecting the environment is everyone\'s responsibility.', zh:'人们越来越意识到保护环境是每个人的责任。', tip:'写作开头高分句，替换 Nowadays。句式：There is a growing awareness that + 从句。' },
+      { tag:'六级', en:'Only in this way can we solve the problem of air pollution in cities.', zh:'只有这样我们才能解决城市空气污染问题。', tip:'倒装加分句：Only + 状语 + 助动词 + 主语。注意情态动词位置。' },
       { tag:'面试', en:'I built a logging device; 200 power-cut tests without data loss.', zh:'我做了采集终端，断电 200 次无丢数据。', tip:'数字比形容词可信。' },
-      { tag:'阅读', en:'address / tackle / cope with', zh:'处理、应对（熟词僻义）', tip:'address 不只是地址；六级最爱考。' }
+      { tag:'阅读', en:'We must address this issue before it gets worse. / How do you tackle this problem? / She copes with stress by exercising.', zh:'我们必须在问题恶化前处理它。/ 你怎么解决这个问题？/ 她通过运动应对压力。', tip:'address/tackle/cope with 都有「处理、应对」之意。address 不只是地址；六级最爱考。' }
     ],
     ru: [
-      { tag:'日常', en:'Здравствуйте! Меня зовут…', zh:'您好！我叫……', tip:'正式场合用 Здравствуйте，熟人用 Привет。' },
+      { tag:'日常', en:'Здравствуйте! Меня зовут Ван Мин.', zh:'您好！我叫王明。', tip:'正式场合用 Здравствуйте，熟人用 Привет。后面接自己的名字。' },
       { tag:'救场', en:'Повторите, пожалуйста.', zh:'请再说一遍。', tip:'俄语语速快，救场句保命。' },
       { tag:'语法', en:'Я прочитал статью.', zh:'我读完了文章。', tip:'完成体=有结果；未完成体读作「在读/常读」。' },
-      { tag:'六级', en:'С одной стороны… С другой стороны…', zh:'一方面……另一方面……', tip:'议论文连接词。' },
-      { tag:'面试', en:'Я думаю, что… Потому что…', zh:'我认为……因为……', tip:'观点三句式：观点-原因-例子。' },
+      { tag:'六级', en:'С одной стороны, технологии упрощают жизнь. С другой стороны, они создают новые проблемы.', zh:'一方面，技术让生活更简单。另一方面，它们带来了新问题。', tip:'议论文连接词：С одной стороны + 陈述1. С другой стороны + 陈述2。' },
+      { tag:'面试', en:'Я думаю, что этот проект важен, потому что он помогает экономить энергию.', zh:'我认为这个项目很重要，因为它能帮助节省能源。', tip:'观点三句式：Я думаю, что + 观点, потому что + 原因。' },
       { tag:'出差', en:'У меня бронь на имя…', zh:'我有预订，名字是……', tip:'入住酒店必说。' }
     ]
   };
@@ -1638,8 +2165,42 @@
     var d = new Date();
     return 'emb-words-' + d.getFullYear() + '-' + (d.getMonth()+1<10?'0':'') + (d.getMonth()+1) + '-' + (d.getDate()<10?'0':'') + d.getDate();
   }
+  /* word-len-class */
   function renderWord() {
-    var arr = WORDS[langMode] || WORDS.en;
+    try { if (window.WORDS_PACK) { WORDS = window.WORDS_PACK; window.__WORDS = WORDS; } } catch (e) {}
+    /* render-art-mnem */
+    try {
+      var arr0 = (window.WORDS_PACK && (window.WORDS_PACK[langMode] || window.WORDS_PACK.en)) || (WORDS && (WORDS[langMode] || WORDS.en));
+      var it0 = arr0[wI % arr0.length];
+      var artBox = $("wArt");
+      if (artBox) {
+        var art = (window.getWordArt && it0) ? getWordArt(it0.w) : null;
+        artBox.innerHTML = art || "";
+      }
+      var mnemBox = $("wMnem");
+      if (mnemBox) {
+        var mn = (window.getWordMnem && it0) ? getWordMnem(it0.w) : null;
+        if (mn) {
+          mnemBox.innerHTML = "<b>💡 记忆</b> " + (mn.tip || "") +
+            (mn.root ? '<span class="root">词根：' + mn.root + "</span>" : "");
+        } else {
+          mnemBox.innerHTML = "";
+        }
+      }
+    } catch (e) { console.warn("art-mnem err", e); }
+    try {
+      var wEl = $("wFront");
+      if (wEl) {
+        var t = wEl.textContent || "";
+        wEl.className = "flip-word" + (t.length > 22 ? " xlong" : t.length > 12 ? " long" : "");
+      }
+      var bEl = $("wBack");
+      if (bEl) {
+        var tb = bEl.textContent || "";
+        bEl.className = "flip-word" + (tb.length > 22 ? " xlong" : tb.length > 12 ? " long" : "");
+      }
+    } catch (e) {}
+    var arr = (window.WORDS_PACK && (window.WORDS_PACK[langMode] || window.WORDS_PACK.en)) || (WORDS && (WORDS[langMode] || WORDS.en));
     var it = arr[wI % arr.length];
     if (!it) return;
     var card = document.getElementById('wordCard');
@@ -1661,15 +2222,11 @@
   }
   function speakWord() {
     try {
-      var arr = WORDS[langMode] || WORDS.en;
+      var arr = (window.WORDS_PACK && (window.WORDS_PACK[langMode] || window.WORDS_PACK.en)) || (WORDS && (WORDS[langMode] || WORDS.en));
       var it = arr[wI % arr.length];
-      if (!window.speechSynthesis) { toast('当前环境不支持发音'); return; }
-      window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(it.w);
-      u.lang = langMode === 'ru' ? 'ru-RU' : 'en-US';
-      u.rate = 0.9;
-      window.speechSynthesis.speak(u);
-    } catch (e) { toast('发音失败'); }
+      if (!it) return;
+      speakText(it.w, langMode);
+    } catch (e) { toast("发音失败"); }
   }
 
   var wrongSet = [];
@@ -1707,7 +2264,7 @@
   }
 
   function shadowSpeak() {
-    var arr = WORDS[langMode] || WORDS.en;
+    var arr = (window.WORDS_PACK && (window.WORDS_PACK[langMode] || window.WORDS_PACK.en)) || (WORDS && (WORDS[langMode] || WORDS.en));
     var it = arr[wI % arr.length];
     if (!it) return;
     toast('先听发音，再跟读一遍');
@@ -1876,11 +2433,11 @@
   }
 
   var TPL = [
-    { t: '现象 + 观点', s: 'There is a growing awareness that… / From my perspective, …' },
-    { t: '两点论证', s: 'On the one hand, … On the other hand, … / First, … Moreover, …' },
-    { t: '因果', s: 'Several factors account for this phenomenon. … Therefore, …' },
-    { t: '倒装强调', s: 'Only in this way can we… / Not only… but also…' },
-    { t: '建议结尾', s: 'It is high time that we took measures to…' }
+    { t: '现象 + 观点', s: 'There is a growing awareness that technology is changing our lives. From my perspective, this trend will continue.（人们越来越意识到技术正在改变我们的生活。我认为这个趋势会继续。）' },
+    { t: '两点论证', s: 'On the one hand, technology brings convenience. On the other hand, it may cause addiction. First, it saves time. Moreover, it improves efficiency.（一方面技术带来便利，另一方面可能导致上瘾。首先省时间，其次提高效率。）' },
+    { t: '因果', s: 'Several factors account for this phenomenon. The main reason is economic pressure. Therefore, we need to take action.（几个因素导致了这一现象。主要原因是经济压力。因此我们需要采取行动。）' },
+    { t: '倒装强调', s: 'Only in this way can we achieve success. Not only does it save money, but it also protects the environment.（只有这样我们才能成功。它不仅省钱，还保护环境。）' },
+    { t: '建议结尾', s: 'It is high time that we took measures to reduce carbon emissions.（是时候采取措施减少碳排放了。）' }
   ];
   var DICT = [
     { zh: '很高兴认识你', en: 'Nice to meet you.' },
@@ -1906,11 +2463,7 @@
   function dictPlay() {
     var it = DICT[dictI % DICT.length];
     try {
-      if (!window.speechSynthesis) { toast('不支持朗读'); return; }
-      window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(it.en);
-      u.lang = 'en-US'; u.rate = 0.85;
-      window.speechSynthesis.speak(u);
+      speakText(it.en, "en");
     } catch (e) {}
   }
   function drawStatBars() {
@@ -1942,7 +2495,15 @@
     return IV.filter(function (x) { return x.s === IV_FILTER; });
   }
 
+  /* empty-hint */
   function renderIv() {
+    try {
+      if (!IV || !IV.length) {
+        var qEl0 = document.getElementById("ivQ");
+        if (qEl0) qEl0.textContent = "题库加载中…若长时间空白请重新打开应用";
+        return;
+      }
+    } catch (e) {}
     var list = ivList();
     var qEl = document.getElementById("ivQ");
     var aEl = document.getElementById("ivA");
@@ -2213,6 +2774,15 @@
     });
   })();
 
+  /* render-safe */
+  try {
+    if (!window.IV_PACK || !window.IV_PACK.length) {
+      console.warn("IV_PACK empty");
+    }
+    if (typeof WORDS === "undefined" || !WORDS) {
+      console.warn("WORDS missing");
+    }
+  } catch (e) {}
   try { syncStats(); } catch (e) {}
   try { bindBoost(); } catch (e) {}
   try { bindBitmapFilter(); } catch (e) {}
@@ -2225,16 +2795,563 @@
     try { tagQuizDiff(); } catch (e) {}
   };
 
+  /* local-ready-on-boot */
+  try {
+    if (location.protocol === "file:" || /android_asset/.test(location.href)) {
+      localStorage.setItem("emb-pack-ready", "1");
+      var pl = $("packLabel");
+      if (pl) pl.textContent = "离线包状态：已内置，可离线使用";
+      var pb = $("packBar");
+      if (pb) pb.style.width = "100%";
+      var pp = $("packPct");
+      if (pp) pp.textContent = "100%";
+    }
+  } catch (e) {}
+
+  
+  /* unified-tts */
+  function speakText(text, lang) {
+    if (!text) return;
+    /* 1. 安卓原生 TTS（WebView 最可靠） */
+    try {
+      if (window.NativeTTS && window.NativeTTS.speakWithLang) {
+        window.NativeTTS.speakWithLang(String(text), lang === "ru" ? "ru" : "en");
+        return;
+      }
+      if (window.NativeTTS && window.NativeTTS.speak) {
+        window.NativeTTS.speak(String(text));
+        return;
+      }
+    } catch (e) {}
+    /* 2. 浏览器 Web Speech API（iOS Safari / 桌面） */
+    try {
+      if (window.speechSynthesis && window.SpeechSynthesisUtterance) {
+        window.speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(String(text));
+        u.lang = (lang === "ru") ? "ru-RU" : "en-US";
+        u.rate = 0.9;
+        window.speechSynthesis.speak(u);
+        return;
+      }
+    } catch (e) {}
+    toast("当前环境不支持语音，请用安卓/iOS 浏览器");
+  }
+  function stopSpeak() {
+    try { if (window.NativeTTS && window.NativeTTS.stop) window.NativeTTS.stop(); } catch (e) {}
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+  }
+
+  
+  /* === online-features === */
+  var _searchMode = "all";
+
+  function buildSearchIndex() {
+    var idx = [];
+    try {
+      if (typeof LESSONS !== "undefined" && LESSONS) {
+        LESSONS.forEach(function (L, i) {
+          idx.push({
+            t: "lesson", title: L.title || ("第" + (i+1) + "节"),
+            desc: (L.body || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 100),
+            key: ((L.title || "") + " " + (L.body || "").replace(/<[^>]+>/g, " ")),
+            act: function () {
+              try { showTab("base"); lessonI = i; renderLesson(); } catch (e) {}
+            }
+          });
+        });
+      }
+      if (typeof IV !== "undefined" && IV && IV.length) {
+        IV.forEach(function (it, i) {
+          idx.push({
+            t: "iv", title: (it.q || "").slice(0, 80),
+            desc: (it.a || "").slice(0, 90),
+            key: (it.q || "") + " " + (it.a || ""),
+            act: function () {
+              try { showTab("iv"); IV_IDX = i; IV_FILTER = "all"; renderIv(); } catch (e) {}
+            }
+          });
+        });
+      }
+      try {
+        var wArr = (typeof WORDS !== "undefined" && WORDS && WORDS.en) ? WORDS.en : [];
+        wArr.forEach(function (it, i) {
+          idx.push({
+            t: "word", title: (it.w || "") + "  " + (it.m || ""),
+            desc: (it.ipa || "") + " · " + (it.tip || ""),
+            key: (it.w || "") + " " + (it.m || "") + " " + (it.tip || ""),
+            act: function () {
+              try { showTab("lang"); wI = i; renderWord(); } catch (e) {}
+            }
+          });
+        });
+      } catch (e) {}
+      if (typeof QS !== "undefined" && QS) {
+        QS.forEach(function (it, i) {
+          idx.push({
+            t: "quiz", title: (it.q || "").slice(0, 80),
+            desc: (it.exp || "").slice(0, 80),
+            key: (it.q || "") + " " + (it.exp || ""),
+            act: function () {
+              try { showTab("quiz"); qi = i; renderQ(); } catch (e) {}
+            }
+          });
+        });
+      }
+    } catch (e) { console.warn("idx err", e); }
+    return idx;
+  }
+
+  var _searchIdx = null;
+  function getSearchIndex() {
+    if (!_searchIdx) _searchIdx = buildSearchIndex();
+    return _searchIdx;
+  }
+
+  function hl(text, q) {
+    if (!q) return text;
+    try {
+      var re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+      return String(text).replace(re, "<mark>$1</mark>");
+    } catch (e) { return text; }
+  }
+
+  /* === baicizhan-interaction === */
+  var BC = {
+    book: "daily",
+    list: [],
+    idx: 0,
+    wrong: []
+  };
+
+  function bcFilterList() {
+    var all = [];
+    try {
+      var _pack = window.WORDS_PACK || WORDS; var wEn = (_pack && _pack.en) ? _pack.en : [];
+      var wRu = (_pack && _pack.ru) ? _pack.ru : ((WORDS && WORDS.ru) ? WORDS.ru : []);
+      if (BC.book === "ru") {
+        all = wRu.map(function (x) { return { w: x.w, m: x.m, ipa: x.ipa || "", tip: x.tip || "", g: "ru" }; });
+      } else {
+        var groups = {
+          daily: "day", cet6: "cet4", cet4: "cet4", acad: "acad",
+          emb: "emb", job: "job", com: "com", soft: "soft", pro: "pro"
+        };
+        var g = groups[BC.book] || null;
+        wEn.forEach(function (x) {
+          if (!g || x.g === g) all.push({ w: x.w, m: x.m, ipa: x.ipa || "", tip: x.tip || "", g: x.g });
+        });
+        /* 专业术语：包含 emb + pro + job */
+        if (BC.book === "pro") {
+          all = wEn.filter(function (x) { return x.g === "emb" || x.g === "pro" || x.g === "job" || x.g === "com" || x.g === "soft" || x.g === "acad" || x.g === "cet4"; })
+            .map(function (x) { return { w: x.w, m: x.m, ipa: x.ipa || "", tip: x.tip || "", g: x.g }; });
+        }
+      }
+    } catch (e) { console.warn("bc list", e); }
+    return all.length ? all : [{ w: "hello", m: "你好", ipa: "/həˈləʊ/", tip: "日常问候", g: "day" }];
+  }
+
+  function bcRender() {
+    var list = BC.list;
+    if (!list.length) list = BC.list = bcFilterList();
+    BC.idx = BC.idx % list.length;
+    var it = list[BC.idx];
+    if (!it) return;
+
+    var wEl = document.getElementById("bcWord");
+    if (wEl) {
+      wEl.textContent = it.w;
+      var len = (it.w || "").length;
+      wEl.className = "bc-word" + (len > 20 ? " xlong" : len > 12 ? " long" : "");
+    }
+    var ph = document.getElementById("bcPhonetic");
+    if (ph) ph.textContent = it.ipa || "";
+    var mn = document.getElementById("bcMeaning");
+    if (mn) mn.textContent = it.m || "";
+    var tp = document.getElementById("bcTip");
+    if (tp) tp.textContent = it.tip ? "💡 " + it.tip : "";
+
+    var art = document.getElementById("bcArt");
+    if (art) {
+      var a = (window.getWordArt) ? getWordArt(it.w) : null;
+      art.innerHTML = a || "";
+    }
+    var mm = document.getElementById("bcMnem");
+    if (mm) {
+      var m = (window.getWordMnem) ? getWordMnem(it.w) : null;
+      mm.textContent = m ? ("💡 " + (m.tip || "") + (m.root ? " · 词根：" + m.root : "")) : "";
+    }
+
+    var bar = document.getElementById("bcBar");
+    if (bar) bar.style.width = Math.round((BC.idx + 1) / list.length * 100) + "%";
+    var now = document.getElementById("bcNow");
+    if (now) {
+      var goal = window.__DAILY_GOAL || 0;
+      if (goal > 0) {
+        var done = Math.min(BC.idx + 1, goal);
+        now.textContent = done + "/" + goal;
+      } else {
+        now.textContent = (BC.idx + 1) + "/" + BC.list.length;
+      }
+    }
+    var total = document.getElementById("bcTotal");
+    if (total) total.textContent = list.length;
+  }
+
+  function bcNext() {
+    if (BC.list.length) {
+      BC.idx = (BC.idx + 1) % BC.list.length;
+      bcRender();
+    }
+  }
+
+  function bcPrev() {
+    if (BC.list.length) {
+      BC.idx = (BC.idx - 1 + BC.list.length) % BC.list.length;
+      bcRender();
+    }
+  }
+
+  function bcShuffle() {
+    for (var i = BC.list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = BC.list[i]; BC.list[i] = BC.list[j]; BC.list[j] = t;
+    }
+    BC.idx = 0;
+    bcRender();
+  }
+
+  function bcFlip() {
+    var list = BC.list;
+    var it = list[BC.idx];
+    if (!it) return;
+    var box = document.getElementById("bcBackContent");
+    if (!box) return;
+    var mn = (window.getWordMnem) ? getWordMnem(it.w) : null;
+    box.innerHTML =
+      '<div class="bb-word">' + it.w + '</div>' +
+      '<div class="bb-phonetic">' + (it.ipa || "") + '</div>' +
+      '<div class="bb-def">释义：<b>' + (it.m || "") + '</b></div>' +
+      (it.tip ? '<div class="bb-tip">💡 ' + it.tip + '</div>' : "") +
+      (mn ? '<div class="bb-mnem">🧠 记忆：' + (mn.tip || "") + (mn.root ? '<br>词根：' + mn.root : "") + '</div>' : "");
+    document.getElementById("bcBack").classList.remove("hidden");
+  }
+
+  function bcSpeak() {
+    var list = BC.list;
+    var it = list[BC.idx];
+    if (!it) return;
+    if (typeof speakText === "function") speakText(it.w, BC.book === "ru" ? "ru" : "en");
+  }
+
+  function bcKnow() {
+    bcNext();
+  }
+
+  function bcFuzzy() {
+    var it = BC.list[BC.idx];
+    if (it) {
+      BC.wrong.push(it);
+      renderWrongChips();
+    }
+    bcNext();
+  }
+
+  function renderWrongChips() {
+    var box = document.getElementById("wrongChips");
+    if (!box) return;
+    box.innerHTML = BC.wrong.map(function (x, i) {
+      return '<span class="wc" data-wi="' + i + '">✕ ' + x.w + '</span>';
+    }).join("") || '<span style="font-size:12px;color:var(--ink3)">还没有错词</span>';
+    var c = document.getElementById("wrongCount");
+    if (c) c.textContent = BC.wrong.length;
+    box.querySelectorAll("[data-wi]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var i = +el.getAttribute("data-wi");
+        BC.wrong.splice(i, 1);
+        renderWrongChips();
+      });
+    });
+  }
+
+  function bcBind() {
+    /* 词书选择 */
+    var books = document.querySelectorAll("#bookSelector .book-card");
+    books.forEach(function (b) {
+      b.addEventListener("click", function () {
+        books.forEach(function (x) { x.classList.remove("on"); });
+        b.classList.add("on");
+        BC.book = b.getAttribute("data-book");
+        BC.list = bcFilterList();
+        BC.idx = 0;
+        bcRender();
+      });
+    });
+
+    var on = function (id, fn) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener("click", fn);
+    };
+    on("bcNext", bcNext);
+    on("bcPrev", bcPrev);
+    on("bcShuffle", bcShuffle);
+    on("bcFlip", bcFlip);
+    on("bcSpeak", bcSpeak);
+    on("bcKnow", bcKnow);
+    on("bcFuzzy", bcFuzzy);
+    on("bcBackClose", function () {
+      document.getElementById("bcBack").classList.add("hidden");
+    });
+
+    /* 滑动手势 */
+    var card = document.getElementById("bcCard");
+    if (card) {
+      var x0 = 0;
+      card.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+      card.addEventListener("touchend", function (e) {
+        var dx = e.changedTouches[0].clientX - x0;
+        if (dx < -50) bcNext();
+        else if (dx > 50) bcPrev();
+      }, { passive: true });
+    }
+  }
+
+  /* daily-goal-js */
+  (function () {
+    var DAILY_GOAL = 10;
+    try { DAILY_GOAL = +(localStorage.getItem("emb-daily-goal") || 10); } catch (e) {}
+    var btns = document.querySelectorAll(".dg-btn");
+    btns.forEach(function (b) {
+      if (b.getAttribute("data-dg") === String(DAILY_GOAL) ||
+          (DAILY_GOAL === 0 && b.getAttribute("data-dg") === "all")) {
+        btns.forEach(function (x) { x.classList.remove("on"); });
+        b.classList.add("on");
+      }
+      b.addEventListener("click", function () {
+        btns.forEach(function (x) { x.classList.remove("on"); });
+        b.classList.add("on");
+        var v = b.getAttribute("data-dg");
+        DAILY_GOAL = v === "all" ? 0 : +v;
+        try { localStorage.setItem("emb-daily-goal", String(DAILY_GOAL)); } catch (e) {}
+        toast("每日目标：" + (DAILY_GOAL === 0 ? "不限" : DAILY_GOAL + " 词"));
+        bcRender();
+      });
+    });
+    window.__DAILY_GOAL = DAILY_GOAL;
+  })();
+
+  try { bcBind(); bcRender(); window.__BC_OK = true; } catch (e) { console.warn("bc init", e); window.__BC_ERR = String(e); }
+
+  /* merge-hw-lessons */
+  try {
+    if (window.HW_LESSONS && typeof LESSONS !== "undefined" && LESSONS && LESSONS.length) {
+      var _hwIds = {};
+      LESSONS.forEach(function (l) { _hwIds[l.id] = 1; });
+      window.HW_LESSONS.forEach(function (l) {
+        if (!_hwIds[l.id]) {
+          LESSONS.push({ id: l.id, title: l.title, art: l.art, body: l.body });
+        }
+      });
+      console.log("HW lessons merged:", window.HW_LESSONS.length);
+    }
+  } catch (e) { console.warn("merge hw", e); }
+
+  /* merge-job-market */
+  try {
+    if (window.JOB_MARKET && typeof LESSONS !== "undefined" && LESSONS && LESSONS.length) {
+      var _jmIds = {};
+      LESSONS.forEach(function (l) { _jmIds[l.id] = 1; });
+      window.JOB_MARKET.forEach(function (l) {
+        if (!_jmIds[l.id]) {
+          LESSONS.push({ id: l.id, title: l.title, art: l.art || "", body: l.body });
+        }
+      });
+      console.log("JOB_MARKET merged:", window.JOB_MARKET.length);
+    }
+  } catch (e) { console.warn("merge jm", e); }
+
+
   /* 启动 */
-  $("verLabel").textContent = VER;
-  $("meVer").textContent = VER;
   refreshStats();
   renderQ();
   drawWeek();
   bindAtlas();
   drawAch();
   renderLesson();
+  renderLang();
+  renderWord();
+  renderTpl();
+  renderDict();
 })();
+</script>
+
+<script>
+
+  /* 一屏一卡：选书 / 背词两态 */
+  (function () {
+    var lang = document.getElementById("tab-lang");
+    if (!lang) return;
+    var pills = document.getElementById("bookPills");
+    var picker = document.getElementById("bookSelector");
+
+    function setMode(m) {
+      lang.classList.remove("mode-pick", "mode-card");
+      lang.classList.add(m === "card" ? "mode-card" : "mode-pick");
+      document.body.classList.toggle("lang-card-lock", m === "card");
+      if (m !== "card") window.scrollTo(0, 0);
+    }
+    function fillPills() {
+      if (!pills || !picker) return;
+      var cards = picker.querySelectorAll(".book-card");
+      pills.innerHTML = "";
+      cards.forEach(function (c) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = (c.querySelector(".book-name") || {}).innerText || c.getAttribute("data-book");
+        b.className = c.classList.contains("on") ? "on" : "";
+        b.addEventListener("click", function () {
+          c.click();
+          pills.querySelectorAll("button").forEach(function (x) { x.classList.remove("on"); });
+          b.classList.add("on");
+          setMode("card");
+        });
+        pills.appendChild(b);
+      });
+    }
+    // 点词书卡 → 进入背词一屏
+    if (picker) {
+      picker.addEventListener("click", function (e) {
+        var card = e.target.closest(".book-card");
+        if (!card) return;
+        setTimeout(function () {
+          fillPills();
+          setMode("card");
+        }, 0);
+      });
+    }
+    // 「词书」→ 回选书
+    var back = document.getElementById("bcBooks");
+    if (back) back.addEventListener("click", function () {
+      setMode("pick");
+      fillPills();
+    });
+    // 默认：选书态
+    setMode("pick");
+    window.__langModeUI = setMode;
+  })();
+
+</script>
+
+<script>
+
+  (function () {
+    function fitLangCard() {
+      var lang = document.getElementById("tab-lang");
+      if (!lang) return;
+      if (!lang.classList.contains("mode-card")) {
+        lang.style.height = "";
+        lang.style.maxHeight = "";
+        document.body.classList.remove("lang-card-lock");
+        return;
+      }
+      document.body.classList.add("lang-card-lock");
+      var tabbar = document.querySelector(".tabbar");
+      var tTop = tabbar ? tabbar.getBoundingClientRect().top : window.innerHeight;
+      var lTop = lang.getBoundingClientRect().top;
+      var avail = Math.max(240, tTop - lTop - 4);
+      lang.style.maxHeight = avail + "px";
+      lang.style.height = avail + "px";
+      var stage = lang.querySelector(".bc-stage");
+      if (stage) {
+        stage.style.flex = "1";
+        stage.style.minHeight = "0";
+        stage.style.display = "flex";
+        stage.style.flexDirection = "column";
+        stage.style.overflow = "hidden";
+      }
+      var card = lang.querySelector(".bc-card");
+      if (card) {
+        card.style.flex = "1";
+        card.style.minHeight = "0";
+        card.style.overflow = "auto";
+      }
+    }
+    window.addEventListener("resize", fitLangCard);
+    // 在 setMode 之后补跑
+    var prev = window.__langModeUI;
+    window.__langModeUI = function (m) {
+      if (typeof prev === "function") prev(m);
+      setTimeout(fitLangCard, 0);
+    };
+    document.addEventListener("click", function (e) {
+      if (e.target.closest && e.target.closest("#tab-lang .book-card, #bcBooks")) {
+        setTimeout(fitLangCard, 30);
+      }
+    }, true);
+    setTimeout(fitLangCard, 100);
+  })();
+
+</script>
+
+<script>
+
+  /* ---------- APK 应用内自更新（原生桥） ---------- */
+  function apkNative() {
+    return (window.NativeUpdate || window.webkit && window.webkit.messageHandlers && null) || window.NativeUpdate;
+  }
+  function apkCheck() {
+    var n = window.NativeUpdate;
+    if (!n || !n.checkApkUpdate) return false;
+    try {
+      window.onApkUpdateInfo = function (info) {
+        if (!info) return;
+        if (info.error) { toast("检查更新失败，请联网后重试"); return; }
+        if (info.has && info.url) {
+          if (confirm("发现新版本 " + info.tag + "（当前 " + (info.cur || "") + "）\n下载并安装？")) {
+            n.downloadAndInstall(info.url);
+            toast("已开始下载，完成后会弹出安装");
+          }
+        } else {
+          toast("已是最新版本 " + (info.cur || ""));
+        }
+      };
+      n.checkApkUpdate();
+      toast("正在检查更新…");
+      return true;
+    } catch (e) {
+      toast("检查更新失败");
+      return true;
+    }
+  }
+  window.__apkCheck = apkCheck;
+
+  /* 让「检查更新 / 立即更新」在 APK 里走原生下载安装 */
+  function bindApkUpdate() {
+    var check = document.getElementById("btnCheckUpdate");
+    if (check) {
+      check.addEventListener("click", function (e) {
+        if (window.__IS_APK__ && apkNative()) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          apkCheck();
+        }
+      }, true);
+    }
+    var doUpd = document.getElementById("btnDoUpdate");
+    if (doUpd) {
+      doUpd.addEventListener("click", function (e) {
+        if (window.__IS_APK__ && apkNative()) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          apkCheck();
+        }
+      }, true);
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bindApkUpdate);
+  } else {
+    bindApkUpdate();
+  }
+
 </script>
 </body>
 </html>
