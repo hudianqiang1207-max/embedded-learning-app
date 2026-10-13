@@ -938,7 +938,7 @@
       </svg>
     </div>
     <h1>嵌入式学习</h1>
-    <span class="ver" id="verLabel">v1.24.0</span>
+    <span class="ver" id="verLabel">v1.25.0</span>
   </header>
 
   <main>
@@ -1032,6 +1032,11 @@
           <div class="ico">✍️</div>
           <b>快速刷题</b>
           <span>错题自动进本</span>
+        </button>
+        <button class="qk" id="btnOpenStudy">
+          <div class="ico">🎓</div>
+          <b>完整学习站</b>
+          <span>38 门课 · 与网页互通</span>
         </button>
         <button class="qk" id="btnLang2">
           <div class="ico">🌍</div>
@@ -1370,7 +1375,8 @@
       <div class="card">
         <h3><span class="badge">⚙️</span>版本与更新</h3>
         <div class="kv"><span>App 版本</span><b id="meVer">v1.15.0</b></div>
-        <div class="kv"><span>当前版本</span><b id="verLabel2">v1.24.0</b></div>
+        <div class="kv"><span>当前版本</span><b id="verLabel2">v1.25.0</b></div>
+        <div class="kv"><span>数据互通</span><b>登录后与学习站同步</b></div>
         <div class="kv"><span>更新方式</span><b id="updModeLabel">一键更新，无需卸载</b></div>
         <div class="kv"><span>离线能力</span><b>课程包可下载到本机</b></div>
                 <div class="ach-wall" id="achWall"></div>
@@ -1439,6 +1445,8 @@
 </div>
 
 <script src="words-data.js"></script>
+<script src="cloud-config.js"></script>
+<script src="cloud-sync.js"></script>
 <script src="bmp-manifest.js"></script>
 <script src="data-interview-pack.js"></script>
 <script src="data-hw-lessons.js"></script>
@@ -1446,7 +1454,7 @@
 <script src="word-art.js"></script>
 <script>
 (function () {
-  var VER = "v1.24.0";
+  var VER = "v1.25.0";
   var DAY_GOAL = 10;
 
   function $(id) { return document.getElementById(id); }
@@ -3350,6 +3358,76 @@
     document.addEventListener("DOMContentLoaded", bindApkUpdate);
   } else {
     bindApkUpdate();
+  }
+
+</script>
+
+<script>
+
+  /* ---------- 与学习站互通（同一 emb-study-v1 + 云同步） ---------- */
+  var STUDY_KEY = "emb-study-v1";
+  function readStudyPayload() {
+    try {
+      var s = JSON.parse(localStorage.getItem(STUDY_KEY) || "{}") || {};
+      return {
+        ver: 2,
+        progress: { ans: s.ans || {}, wrong: s.wrong || {}, qts: s.qts || {}, days: s.days || {} },
+        mock: null,
+        guide: true
+      };
+    } catch (e) {
+      return { ver: 2, progress: { ans: {}, wrong: {}, qts: {}, days: {} }, mock: null, guide: true };
+    }
+  }
+  function applyStudyPayload(payload) {
+    if (!payload || !payload.progress) return;
+    try {
+      var old = JSON.parse(localStorage.getItem(STUDY_KEY) || "{}") || {};
+      var p = payload.progress;
+      // 合并：ans/days 取 max，wrong 按 qts 后写胜
+      var ans = old.ans || {};
+      Object.keys(p.ans || {}).forEach(function (k) {
+        ans[k] = Math.max(ans[k] || 0, p.ans[k] || 0);
+      });
+      var days = old.days || {};
+      Object.keys(p.days || {}).forEach(function (k) {
+        days[k] = Math.max(days[k] || 0, p.days[k] || 0);
+      });
+      var wrong = old.wrong || {};
+      var qts = old.qts || {};
+      Object.keys(p.wrong || {}).forEach(function (k) {
+        var ot = qts[k] || 0, nt = (p.qts && p.qts[k]) || 0;
+        if (nt >= ot) { wrong[k] = p.wrong[k]; qts[k] = nt; }
+      });
+      localStorage.setItem(STUDY_KEY, JSON.stringify({
+        ans: ans, wrong: wrong, qts: qts, days: days
+      }));
+    } catch (e) {}
+  }
+  function bindStudySync() {
+    if (window.CloudSync && CloudSync.init) {
+      CloudSync.init({
+        readPayload: readStudyPayload,
+        applyPayload: applyStudyPayload,
+        onStatus: function () {
+          try {
+            var st = CloudSync.getStatus ? CloudSync.getStatus() : null;
+            if (st && st.state === "synced") console.log("study sync ok");
+          } catch (e) {}
+        }
+      });
+    }
+    var btn = document.getElementById("btnOpenStudy");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        location.href = "study/index.html";
+      });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bindStudySync);
+  } else {
+    bindStudySync();
   }
 
 </script>
