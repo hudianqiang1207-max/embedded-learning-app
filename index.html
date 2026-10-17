@@ -926,6 +926,53 @@
     overflow: hidden !important;
   }
 
+
+
+  /* 外语页：放大不挤 + 返回 */
+  .lang-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin: 0 0 12px; padding: 10px 16px;
+    border: 1px solid var(--line); background: var(--warm-card);
+    color: var(--ink); border-radius: 999px; font: inherit;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+  }
+  #tab-lang .book-title { font-size: 18px; margin-bottom: 8px; }
+  #tab-lang .book-sub { font-size: 13px; }
+  #tab-lang .book-card { padding: 18px 12px; }
+  #tab-lang .book-name { font-size: 15px; }
+  #tab-lang .book-count { font-size: 13px; }
+  #tab-lang .daily-goal-bar { font-size: 15px; gap: 10px; }
+  #tab-lang .dg-btn { padding: 12px 18px; font-size: 15px; }
+  #tab-lang .bc-progress { margin: 14px 0; }
+  #tab-lang .bc-count { font-size: 16px; font-weight: 700; }
+  #tab-lang .bc-card {
+    padding: 36px 22px; min-height: 380px;
+    border-radius: 28px;
+  }
+  #tab-lang .bc-art { width: 200px; height: 120px; margin-bottom: 18px; }
+  #tab-lang .bc-word {
+    font-size: 42px; line-height: 1.25; letter-spacing: .02em;
+  }
+  #tab-lang .bc-word.long { font-size: 32px; }
+  #tab-lang .bc-word.xlong { font-size: 24px; line-height: 1.35; }
+  #tab-lang .bc-phonetic { font-size: 18px; margin: 12px 0 16px; }
+  #tab-lang .bc-meaning { font-size: 24px; font-weight: 700; }
+  #tab-lang .bc-tip { font-size: 15px; margin-top: 14px; padding: 10px 14px; }
+  #tab-lang .bc-actions { gap: 12px; margin-top: 18px; }
+  #tab-lang .bc-actions .bc-btn {
+    padding: 16px 10px; font-size: 16px; border-radius: 16px;
+  }
+  #tab-lang .bc-nav { gap: 10px; margin-top: 12px; }
+  #tab-lang .bc-nav .bc-nav-btn {
+    padding: 14px 10px; font-size: 14px; border-radius: 14px;
+  }
+  /* 一屏一卡模式也保持放大 */
+  #tab-lang.mode-card .bc-word { font-size: 38px; }
+  #tab-lang.mode-card .bc-word.long { font-size: 28px; }
+  #tab-lang.mode-card .bc-word.xlong { font-size: 22px; }
+  #tab-lang.mode-card .bc-meaning { font-size: 22px; }
+  #tab-lang.mode-card .bc-card { padding: 28px 18px; min-height: 320px; }
+
 </style>
 </head>
 <body>
@@ -1211,6 +1258,7 @@
       </div>
     </section>
     <section id="tab-lang" class="hidden">
+      <button type="button" class="lang-back" id="langBack">‹ 返回首页</button>
       <div class="book-pills" id="bookPills"></div>
       <!-- 分类选择（百词斩式词书） -->
       <div class="book-selector" id="bookSelector">
@@ -1845,8 +1893,8 @@
     toast('记住了！今日词条 +1');
   });
   if ($("btnLang")) $("btnLang").addEventListener("click", function () { showTab("lang"); });
-  if ($("btnEn")) $("btnEn").addEventListener("click", function () { langMode='en'; renderLang(); renderWord(); document.getElementById('langFb').classList.remove('show'); });
-  if ($("btnRu")) $("btnRu").addEventListener("click", function () { langMode='ru'; renderLang(); renderWord(); document.getElementById('langFb').classList.remove('show'); });
+  if ($("btnEn")) $("btnEn").addEventListener("click", function () { langMode='en'; try{ if(window.WORDS_PACK) WORDS=window.WORDS_PACK; }catch(e){} renderLang(); renderWord(); try{ BC.book='day'; BC.list=bcFilterList(); BC.idx=0; bcRender(); }catch(e){} document.getElementById('langFb').classList.remove('show'); });
+  if ($("btnRu")) $("btnRu").addEventListener("click", function () { langMode='ru'; try{ if(window.WORDS_PACK) WORDS=window.WORDS_PACK; }catch(e){} renderLang(); renderWord(); try{ BC.book='ru'; BC.list=bcFilterList(); BC.idx=0; bcRender(); }catch(e){} document.getElementById('langFb').classList.remove('show'); });
   if ($("btnLangQ")) $("btnLangQ").addEventListener("click", langQuiz);
   if ($("btnLangShuffle")) if ($("btnLangShuffle")) $("btnLangShuffle").addEventListener("click", function () { renderLang(); langQuiz(); });
   if ($("btnBase")) $("btnBase").addEventListener("click", function () { showTab("base"); });
@@ -3429,6 +3477,42 @@
   } else {
     bindStudySync();
   }
+
+</script>
+
+<script>
+
+  /* 外语页返回 + 俄语词书 */
+  (function () {
+    var back = document.getElementById("langBack");
+    if (back) {
+      back.addEventListener("click", function () {
+        var home = document.querySelector('button[data-tab="home"]');
+        if (home) home.click();
+      });
+    }
+    // 俄语按钮：切到俄语词库
+    var ru = document.getElementById("btnRu");
+    if (ru) {
+      ru.addEventListener("click", function () {
+        try {
+          if (window.WORDS_PACK && WORDS_PACK.ru && WORDS_PACK.ru.length) {
+            WORDS = window.WORDS_PACK;
+            if (typeof langMode !== "undefined") langMode = "ru";
+          }
+        } catch (e) {}
+      }, true);
+    }
+    var en = document.getElementById("btnEn");
+    if (en) {
+      en.addEventListener("click", function () {
+        try {
+          if (typeof langMode !== "undefined") langMode = "en";
+          if (window.WORDS_PACK) WORDS = window.WORDS_PACK;
+        } catch (e) {}
+      }, true);
+    }
+  })();
 
 </script>
 </body>
